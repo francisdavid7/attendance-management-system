@@ -1,0 +1,107 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  STUDENT
+  TUTOR
+  ADMIN
+}
+
+enum AttendanceStatus {
+  PRESENT
+  LATE
+  PARTIAL
+  ABSENT
+}
+
+model User {
+  id       String @id @default(uuid())
+  fullName String
+  email    String @unique
+  password String
+  role     Role   @default(STUDENT)
+
+  // Relations
+  studentCourses StudentCourse[]
+  tutorCourses   Course[]        @relation("TutorCourses")
+  tutorVerify    Attendance[]    @relation("tutorVerify")
+
+  attendances Attendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Course {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  tutorId String?
+  tutor   User?   @relation("TutorCourses", fields: [tutorId], references: [id])
+
+  students StudentCourse[]
+  // sessions Session[]
+
+  createdAt DateTime  @default(now())
+  sessions  Session[]
+}
+
+model StudentCourse {
+  id        String @id @default(uuid())
+  studentId String
+  courseId  String
+
+  student User   @relation(fields: [studentId], references: [id])
+  course  Course @relation(fields: [courseId], references: [id])
+
+  @@unique([studentId, courseId])
+}
+
+model Session {
+  id       String   @id @default(uuid())
+  courseId String
+  date     DateTime
+
+  qrCode      String
+  qrExpiresAt DateTime
+
+  isActive Boolean @default(true)
+
+  course Course @relation(fields: [courseId], references: [id])
+
+  attendances Attendance[]
+
+  createdAt DateTime @default(now())
+}
+
+model Attendance {
+  id        String @id @default(uuid())
+  studentId String
+  sessionId String
+
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+
+  status AttendanceStatus
+
+  verifiedById String?
+  verifiedBy   User?   @relation("tutorVerify", fields: [verifiedById], references: [id])
+
+  student User    @relation(fields: [studentId], references: [id])
+  session Session @relation(fields: [sessionId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, sessionId])
+}
