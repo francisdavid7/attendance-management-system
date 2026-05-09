@@ -11,13 +11,13 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     // Safely validates the data using zod
-    const validateFields = registerSchema.safeParse(body);
+    const validatedFields = registerSchema.safeParse(body);
 
     // Throw a possible error when not properly validated
-    if (!validateFields.success) {
+    if (!validatedFields.success) {
       return NextResponse.json(
         {
-          error: validateFields.error.flatten(),
+          error: validatedFields.error.flatten(),
         },
         {
           status: 400,
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     }
 
     // Extract the data from the validated fields
-    const { fullName, email, password } = validateFields.data;
+    const { fullName, email, password } = validatedFields.data;
 
     // Check if user already exist
     const existingUser = await prisma.user.findUnique({
