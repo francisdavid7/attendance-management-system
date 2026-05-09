@@ -29,14 +29,24 @@ model User {
   fullName String
   email    String @unique
   password String
+
   role     Role   @default(STUDENT)
+
+  isVerified Boolean @default(false)
+  
+  verificationToken String?
+  verificationTokenExpiresAt DateTime?
+
+  resetPasswordToken String?
+  resetPasswordTokenExpiresAt DateTime?
+  
 
   // Relations
   studentCourses StudentCourse[]
-  tutorCourses   Course[]        @relation("TutorCourses")
-  tutorVerify    Attendance[]    @relation("tutorVerify")
+  courses   Course[]
+  verifiedAttendances    Attendance[] @relation("VerifiedByTutor")
 
-  attendances Attendance[]
+  attendances Attendance[] @relation("StudentAttendance")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -48,13 +58,12 @@ model Course {
   description String?
 
   tutorId String?
-  tutor   User?   @relation("TutorCourses", fields: [tutorId], references: [id])
+  tutor   User?   @relation(fields: [tutorId], references: [id])
 
   students StudentCourse[]
-  // sessions Session[]
+  sessions Session[]
 
   createdAt DateTime  @default(now())
-  sessions  Session[]
 }
 
 model StudentCourse {
@@ -96,9 +105,9 @@ model Attendance {
   status AttendanceStatus
 
   verifiedById String?
-  verifiedBy   User?   @relation("tutorVerify", fields: [verifiedById], references: [id])
+  verifiedBy   User?   @relation("VerifiedByTutor", fields: [verifiedById], references: [id])
 
-  student User    @relation(fields: [studentId], references: [id])
+  student User    @relation("StudentAttendance", fields: [studentId], references: [id])
   session Session @relation(fields: [sessionId], references: [id])
 
   createdAt DateTime @default(now())
