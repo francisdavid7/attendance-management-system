@@ -25,6 +25,7 @@ export async function GET() {
       select: {
         fullName: true,
         email: true,
+        role: true,
         isVerified: true,
       },
     });
