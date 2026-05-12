@@ -3,7 +3,7 @@ import { registerSchema } from "@/lib/validation/auth";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import crypto from "crypto";
-import { sendVerificationEmail } from "@/lib/auth/mail";
+import { sendVerificationEmail } from "@/lib/mail/mail";
 
 export async function POST(req: Request) {
   try {
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       {
-        error: "Something went wrong",
+        error: error.message,
       },
       {
         status: 500,
