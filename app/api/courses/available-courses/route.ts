@@ -4,7 +4,9 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const availableCourses = await prisma.course.findMany({
-      include: {
+      select: {
+        id: true,
+        name: true,
         tutor: {
           select: {
             fullName: true,
