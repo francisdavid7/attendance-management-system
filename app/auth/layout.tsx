@@ -12,7 +12,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <h1 className="text-[40px] font-bold text-white leading-12 mb-4">
               Empower Your Educational Journey
             </h1>
-            <p className="text-muted text-[14px]">
+            <p className="text-[#d2d8e4] text-[14px]">
               A refined platform for high-performance teams to orchestrate
               attendance, scheduling, and growth with seamless precision.
             </p>
@@ -20,7 +20,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
 
           {/* Footer */}
           <div className="flex items-center justify-between border-t border-white/10 pt-6 text-sm text-zinc-500">
-            <p>© 2026 AuthFlow Inc.</p>
+            <p>© 2026 AttendX</p>
 
             <div className="flex items-center gap-4">
               <button className="transition-colors hover:text-white">

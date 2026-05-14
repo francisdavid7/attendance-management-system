@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import { registerSchema } from "@/lib/validation/auth";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth/password";
 import crypto from "crypto";
 import { sendVerificationEmail } from "@/lib/mail/mail";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     // Get the data from the request body
     const body = await req.json();
@@ -56,6 +57,11 @@ export async function POST(req: Request) {
         password: hashedPassword,
         verificationToken,
         verificationTokenExpiresAt: new Date(Date.now() + 1000 * 60 * 60),
+      },
+
+      select: {
+        id: true,
+        email: true,
       },
     });
 

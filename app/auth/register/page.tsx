@@ -23,13 +23,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import useSWRMutation from "swr/mutation";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+const sendRequest = async (
+  url: string,
+  { arg }: { arg: z.infer<typeof registerSchema> },
+) => axios.post(url, arg).then((res) => res.data);
 
 const page = () => {
-  const {
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<z.infer<typeof registerSchema>>({
+  const { trigger, isMutating } = useSWRMutation<
+    { user: { id: string; email: string } },
+    any,
+    string,
+    z.infer<typeof registerSchema>
+  >("/api/auth/register", sendRequest);
+  const { control, handleSubmit } = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       fullName: "",
@@ -38,16 +49,26 @@ const page = () => {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 5000);
-    });
+  const router = useRouter();
 
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+    try {
+      const { user } = await trigger(data);
+      sessionStorage.setItem("user", JSON.stringify(user));
+
+      toast.success("Registeration sucessfull!");
+      router.push("/auth/verify-email");
+    } catch (error: any) {
+      if (error.response) {
+        toast.error(error.response.data.error);
+        return;
+      }
+      toast.error(error.message);
+    }
   };
 
   return (
-    <div className="w-1/2 p-12">
+    <div className="w-1/2 p-12 flex items-center justify-center">
       <Card className="w-[80%] mx-auto">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold">Join AttendX</CardTitle>
@@ -127,8 +148,8 @@ const page = () => {
               />
 
               <Field>
-                <Button disabled={isSubmitting} type="submit" className="gap-2">
-                  {isSubmitting ? (
+                <Button disabled={isMutating} type="submit" className="gap-2">
+                  {isMutating ? (
                     <>
                       <Loader2 className="animate-spin" />
                       Loading ...

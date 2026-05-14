@@ -5,6 +5,10 @@ export function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const pathname = request.nextUrl.pathname;
 
+  if (pathname === "/auth" || pathname === "/auth/") {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
   if (pathname.startsWith("/auth") && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
