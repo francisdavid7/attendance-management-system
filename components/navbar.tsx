@@ -56,10 +56,14 @@ export default function Navbar() {
             ))}
           </nav>
           <div className="flex gap-1">
-            <Button className="cursor-pointer" variant="ghost">
-              Login
-            </Button>
-            <Button className="cursor-pointer">Get Started</Button>
+            <Link href="/auth/login">
+              <Button className="cursor-pointer" variant="ghost">
+                Login
+              </Button>
+            </Link>
+            <Link href="/auth/register">
+              <Button className="cursor-pointer">Get Started</Button>
+            </Link>
           </div>
         </div>
         <div className="ml-2">
