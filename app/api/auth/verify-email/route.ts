@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const token = searchParams.get("token");

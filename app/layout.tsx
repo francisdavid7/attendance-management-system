@@ -50,6 +50,7 @@ export default function RootLayout({
           <main>{children}</main>
           <Toaster
             position="top-right"
+            duration={3000}
             toastOptions={{
               classNames: {
                 toast:
