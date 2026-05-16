@@ -113,14 +113,35 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
+
   /* 
   .wrapper {
     @apply p-[5%_10%];
   } */
+}
+
+
+
+
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 90s linear infinite;
 }
