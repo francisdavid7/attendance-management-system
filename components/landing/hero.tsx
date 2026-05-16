@@ -5,6 +5,7 @@ import Heroimage from "./heroimage";
 import Marquee from "./marquee";
 import Grid from "./tools-grid";
 import NumberGrid from "./implementation-grid"
+import RoleDescriptions from "./roleDecriptions"
 
 const heroSection = () => {
   return (
@@ -61,7 +62,13 @@ const heroSection = () => {
           <div className="mt-10">
             <NumberGrid />
           </div>
+
         </section>
+
+        <div className="px-7 py-8">
+          <RoleDescriptions />
+
+        </div>
       </section>
     </main>
 
