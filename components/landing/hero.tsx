@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import Heroimage from "./heroimage";
 import Marquee from "./marquee";
 import Grid from "./tools-grid";
+import NumberGrid from "./implementation-grid"
 
 const heroSection = () => {
   return (
@@ -52,6 +53,15 @@ const heroSection = () => {
           <Grid />
         </div>
 
+        <section className="mt-12 bg-white px-10 py-10">
+          <div className="text-4xl font-bold text-black">
+            <h1>Effortless Implementation</h1>
+          </div>
+
+          <div className="mt-10">
+            <NumberGrid />
+          </div>
+        </section>
       </section>
     </main>
 

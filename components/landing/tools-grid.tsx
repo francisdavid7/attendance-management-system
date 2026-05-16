@@ -5,7 +5,7 @@ const grid = () => {
         <div className="w-full p-4 sm:p-6 ">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center" >
                 <div className="bg-[color:var(--color-card)] text-center rounded-2xl py-5 px-6 w-full shadow-sm md:ml-76 ml-0">
-                    <div className="mb-4 h-10 w-10 rounded-md bg-[color:var(--color-secondary)]/15 flex items-center justify-center">
+                    <div className="mb-4 h-10 w-10 rounded-md bg-[color:var(--color-primary)]/15 flex items-center justify-center">
                         <QrCodeIcon size={24} color="var(--color-secondary)" />
                     </div>
 
@@ -21,7 +21,7 @@ const grid = () => {
                     </div>
                 </div>
 
-                <div className="text-white md:w-[50%] bg-[color:var(--color-secondary)] rounded-2xl p-6 text-justify shadow-sm">
+                <div className="text-white md:w-[50%] bg-[color:var(--color-primary)] rounded-2xl p-6 text-justify shadow-sm">
                     <section className="grid grid-cols-2 gap-3 items-center">
                         <div className="h-12 w-12 bg-white/10 rounded-md flex items-center justify-center border border-white/20">
                             <ChartColumn size={28} color="white" />
@@ -56,7 +56,7 @@ const grid = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-14 mt-10 justify-items-center">
                 <section className="bg-[color:var(--color-card)] text-center rounded-2xl py-5 px-6  md:w-[60%] shadow-sm ">
-                    <div className="mb-6 text-[color:var(--color-secondary)] h-14 w-14 rounded-lg bg-[color:var(--color-secondary)]/12 flex items-center justify-center">
+                    <div className="mb-6 text-[color:var(--color-primary)] h-14 w-14 rounded-lg bg-[color:var(--color-secondary)]/12 flex items-center justify-center">
                         <ShieldCheck size={40} />
                     </div>
 
@@ -72,7 +72,7 @@ const grid = () => {
                     <div className="flex gap-6">
 
                         <section className="text-left grow">
-                            <div className="bg-[color:var(--color-secondary)] mb-4 h-11 w-11 rounded-md flex items-center justify-center">
+                            <div className="bg-[color:var(--color-primary)] mb-4 h-11 w-11 rounded-md flex items-center justify-center">
                                 <HistoryIcon size={20} color="white" />
                             </div>
 
@@ -83,8 +83,8 @@ const grid = () => {
 
                         <section className="flex flex-col gap-3 mt-2 w-full mt-10">
                             <div className="bg-white md:w-full rounded-lg h-10 px-3 py-2 flex items-center">
-                                <div className="bg-[color:var(--color-secondary)]/20 p-1 rounded-full mr-3">
-                                    <h1 className="text-[12px] font-bold text-[color:var(--color-secondary)]">AJ</h1>
+                                <div className="bg-[color:var(--color-primary)]/20 p-1 rounded-full mr-3">
+                                    <h1 className="text-[12px] font-bold text-[color:var(--color-primary)]">AJ</h1>
                                 </div>
                                 <div className="font-semibold text-sm flex-1">Alex Johnson</div>
 
