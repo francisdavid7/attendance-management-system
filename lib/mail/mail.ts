@@ -1,13 +1,16 @@
 import { Resend } from "resend";
+import EmailVerificationTemplate from "@/components/emailVerificationTemplate";
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendVerificationEmail(
   email: string,
   token: string,
-  name?: string,
+  name: string,
 ) {
   const verificationLink = `http://localhost:3000/auth/confirm-email?token=${token}`;
+
+  const emailTemplate = EmailVerificationTemplate(name, verificationLink);
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
@@ -16,17 +19,7 @@ export async function sendVerificationEmail(
 
     subject: "Verify your email",
 
-    html: `
-      <h2>Verify Your Email</h2>
-
-      <p>
-        Click the link below to verify your account:
-      </p>
-
-      <a href="${verificationLink}">
-        Verify Email
-      </a>
-    `,
+    html: emailTemplate,
   });
 }
 

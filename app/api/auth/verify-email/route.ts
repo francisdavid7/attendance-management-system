@@ -17,14 +17,24 @@ export async function PUT(req: Request) {
     });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 400 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 400 });
     }
 
     if (
       user.verificationTokenExpiresAt &&
       user.verificationTokenExpiresAt < new Date()
     ) {
-      return NextResponse.json({ error: "Token Expired" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Verification link expired" },
+        { status: 400 },
+      );
+    }
+
+    if (user.isVerified) {
+      return NextResponse.json(
+        { message: "Your email is already verified" },
+        { status: 200 },
+      );
     }
 
     await prisma.user.update({
@@ -33,8 +43,6 @@ export async function PUT(req: Request) {
       },
       data: {
         isVerified: true,
-        verificationToken: null,
-        verificationTokenExpiresAt: null,
       },
     });
 

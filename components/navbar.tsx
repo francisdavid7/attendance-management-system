@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Image from "next/image";
 import { ThemeToggle } from "./theme-toggle";
+import Logo from "./logo";
 
 const navLinks = [
   {
@@ -33,16 +34,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex justify-between items-center w-full">
           {/* LOGO */}
-          <Link href="/" className="text-xl font-bold flex items-center">
-            <Image
-              src="/logo.png"
-              width={30}
-              height={30}
-              alt="Logo"
-              className="mr-2"
-            />
-            Attend<span className="text-primary">X</span>
-          </Link>
+          <Logo />
           {/* DESKTOP NAV */}
           <nav className="hidden items-center gap-6 md:flex">
             {navLinks.map((link) => (

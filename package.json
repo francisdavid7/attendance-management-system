@@ -12,6 +12,8 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/adapter-neon": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.0.8",
     "axios": "^1.16.0",
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
@@ -43,6 +45,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "prisma": "^7.8.0",
+    "react-email": "^6.1.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
