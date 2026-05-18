@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const confirmRequest = (url: string) => axios.put(url).then((res) => res.data);
 
@@ -22,18 +22,30 @@ const page = () => {
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading",
   );
+  const [message, setMessage] = useState("");
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const router = useRouter();
 
   const { trigger, error } = useSWRMutation(
     `/api/auth/verify-email?token=${token}`,
     confirmRequest,
   );
 
+  const redirectToLogin = () => {
+    return setTimeout(() => {
+      router.replace("/auth/login");
+    }, 3000);
+  };
+
   const confirmEmail = async () => {
     try {
       const res = await trigger();
+
       setStatus("success");
+      setMessage(res.message);
+
+      redirectToLogin();
     } catch (error: any) {
       setStatus("error");
     }
@@ -63,27 +75,44 @@ const page = () => {
         <CardHeader className="w-full">
           {status !== "error" && (
             <CardTitle className="text-2xl md:text-3xl font-bold">
-              {status === "loading" ? "Verifying your email" : "Email verified"}
+              {status === "loading"
+                ? "Verifying your email"
+                : message
+                  ? "Email already verified"
+                  : "Email verified"}
             </CardTitle>
           )}
           <CardDescription>
-            {status === "loading"
-              ? "Please wait while your email is verified."
-              : status === "error"
-                ? error.response?.data?.error
-                : "Your email has been successfully verified."}
+            {status === "loading" ? (
+              "Please wait while your email is verified."
+            ) : status === "error" ? (
+              error.response?.data?.error
+            ) : (
+              <div>
+                {message ? (
+                  <p>{message}</p>
+                ) : (
+                  <div>
+                    <p>Your email has been successfully verified.</p>
+                    <p>
+                      You'll be redirected shortly, if not, use button below to
+                      go to login
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </CardDescription>
         </CardHeader>
 
         <CardContent className="w-full">
-          {status === "success" ||
-            (status === "error" && (
-              <Link href="/auth/login">
-                <Button className="w-full mb-4">
-                  <LogIn /> Back to Login
-                </Button>
-              </Link>
-            ))}
+          {status !== "loading" && (
+            <Link href="/auth/login">
+              <Button className="w-full mb-4">
+                <LogIn /> Back to Login
+              </Button>
+            </Link>
+          )}
         </CardContent>
       </Card>
     </div>

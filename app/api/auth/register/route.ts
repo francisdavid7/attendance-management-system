@@ -65,8 +65,10 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const name = fullName.split(" ")[0];
+
     // Send user a verification email
-    await sendVerificationEmail(user.email, verificationToken);
+    await sendVerificationEmail(user.email, verificationToken, name);
 
     return NextResponse.json(
       {
