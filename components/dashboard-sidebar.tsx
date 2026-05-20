@@ -1,19 +1,10 @@
 "use client";
 
 import {
-  Calendar,
-  LayoutDashboard,
-  Settings,
-  Users,
-  BookOpen,
-} from "lucide-react";
-
-import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -21,41 +12,23 @@ import {
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
 import getCurrentUser from "@/lib/get-current-user";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { Icon } from "next/dist/lib/metadata/types/metadata-types";
 
-const items = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Students",
-    url: "/dashboard/students",
-    icon: Users,
-  },
-  {
-    title: "Courses",
-    url: "/dashboard/courses",
-    icon: BookOpen,
-  },
-  {
-    title: "Attendance",
-    url: "/dashboard/attendance",
-    icon: Calendar,
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
-  },
-];
+export interface ItemsTypes {
+  title: string;
+  url: string;
+  icon: Icon;
+}
 
-export function DashboardSidebar() {
-  const isLoading = false;
+export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
+  const { isLoading, error } = getCurrentUser();
+  const pathname = usePathname();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarMenu>
+        <SidebarMenu className="py-2">
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <a
@@ -74,29 +47,39 @@ export function DashboardSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
-
           <SidebarGroupContent>
             {isLoading ? (
               <SidebarMenu>
-                {Array.from({ length: 5 }).map((_, index) => (
+                {items.map((_, index) => (
                   <SidebarMenuItem key={index}>
                     <SidebarMenuSkeleton />
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
-            ) : (
+            ) : !error ? (
               <SidebarMenu>
                 {items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton className="hover:bg-muted/20" asChild>
-                      <a href={item.url}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url}
+                      className="hover:bg-muted/20 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+                    >
+                      <Link href={item.url}>
                         <item.icon className="size-4" />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
+              </SidebarMenu>
+            ) : (
+              <SidebarMenu>
+                <SidebarMenuItem className="mt-10">
+                  <p className="px-3.5 text-destructive">
+                    An error occured. Data could not be loaded.
+                  </p>
+                </SidebarMenuItem>
               </SidebarMenu>
             )}
           </SidebarGroupContent>

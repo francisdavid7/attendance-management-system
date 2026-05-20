@@ -49,11 +49,14 @@ const page = () => {
     },
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
       const res = await trigger(data);
 
       toast.success(res.message);
+      router.push("/dashboard");
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);
