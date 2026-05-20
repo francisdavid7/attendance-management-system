@@ -11,21 +11,15 @@ const heroimage = () => {
           <h1 className="text-[30px] font-bold text-primary">99.8%</h1>
           <p className="text-[12px] text-secondary">ACCURACY RATE</p>
         </div>
+
       </div>
 
       <div className="flex justify-self-end ">
-        <div className="h-9  w-9 lg: shrink bg-[#8f8fac] rounded-full border-3 border-[#4c4848] z-0">
-          <img src='https://xsgames.co/randomusers/avatar.php?g=female' className="rounded-full" alt="" />
-        </div>
-        <div className="h-9 w-9 bg-[#7f7f85] rounded-full -ml-4 border-3 border-[#4c4848] z-10">
-          <img src='https://xsgames.co/randomusers/avatar.php?g=female&id=8' className="rounded-full" alt="" />
-        </div>
+        <div className="h-9  w-9 lg: shrink bg-[#8f8fac] rounded-full border-3 border-[#4c4848] z-0"></div>
+        <div className="h-9 w-9 bg-[#7f7f85] rounded-full -ml-4 border-3 border-[#4c4848] z-10"></div>
+        <div className="h-9 w-9 bg-[#727b95] rounded-full -ml-4 border-3 border-[#4c4848] z-20"></div>
 
-        <div className="h-9 w-9 bg-[#727b95] rounded-full -ml-4 border-3 border-[#4c4848] z-20">
-          <img src='https://xsgames.co/randomusers/avatar.php?g=male' className="rounded-full" alt="" />
-        </div>
-
-        <div className="ml-3 mt-auto mb-auto text-center font-bold">
+        <div className="ml-3 mt-auto mb-auto text-center font-bold ">
           <h1 className="text-[#333d] "> Joined by <span className="text-black">500+</span> ICT Department </h1>
         </div>
       </div>

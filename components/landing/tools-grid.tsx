@@ -33,10 +33,10 @@ const grid = () => {
 
                     <section className="mt-3 text-white">
                         <div>
-                            <h1 className="text-lg font-bold sm:text-2xl mt-4 mb-3 ">Predictive Admin Analytics</h1>
+                            <h1 className="text-lg sm:text-xl mt-4 mb-3 font-semibold">Predictive Admin Analytics</h1>
                         </div>
                         <div>
-                            <p className="mb-3  leading-relaxed">Dive deep into attendance trends with powerful ML-driven data visualization and instant PDF/Excel exports.</p>
+                            <p className="mb-3 text-sm leading-relaxed">Dive deep into attendance trends with powerful ML-driven data visualization and instant PDF/Excel exports.</p>
                         </div>
 
                         <section className="mt-4 pt-4 border-t border-white/10">
@@ -44,7 +44,7 @@ const grid = () => {
                                 <div className="h-10 w-10 bg-white/12 rounded-md flex items-center justify-center">
                                     <ChartNoAxesColumn size={22} color="white" />
                                 </div>
-                                <div className="text-justify text-2xl font-medium">
+                                <div className="text-justify text-lg font-semibold">
                                     <div>15% boost in</div>
                                     <div>engagement</div>
                                 </div>
