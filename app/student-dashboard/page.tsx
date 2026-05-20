@@ -1,7 +1,8 @@
+import Navbar from "@/components/student-portal/navbar"
 export default function portal() {
     return (
-        <p>
-            Welcome
-        </p>
+        <main>
+            < Navbar />
+        </main>
     )
 }
