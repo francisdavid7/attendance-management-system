@@ -20,6 +20,8 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge"
 import { Progress } from "../ui/progress";
 import { BookOpen, CheckCircle2, CircleX, History } from "lucide-react";
+import { useEffect, useState } from "react";
+import { clearInterval } from "timers";
 
 
 const data = [{
@@ -30,11 +32,12 @@ const data = [{
 
 
 function Chart() {
+
     return (
         <main>
             <div className="">
                 <div className="">
-                    <div className="text-3xl font-bold ">
+                    <div className="text-4xl font-bold ">
                         Welcome back, Alex!
                     </div>
                     <p className=" text-[14px] opacity-55 font-light mt-3">
@@ -42,12 +45,12 @@ function Chart() {
                     </p>
                 </div>
 
-                <section className="flex justify-evenly mt-11">
+                <section className="flex gap-6 mt-6">
 
-                    <div className=" ">
-                        <Card>
-                            <section className="flex gap-8">
-                                <div className="grow" >
+                    <div className="">
+                        <Card className="">
+                            <section className="flex p-4 gap-8">
+                                <div className="grow " >
                                     <CardHeader>
                                         <CardTitle>
                                             <div className="text-xl text-[color:var(--color-muted-foreground)]">
