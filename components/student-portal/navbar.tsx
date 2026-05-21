@@ -1,12 +1,7 @@
-import { fromJSONSchema } from "zod"
+
 import {
     Sheet,
-    SheetTrigger,
-    SheetClose,
-    SheetContent,
     SheetHeader,
-    SheetFooter,
-    SheetTitle,
     SheetDescription,
 } from "@/components/ui/sheet"
 
@@ -16,7 +11,7 @@ import { BellDotIcon, CircleQuestionMark } from "lucide-react"
 
 const navbar = () => {
     return (
-        <main className="z-1000 -mt-2">
+        <main className="z-1000 -mt-9">
             <Sheet >
                 <SheetHeader >
                     <div className="flex gap-2">

@@ -1,15 +1,22 @@
-import Navbar from "@/components/student-portal/navbar"
-import Chart from "@/components/student-portal/chart"
+import Navbar from "@/components/student-portal/navbar";
+import Chart from "@/components/student-portal/chart";
+import RecentHistory from "@/components/student-portal/table";
+
 export default function portal() {
     return (
-        <div>
-            
+        <div className="md:p-6 ">
+
             <div className="justify-self-end ">
                 <Navbar />
             </div>
+            <section>
+
+                <Chart />
+
+            </section>
 
             <div>
-                <Chart />
+                <RecentHistory />
             </div>
         </div>
 

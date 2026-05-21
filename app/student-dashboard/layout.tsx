@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SidebarProvider>
             <SideBar />
             <SidebarTrigger />
-            <main className="w-full ">
+            <main className="w-full">
                 {children}
             </main>
         </SidebarProvider>
