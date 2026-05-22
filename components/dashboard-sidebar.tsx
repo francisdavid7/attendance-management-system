@@ -14,12 +14,12 @@ import {
 import getCurrentUser from "@/lib/get-current-user";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Icon } from "next/dist/lib/metadata/types/metadata-types";
+import { ComponentType } from "react";
 
 export interface ItemsTypes {
   title: string;
   url: string;
-  icon: Icon;
+  icon: ComponentType<{ className?: string }>;
 }
 
 export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
@@ -58,20 +58,23 @@ export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
               </SidebarMenu>
             ) : !error ? (
               <SidebarMenu>
-                {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={pathname === item.url}
-                      className="hover:bg-muted/20 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
-                    >
-                      <Link href={item.url}>
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {items.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={pathname === item.url}
+                        className="hover:bg-muted/20 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+                      >
+                        <Link href={item.url}>
+                          <Icon className="size-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             ) : (
               <SidebarMenu>
