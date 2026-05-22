@@ -11,7 +11,7 @@ import { BellDotIcon, CircleQuestionMark } from "lucide-react"
 
 const navbar = () => {
     return (
-        <main className="z-1000 -mt-9">
+        <main className="z-1000 -mt-9 justify-self-end">
             <Sheet >
                 <SheetHeader >
                     <div className="flex gap-2">

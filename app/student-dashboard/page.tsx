@@ -6,13 +6,12 @@ export default function portal() {
     return (
         <div className="md:p-6 ">
 
-            <div className="justify-self-end ">
+            <div>
                 <Navbar />
             </div>
+
             <section>
-
                 <Chart />
-
             </section>
 
             <div>

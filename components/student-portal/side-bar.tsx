@@ -28,7 +28,7 @@ import {
 const content = [
     {
         title: "Dashboard",
-        url: "/student-dashboard/dashboard",
+        url: "/student-dashboard",
         icon: LayoutDashboard,
     },
     {

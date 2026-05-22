@@ -2,7 +2,8 @@
 import {
     RadialBarChart,
     RadialBar,
-    PolarAngleAxis
+    PolarAngleAxis,
+    Legend
 } from "recharts"
 
 import {
@@ -14,8 +15,8 @@ import {
 } from "@/components/ui/card"
 
 import { Progress } from "../ui/progress";
-import { BookOpen, CheckCircle2, CircleX, History } from "lucide-react";
-
+import { BadgeCheck, BookOpen, CheckCircle2, CircleX, History } from "lucide-react";
+import { Badge } from "../ui/badge";
 const data = [{
     name: "Attendance",
     value: 83,
@@ -76,6 +77,18 @@ function Chart() {
 
     }
 
+
+    const renderCenterLabel = () => {
+        return (
+
+            <div>
+                <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827' }}>
+                    <BadgeCheck size={50} className="text-(--color-primary)" />
+                </span>
+            </div>
+        );
+    };
+
     return (
         <main>
             <div className="">
@@ -117,7 +130,7 @@ function Chart() {
                                 </CardDescription>
                             </div>
                             <CardContent>
-                                <div>
+                                <div >
                                     <RadialBarChart
                                         width={250}
                                         height={250}
@@ -133,12 +146,22 @@ function Chart() {
                                             angleAxisId={0}
                                             tick={false}
                                         />
+
+
                                         <RadialBar
                                             dataKey="value"
                                             background
                                             cornerRadius={10}
                                         />
+
+                                        <Legend
+                                            content={renderCenterLabel}
+                                            layout="vertical"
+                                            verticalAlign="middle"
+                                            align="center"
+                                        />
                                     </RadialBarChart>
+
                                 </div>
                             </CardContent>
                         </section>

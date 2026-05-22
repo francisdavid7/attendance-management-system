@@ -88,7 +88,7 @@ export default function RecentHistory() {
                 </div>
                 <Table>
 
-                    <TableHeader className="bg-(--color-muted)" >
+                    <TableHeader className="bg-muted/20" >
                         <TableRow  >
                             <TableHead className="font-bold">DATE</TableHead>
                             <TableHead className="font-bold">COURSE</TableHead>
