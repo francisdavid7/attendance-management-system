@@ -1,7 +1,5 @@
-import Courses from "../components/admin/courses";
-
 const page = () => {
-  return <Courses />;
+  return <div>COurses</div>;
 };
 
 export default page;
