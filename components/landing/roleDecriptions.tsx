@@ -1,5 +1,5 @@
-import { Database, GraduationCap, LucideShieldAlert, LucideShieldUser, PhoneIcon, PhoneOffIcon, QrCodeIcon, Settings, ShieldAlertIcon, ShieldUser, User2Icon, UserCircle, UserCircle2Icon, UserCog2Icon } from "lucide-react"
-import { Portal } from "radix-ui";
+import { Database, GraduationCap, QrCodeIcon, Settings, ShieldUser, UserCircle2Icon } from "lucide-react"
+
 
 const roleDescriptions = () => {
     return (
@@ -61,7 +61,7 @@ const roleDescriptions = () => {
                 <section className="w-full md:w-[60%]  flex flex-row-reverse justify-center  mt-auto mb-auto">
 
 
-                    <div className="bg-white rounded-2xl py-6 px-6 w-full h-fit -ml-16 z-0 mb-8 -rotate-4 shadow-2xl shadow-slate-400/25 border border-slate-200">
+                    <div className="bg-card rounded-2xl py-6 px-6 w-full h-fit -ml-16 z-0 mb-8 -rotate-4 shadow-2xl shadow-slate-400/25 border border-slate-200">
                         <section className="flex">
                             <div className="text-[color:var(--color-primary)] grow text-start font-bold">ADMIN PANEL</div>
                             <div className="text-end"> <Settings /> </div>
@@ -89,10 +89,7 @@ const roleDescriptions = () => {
 
                     </div>
 
-
-
-
-                    <div className="w-[70%] flex flex-col gap-6 bg-[#ffffffba] rounded-2xl py-4 px-4 h-fit z-30 mt-25 rotate-6 shadow-2xl shadow-slate-400/20 border border-slate-200">
+                    <div className="bg-card/20 w-[70%] flex flex-col gap-6 bg-[#ffffffba] rounded-2xl py-4 px-4 h-fit z-30 mt-25 rotate-6 shadow-2xl shadow-slate-400/20 border border-slate-200">
                         <div className="flex gap-1 md:gap-2">
                             <div className="h-10 w-10 md:h-12 md:w-12 text-[#ffffffec] text-[28px] bg-[color:var(--color-primary)] md:rounded-2xl rounded-[7px] place-content-center px-2 md:px-3 ">
                                 <UserCircle2Icon />
