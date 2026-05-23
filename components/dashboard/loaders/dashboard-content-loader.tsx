@@ -32,7 +32,7 @@ const Loading = () => {
                 <Skeleton className="h-4 w-56" />
               </div>
 
-              <Skeleton className="h-[320px] w-full rounded-2xl" />
+              <Skeleton className="h-80 w-full rounded-2xl" />
             </div>
 
             {/* Activity */}

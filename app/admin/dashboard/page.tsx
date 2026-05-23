@@ -4,34 +4,39 @@ import {
   DashboardStatsCards,
   type StatsDataType,
 } from "@/components/dashboard/dashboard-stats-card";
+import ErrorState from "@/components/dashboard/error/data-error";
 import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
 import useDashboardStats from "@/hooks/use-dashboard-stats";
 import { BookOpen, CalendarCheck, GraduationCap, Users } from "lucide-react";
 
 const page = () => {
-  const { stats, isLoading, isError } = useDashboardStats();
+  const { stats, isLoading, isError, mutate } = useDashboardStats();
 
   if (isLoading) return <Loading />;
 
-  if (isError) return <div>Error</div>;
+  if (isError)
+    return (
+      <div>
+        <ErrorState onRetry={() => mutate()} />
+      </div>
+    );
 
-  console.log(stats);
   const statsData: StatsDataType[] = [
     {
       title: "Total Students",
-      value: "1,248",
+      value: stats.totalStudents,
       icon: GraduationCap,
       description: "+12 added this week",
     },
     {
       title: "Total Tutors",
-      value: "48",
+      value: stats.totalTutors,
       icon: Users,
       description: "5 active today",
     },
     {
       title: "Total Courses",
-      value: "26",
+      value: stats.totalCourses,
       icon: BookOpen,
       description: "3 new this semester",
     },
