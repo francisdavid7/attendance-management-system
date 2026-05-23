@@ -41,11 +41,13 @@ const heroSection = () => {
 
       </section>
 
-      <div>
-        <Marquee />
-      </div>
 
-      <section className="bg-[color:var(--color-card)] text-center mt-20">
+      <section className="bg-[color:var(--color-card)] text-center ">
+        <div className="mb-15">
+
+          <Marquee />
+        </div>
+
         <h1 className="text-4xl font-bold text-black" >
           Advanced Tools for Seamless Oversight
         </h1>
