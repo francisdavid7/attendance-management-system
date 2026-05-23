@@ -65,7 +65,7 @@ export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
                       <SidebarMenuButton
                         asChild
                         isActive={pathname === item.url}
-                        className="hover:bg-muted/20 data-[active=true]:bg-primary data-[active=true]:text-primary-foreground"
+                        className="hover:bg-muted/20 data-[active=true]:bg-muted/60 data-[active=true]:text-primary data-[active=true]:font-bold transition-all"
                       >
                         <Link href={item.url}>
                           <Icon className="size-4" />
