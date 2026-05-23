@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { verifyToken } from "./lib/auth/jwt";
 
 interface UserType {
-  id: string;
+  id: "ADMIN" | "TUTOR" | "STUDENT";
   role: string;
   iat: number;
   exp: number;
@@ -44,6 +44,15 @@ export function proxy(request: NextRequest) {
 
     // Admin protection
     if (pathname.startsWith("/admin") && user.role !== "ADMIN") {
+      return NextResponse.redirect(
+        new URL(`/${user.role.toLowerCase()}/dashboard`, request.url),
+      );
+    }
+
+    if (
+      (pathname.startsWith("/tutor") || pathname.startsWith("/student")) &&
+      user.role === "ADMIN"
+    ) {
       return NextResponse.redirect(
         new URL(`/${user.role.toLowerCase()}/dashboard`, request.url),
       );

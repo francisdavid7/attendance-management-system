@@ -9,7 +9,6 @@ import { Skeleton } from "../ui/skeleton";
 
 export function DashboardHeader() {
   const { user, isLoading } = getCurrentUser();
-  console.log(user);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-md">
