@@ -6,13 +6,14 @@ import {
   Settings,
   Users,
   BookOpen,
+  GraduationCap,
 } from "lucide-react";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import type { ItemsTypes } from "@/components/dashboard/dashboard-sidebar";
-import getCurrentUser from "@/lib/get-current-user";
+import getCurrentUser from "@/lib/actions/get-current-user";
 import ErrorState from "@/components/dashboard/error/error-state";
 
 const items: ItemsTypes[] = [
@@ -30,6 +31,11 @@ const items: ItemsTypes[] = [
     title: "Courses",
     url: "/admin/dashboard/courses",
     icon: BookOpen as any,
+  },
+  {
+    title: "Tutors",
+    url: "/admin/dashboard/tutors",
+    icon: GraduationCap as any,
   },
   {
     title: "Attendance",

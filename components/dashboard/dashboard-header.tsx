@@ -4,7 +4,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Bell, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import getCurrentUser from "@/lib/get-current-user";
+import getCurrentUser from "@/lib/actions/get-current-user";
 import { Skeleton } from "../ui/skeleton";
 
 export function DashboardHeader() {

@@ -42,6 +42,12 @@ export function proxy(request: NextRequest) {
       );
     }
 
+    if (pathname.startsWith("/dashboard")) {
+      return NextResponse.redirect(
+        new URL(`/${user.role.toLowerCase()}/dashboard`, request.url),
+      );
+    }
+
     // Admin protection
     if (pathname.startsWith("/admin") && user.role !== "ADMIN") {
       return NextResponse.redirect(

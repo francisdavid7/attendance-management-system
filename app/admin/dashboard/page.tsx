@@ -1,13 +1,25 @@
 "use client";
 
+import { DashboardAnalyticsSection } from "@/components/dashboard/admin/dashboard-analytics-section";
 import {
   DashboardStatsCards,
   type StatsDataType,
 } from "@/components/dashboard/dashboard-stats-card";
 import ErrorState from "@/components/dashboard/error/data-error";
 import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import useDashboardStats from "@/hooks/use-dashboard-stats";
 import { BookOpen, CalendarCheck, GraduationCap, Users } from "lucide-react";
+
+const studentHeadRow = ["S/N", "Student", "Email", "Course", "Tutor"];
 
 const page = () => {
   const { stats, isLoading, isError, mutate } = useDashboardStats();
@@ -60,6 +72,32 @@ const page = () => {
 
       {/* Top cards */}
       <DashboardStatsCards stats={statsData} />
+      <DashboardAnalyticsSection />
+
+      {/* <div>
+        <Table>
+          <TableCaption>Recent students</TableCaption>
+          <TableHeader>
+            <TableRow>
+              {studentHeadRow.map((data) => (
+                <TableHead key={data}>{data}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {students.splice(0, 5).map((student, index) => (
+              <TableRow key={student.id}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{student.fullName}</TableCell>
+                <TableCell>{student?.email}</TableCell>
+                <TableCell>{student?.course ?? "N/A"}</TableCell>
+                <TableCell>{student?.tutor ?? "N/A"}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div> */}
     </div>
   );
 };

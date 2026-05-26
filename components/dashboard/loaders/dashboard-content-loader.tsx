@@ -7,6 +7,9 @@ const Loading = () => {
       <div className="flex min-h-screen flex-col">
         {/* Main Content */}
         <main className="flex-1 space-y-6 p-6">
+          <div className="space-y-1">
+            <Skeleton className="h-9 w-32" />
+          </div>
           {/* Stats Cards */}
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {Array.from({ length: 4 }).map((_, index) => (

@@ -3,6 +3,7 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -11,10 +12,13 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import getCurrentUser from "@/lib/get-current-user";
+import getCurrentUser from "@/lib/actions/get-current-user";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ComponentType } from "react";
+import { SquareArrowRightEnterIcon, User } from "lucide-react";
+import { toast } from "sonner";
+import { LogoutUser } from "@/lib/actions/logout-user";
 
 export interface ItemsTypes {
   title: string;
@@ -25,6 +29,16 @@ export interface ItemsTypes {
 export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
   const { isLoading, error } = getCurrentUser();
   const pathname = usePathname();
+
+  const handleLogout = () => {
+    try {
+      LogoutUser();
+      toast.success("Logged out successfully");
+    } catch (error: any) {
+      toast.error(error.messsage);
+    }
+  };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -45,7 +59,7 @@ export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="flex flex-col">
         <SidebarGroup>
           <SidebarGroupContent>
             {isLoading ? (
@@ -87,6 +101,37 @@ export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
             )}
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarFooter className="mt-auto">
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu className="border-t-2 w-full py-5 ">
+                <SidebarMenuItem>
+                  <SidebarMenuButton className="hover:bg-muted/20 cursor-pointer">
+                    <div className="flex gap-2 ">
+                      <div>
+                        <User size={20} />
+                      </div>
+                      <div>Profile</div>
+                    </div>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    onClick={handleLogout}
+                    className="hover:bg-muted/20 cursor-pointer"
+                  >
+                    <div className="flex gap-2">
+                      <SquareArrowRightEnterIcon size={20} />
+                      <p>Logout</p>
+                    </div>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarFooter>
       </SidebarContent>
     </Sidebar>
   );
