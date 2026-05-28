@@ -51,11 +51,17 @@ const page = () => {
           <TableBody>
             {students.splice(0, 5).map((student) => (
               <TableRow key={student.id}>
-                <TableCell>{student.id?.split("-")[0]}</TableCell>
-                <TableCell>{student.fullName}</TableCell>
-                <TableCell>{student?.email}</TableCell>
-                <TableCell>{student?.course ?? "N/A"}</TableCell>
-                <TableCell>{student?.tutor ?? "N/A"}</TableCell>
+                <TableCell className="py-4">
+                  {student.id?.split("-")[0]}
+                </TableCell>
+                <TableCell className="py-4">{student.fullName}</TableCell>
+                <TableCell className="py-4">{student?.email}</TableCell>
+                <TableCell className="py-4">
+                  {student?.course ?? "N/A"}
+                </TableCell>
+                <TableCell className="py-4">
+                  {student?.tutor ?? "N/A"}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

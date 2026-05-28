@@ -175,7 +175,7 @@ const Courses = () => {
 
             <TableBody>
               {courses.map((course) => (
-                <TableRow key={course.code}>
+                <TableRow key={course.title}>
                   {/* COURSE */}
                   <TableCell>
                     <div>

@@ -12,13 +12,14 @@ import {
   SidebarMenuItem,
   SidebarMenuSkeleton,
 } from "@/components/ui/sidebar";
-import getCurrentUser from "@/lib/actions/get-current-user";
+import { getCurrentUser } from "@/lib/actions/actions";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ComponentType } from "react";
 import { SquareArrowRightEnterIcon, User } from "lucide-react";
 import { toast } from "sonner";
 import { LogoutUser } from "@/lib/actions/logout-user";
+import SidebarLoader from "./loaders/sidebar-loader";
 
 export interface ItemsTypes {
   title: string;
@@ -29,6 +30,8 @@ export interface ItemsTypes {
 export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
   const { isLoading, error } = getCurrentUser();
   const pathname = usePathname();
+
+  if (isLoading) return <SidebarLoader />;
 
   const handleLogout = () => {
     try {
@@ -62,43 +65,25 @@ export function DashboardSidebar({ items }: { items: ItemsTypes[] }) {
       <SidebarContent className="flex flex-col">
         <SidebarGroup>
           <SidebarGroupContent>
-            {isLoading ? (
-              <SidebarMenu>
-                {items.map((_, index) => (
-                  <SidebarMenuItem key={index}>
-                    <SidebarMenuSkeleton />
+            <SidebarMenu>
+              {items.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === item.url}
+                      className="hover:bg-muted/20 data-[active=true]:bg-muted/60 data-[active=true]:text-primary data-[active=true]:font-bold transition-all"
+                    >
+                      <Link href={item.url}>
+                        <Icon className="size-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
                   </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            ) : !error ? (
-              <SidebarMenu>
-                {items.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={pathname === item.url}
-                        className="hover:bg-muted/20 data-[active=true]:bg-muted/60 data-[active=true]:text-primary data-[active=true]:font-bold transition-all"
-                      >
-                        <Link href={item.url}>
-                          <Icon className="size-4" />
-                          <span>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            ) : (
-              <SidebarMenu>
-                <SidebarMenuItem className="mt-10">
-                  <p className="px-3.5 text-destructive">
-                    An error occured. Data could not be loaded.
-                  </p>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            )}
+                );
+              })}
+            </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 

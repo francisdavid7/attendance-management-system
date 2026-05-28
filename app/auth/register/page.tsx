@@ -112,7 +112,7 @@ const page = () => {
                       {...field}
                       type="email"
                       id={field.name}
-                      placeholder="student@university.edu"
+                      placeholder="student@example.edu"
                       aria-invalid={fieldState.invalid}
                     />
 

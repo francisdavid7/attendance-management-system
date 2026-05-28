@@ -1,11 +1,16 @@
+import Courses from "@/app/admin/dashboard/courses/page";
 import { prisma } from "@/lib/prisma";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const tutors = await prisma.user.findMany({
       where: {
         role: "TUTOR",
+      },
+
+      orderBy: {
+        createdAt: "desc",
       },
 
       select: {
@@ -27,6 +32,14 @@ export async function GET(request: NextRequest) {
       },
     });
 
+    const coursesAssigned = await prisma.course.count({
+      where: {
+        tutorId: {
+          not: null,
+        },
+      },
+    });
+
     const tutorData = tutors.map((tutor) => {
       // Get students' ID
       const studentIds = tutor.courses.flatMap((course) =>
@@ -44,10 +57,11 @@ export async function GET(request: NextRequest) {
         email: tutor.email,
         assignedCourses,
         totalStudents: uniqueStudents.length,
+        status: assignedCourses.length >= 1 ? "ACTIVE" : "INACTIVE",
       };
     });
 
-    return NextResponse.json({ success: true, tutorData });
+    return NextResponse.json({ success: true, tutorData, coursesAssigned });
   } catch (error: any) {
     return NextResponse.json({ error: error.message });
   }

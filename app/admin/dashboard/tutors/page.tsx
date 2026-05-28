@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import {
   BookOpen,
   MoreHorizontal,
@@ -22,72 +25,56 @@ import {
 } from "@/components/ui/table";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getTutors } from "@/lib/actions/actions";
+import Loading from "@/components/dashboard/loaders/dashboard-table-data-loader";
+import AddTutor from "./components/add-tutor";
+import ErrorState from "@/components/dashboard/error/data-error";
 
-const stats = [
-  {
-    title: "Total Tutors",
-    value: "24",
-    icon: Users,
-  },
+interface StatItem {
+  title: string;
+  value: string;
+  icon: React.ComponentType<any>;
+}
 
-  {
-    title: "Active Tutors",
-    value: "18",
-    icon: UserCheck,
-  },
-
-  {
-    title: "Assigned Courses",
-    value: "32",
-    icon: BookOpen,
-  },
-
-  {
-    title: "Verified Tutors",
-    value: "20",
-    icon: ShieldCheck,
-  },
-];
-
-const tutors = [
-  {
-    fullName: "John Doe",
-    email: "john@example.com",
-    course: "Web Development",
-    students: 120,
-    attendance: "92%",
-    status: "Active",
-  },
-
-  {
-    fullName: "Sarah James",
-    email: "sarah@example.com",
-    course: "UI/UX Design",
-    students: 84,
-    attendance: "88%",
-    status: "Active",
-  },
-
-  {
-    fullName: "Michael Smith",
-    email: "michael@example.com",
-    course: "Cyber Security",
-    students: 63,
-    attendance: "81%",
-    status: "Pending",
-  },
-
-  {
-    fullName: "David Wilson",
-    email: "david@example.com",
-    course: "Data Science",
-    students: 41,
-    attendance: "74%",
-    status: "Inactive",
-  },
-];
+interface Tutor {
+  fullName: string;
+  email: string;
+  assignedCourses: string | string[];
+  totalStudents: number;
+  status?: "ACTIVE" | "INACTIVE" | "PENDING";
+}
 
 const Tutors = () => {
+  const { tutors, coursesAssigned, isLoading, error } = getTutors();
+
+  if (isLoading) return <Loading />;
+
+  if (error) return <ErrorState />;
+
+  const activeTutors = tutors.filter(
+    (tutor: any) => tutor.assignedCourses.length > 0,
+  );
+
+  const stats = [
+    {
+      title: "Total Tutors",
+      value: tutors.length,
+      icon: Users,
+    },
+
+    {
+      title: "Active Tutors",
+      value: activeTutors.length,
+      icon: UserCheck,
+    },
+
+    {
+      title: "Assigned Courses",
+      value: coursesAssigned,
+      icon: BookOpen,
+    },
+  ];
+
   return (
     <section className="space-y-6 p-6">
       {/* PAGE HEADER */}
@@ -100,15 +87,11 @@ const Tutors = () => {
           </p>
         </div>
 
-        <Button className="h-10 rounded-xl px-5">
-          <Plus className="h-4 w-4" />
-
-          <span>Add Tutor</span>
-        </Button>
+        <AddTutor />
       </div>
 
       {/* STATS */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {stats.map((item) => {
           const Icon = item.icon;
 
@@ -172,8 +155,6 @@ const Tutors = () => {
 
                 <TableHead>Students</TableHead>
 
-                <TableHead>Attendance</TableHead>
-
                 <TableHead>Status</TableHead>
 
                 <TableHead className="text-right">Actions</TableHead>
@@ -181,7 +162,7 @@ const Tutors = () => {
             </TableHeader>
 
             <TableBody>
-              {tutors.map((tutor) => (
+              {tutors.map((tutor: Tutor) => (
                 <TableRow key={tutor.email}>
                   {/* TUTOR */}
                   <TableCell>
@@ -208,24 +189,17 @@ const Tutors = () => {
                   </TableCell>
 
                   {/* COURSE */}
-                  <TableCell>{tutor.course}</TableCell>
+                  <TableCell>
+                    {tutor.assignedCourses[0] ?? "No course assigned yet"}
+                  </TableCell>
 
                   {/* STUDENTS */}
-                  <TableCell>{tutor.students}</TableCell>
-
-                  {/* ATTENDANCE */}
-                  <TableCell>{tutor.attendance}</TableCell>
+                  <TableCell>{tutor.totalStudents}</TableCell>
 
                   {/* STATUS */}
                   <TableCell>
                     <div
-                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium ${
-                        tutor.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : tutor.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
+                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium  ${tutor.status === "ACTIVE" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}
                     >
                       {tutor.status}
                     </div>

@@ -13,8 +13,9 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import type { ItemsTypes } from "@/components/dashboard/dashboard-sidebar";
-import getCurrentUser from "@/lib/actions/get-current-user";
+import { getCurrentUser } from "@/lib/actions/actions";
 import ErrorState from "@/components/dashboard/error/error-state";
+import Loading from "./loading";
 
 const items: ItemsTypes[] = [
   {
