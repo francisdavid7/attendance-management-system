@@ -43,6 +43,7 @@ export function DashboardHeader() {
           </>
         ) : (
           <>
+
             <Button variant="outline" size="icon-lg">
               <Bell className="h-5 w-5" />
             </Button>
