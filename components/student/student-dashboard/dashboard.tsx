@@ -1,7 +1,7 @@
 "use client"
 import btn from "./icons";
 import { BadgeCheck } from "lucide-react";
-import getCurrentUser from "@/lib/actions/get-current-user";
+import { getCurrentUser } from "@/lib/actions/actions";
 import { Progress } from "@/components/ui/progress";
 import { RadialBarChart, RadialBar, PolarAngleAxis, Legend } from "recharts"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"

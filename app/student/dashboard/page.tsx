@@ -2,7 +2,7 @@
 import Chart from "@/components/student/student-dashboard/dashboard";
 import RecentHistory from "@/components/student/student-dashboard/table/recent";
 import { Skeleton } from "@/components/ui/skeleton";
-import getCurrentUser from "@/lib/actions/get-current-user";
+import { getCurrentUser } from "@/lib/actions/actions";
 const Dashboard = () => {
   const { user, isLoading } = getCurrentUser();
   return <div>
