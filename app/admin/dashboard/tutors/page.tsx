@@ -41,15 +41,15 @@ interface Tutor {
   email: string;
   assignedCourses: string | string[];
   totalStudents: number;
-  status?: "ACTIVE" | "INACTIVE" | "PENDING";
+  status?: "Active" | "Inactive" | "Pending";
 }
 
 const Tutors = () => {
-  const { tutors, coursesAssigned, isLoading, error } = getTutors();
+  const { tutors, coursesAssigned, isLoading, error, mutate } = getTutors();
 
   if (isLoading) return <Loading />;
 
-  if (error) return <ErrorState />;
+  if (error) return <ErrorState onRetry={() => mutate()} />;
 
   const activeTutors = tutors.filter(
     (tutor: any) => tutor.assignedCourses.length > 0,
@@ -199,7 +199,7 @@ const Tutors = () => {
                   {/* STATUS */}
                   <TableCell>
                     <div
-                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium  ${tutor.status === "ACTIVE" ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"}`}
+                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium  ${tutor.status === "Active" ? "bg-secondary/20 text-emerald-700" : "bg-red-200 text-red-700"}`}
                     >
                       {tutor.status}
                     </div>

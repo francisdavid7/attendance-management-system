@@ -19,7 +19,23 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ courses });
+    const coursesData = courses.map((course) => {
+      const totalStudents = course._count.students;
+      const hasTutor = course.tutor ?? false;
+      return {
+        course: course.name,
+        tutor: course.tutor?.fullName ?? "No Tutor Assigned",
+        totalStudents,
+        status:
+          course.tutor !== null
+            ? "Active"
+            : hasTutor && totalStudents < 1
+              ? "Pending"
+              : "Inactive",
+      };
+    });
+
+    return NextResponse.json({ success: true, coursesData });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

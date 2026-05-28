@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BookOpen,
   MoreHorizontal,
@@ -20,68 +22,59 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getCourses } from "@/lib/actions/actions";
+import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
+import ErrorState from "@/components/dashboard/error/data-error";
+import CreateCourse from "./components/create-course";
 
-const stats = [
-  {
-    title: "Total Courses",
-    value: "24",
-    icon: BookOpen,
-  },
-
-  {
-    title: "Active Courses",
-    value: "18",
-    icon: BookOpen,
-  },
-
-  {
-    title: "Assigned Tutors",
-    value: "12",
-    icon: User2,
-  },
-
-  {
-    title: "Total Enrollments",
-    value: "1,248",
-    icon: Users,
-  },
-];
-
-const courses = [
-  {
-    title: "Web Development",
-    tutor: "John Doe",
-    students: 120,
-    attendance: "92%",
-    status: "Active",
-  },
-
-  {
-    title: "UI/UX Design",
-    tutor: "Sarah James",
-    students: 84,
-    attendance: "88%",
-    status: "Active",
-  },
-
-  {
-    title: "Data Science",
-    tutor: "Michael Smith",
-    students: 63,
-    attendance: "81%",
-    status: "Inactive",
-  },
-
-  {
-    title: "Cyber Security",
-    tutor: "No Tutor Assigned",
-    students: 40,
-    attendance: "75%",
-    status: "Pending",
-  },
-];
+interface CourseType {
+  course: string;
+  tutor: string;
+  totalStudents: number;
+  status: string;
+}
 
 const Courses = () => {
+  const { courses, isLoading, error, mutate } = getCourses();
+
+  if (isLoading) return <Loading />;
+
+  if (error) return <ErrorState onRetry={() => mutate()} />;
+
+  const activeCourses = courses.filter(
+    (course: any) => course.status === "Active",
+  );
+
+  const assignedCourses = courses.filter(
+    (course: any) => course.tutor !== "No Tutor Assigned",
+  );
+
+  const stats = [
+    {
+      title: "Total Courses",
+      value: courses.length,
+      icon: BookOpen,
+    },
+
+    {
+      title: "Active Courses",
+      value: activeCourses.length,
+      icon: BookOpen,
+    },
+
+    {
+      title: "Assigned Tutors",
+      value: assignedCourses.length,
+      icon: User2,
+    },
+
+    {
+      title: "Total Enrollments",
+      value: "1,248",
+      icon: Users,
+    },
+  ];
+
   return (
     <section className="space-y-6 p-6">
       {/* PAGE HEADER */}
@@ -94,11 +87,7 @@ const Courses = () => {
           </p>
         </div>
 
-        <Button className="h-10 rounded-xl px-5">
-          <Plus className="h-4 w-4" />
-
-          <span>Create Course</span>
-        </Button>
+        <CreateCourse />
       </div>
 
       {/* STATS */}
@@ -165,8 +154,6 @@ const Courses = () => {
 
                 <TableHead>Students</TableHead>
 
-                <TableHead>Attendance</TableHead>
-
                 <TableHead>Status</TableHead>
 
                 <TableHead className="text-right">Actions</TableHead>
@@ -174,12 +161,12 @@ const Courses = () => {
             </TableHeader>
 
             <TableBody>
-              {courses.map((course) => (
-                <TableRow key={course.title}>
+              {courses.map((course: CourseType) => (
+                <TableRow key={course.course}>
                   {/* COURSE */}
                   <TableCell>
                     <div>
-                      <p className="font-medium">{course.title}</p>
+                      <p className="font-medium">{course.course}</p>
                     </div>
                   </TableCell>
 
@@ -187,10 +174,7 @@ const Courses = () => {
                   <TableCell>{course.tutor}</TableCell>
 
                   {/* STUDENTS */}
-                  <TableCell>{course.students}</TableCell>
-
-                  {/* ATTENDANCE */}
-                  <TableCell>{course.attendance}</TableCell>
+                  <TableCell>{course.totalStudents}</TableCell>
 
                   {/* STATUS */}
                   <TableCell>

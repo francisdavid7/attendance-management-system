@@ -57,7 +57,7 @@ export async function GET() {
         email: tutor.email,
         assignedCourses,
         totalStudents: uniqueStudents.length,
-        status: assignedCourses.length >= 1 ? "ACTIVE" : "INACTIVE",
+        status: assignedCourses.length >= 1 ? "Active" : "Inactive",
       };
     });
 

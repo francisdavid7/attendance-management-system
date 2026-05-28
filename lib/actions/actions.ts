@@ -19,3 +19,15 @@ export const getTutors = () => {
   const coursesAssigned = data?.coursesAssigned;
   return { tutors, coursesAssigned, isLoading, error, mutate };
 };
+
+// Get courses data
+export const getCourses = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/admin/courses",
+    fetch,
+  );
+
+  const courses = data?.coursesData;
+  const coursesAssigned = data?.coursesAssigned;
+  return { courses, isLoading, error, mutate };
+};
