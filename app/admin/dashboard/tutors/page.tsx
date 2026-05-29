@@ -26,9 +26,18 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getTutors } from "@/lib/actions/actions";
-import Loading from "@/components/dashboard/loaders/dashboard-table-data-loader";
 import AddTutor from "./components/add-tutor";
 import ErrorState from "@/components/dashboard/error/data-error";
+import { Badge } from "@/components/ui/badge";
+import StatsTableLoader from "@/components/dashboard/loaders/stats-table-loader";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface StatItem {
   title: string;
@@ -36,7 +45,7 @@ interface StatItem {
   icon: React.ComponentType<any>;
 }
 
-interface Tutor {
+export interface Tutor {
   fullName: string;
   email: string;
   assignedCourses: string | string[];
@@ -47,7 +56,7 @@ interface Tutor {
 const Tutors = () => {
   const { tutors, coursesAssigned, isLoading, error, mutate } = getTutors();
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <StatsTableLoader />;
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
 
@@ -127,19 +136,34 @@ const Tutors = () => {
 
         {/* FILTERS */}
         <div className="flex flex-wrap items-center gap-3">
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Courses</option>
-            <option>Web Development</option>
-            <option>UI/UX Design</option>
-            <option>Cyber Security</option>
-          </select>
+          <Select defaultValue="All Courses">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
 
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Inactive</option>
-            <option>Pending</option>
-          </select>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All Courses">All Courses</SelectItem>
+                <SelectItem value="Assigned">Assigned</SelectItem>
+                <SelectItem value="Unassigned">Unassigned</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select defaultValue="All Status">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All Status">All Status</SelectItem>
+                <SelectItem value="Assigned">Active</SelectItem>
+                <SelectItem value="Unassigned">Inactive</SelectItem>
+                <SelectItem value="Unassigned">Pending</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -198,11 +222,13 @@ const Tutors = () => {
 
                   {/* STATUS */}
                   <TableCell>
-                    <div
-                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium  ${tutor.status === "Active" ? "bg-secondary/20 text-emerald-700" : "bg-red-200 text-red-700"}`}
+                    <Badge
+                      variant={
+                        tutor.status === "Active" ? "default" : "destructive"
+                      }
                     >
                       {tutor.status}
-                    </div>
+                    </Badge>
                   </TableCell>
 
                   {/* ACTIONS */}

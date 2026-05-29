@@ -1,7 +1,13 @@
 import useSWR from "swr";
 import axios from "axios";
+import useSWRMutation from "swr/mutation";
 
+// fether function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);
+
+// request poster function
+const postData = (url: string, { arg }: { arg: any }) =>
+  axios.post(url, arg).then((res) => res.data);
 
 // Get current user
 export const getCurrentUser = () => {
@@ -30,4 +36,9 @@ export const getCourses = () => {
   const courses = data?.coursesData;
   const coursesAssigned = data?.coursesAssigned;
   return { courses, isLoading, error, mutate };
+};
+
+// ============================= POST REQUESTS ====================================== //
+export const useAssignTutor = () => {
+  return useSWRMutation("/api/courses/assign-tutor", postData);
 };

@@ -15,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema } from "@/lib/validation/auth";
 import z from "zod";
 import { Loader2, Plus } from "lucide-react";
 import useSWRMutation from "swr/mutation";
@@ -34,13 +33,15 @@ import { Textarea } from "@/components/ui/textarea";
 
 const sendRequest = async (
   url: string,
-  { arg }: { arg: z.infer<typeof registerSchema> },
+  { arg }: { arg: z.infer<typeof CourseSchema> },
 ) => axios.post(url, arg).then((res) => res.data);
 
 const CourseSchema = z.object({
   name: z.string().min(3, "Course name must be at least three characters"),
   description: z.string().optional(),
 });
+
+type CourseType = z.infer<typeof CourseSchema>;
 
 const CreateCourse = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,10 +55,12 @@ const CreateCourse = () => {
     defaultValues: { name: "" },
   });
 
-  const { trigger, isMutating } = useSWRMutation(
-    "/api/courses/create-tutor",
-    sendRequest,
-  );
+  const { trigger, isMutating } = useSWRMutation<
+    string,
+    unknown,
+    string,
+    CourseType
+  >("/api/courses/create-course", sendRequest);
 
   // Reset form when submission is successful
   useEffect(() => {
@@ -66,13 +69,11 @@ const CreateCourse = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  const handleCreateCourse = async (data: z.infer<typeof registerSchema>) => {
+  const handleCreateCourse = async (data: z.infer<typeof CourseSchema>) => {
     try {
-      const res = await trigger(data);
-      toast.success(
-        `Tutor ${res.tutor.fullName?.split(" ")[0]} has been created!`,
-      );
+      const res: any = await trigger(data);
       setIsOpen(false);
+      toast.success(res.message);
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);
@@ -115,7 +116,7 @@ const CreateCourse = () => {
 
                       <Input
                         {...field}
-                        type="email"
+                        type="text"
                         id={field.name}
                         placeholder="e.g cyber security"
                         aria-invalid={fieldState.invalid}

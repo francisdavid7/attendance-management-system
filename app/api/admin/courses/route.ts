@@ -4,7 +4,12 @@ import { NextResponse } from "next/server";
 export async function GET() {
   try {
     const courses = await prisma.course.findMany({
+      orderBy: {
+        createdAt: "asc",
+      },
+
       select: {
+        id: true,
         name: true,
         tutor: {
           select: {
@@ -23,6 +28,7 @@ export async function GET() {
       const totalStudents = course._count.students;
       const hasTutor = course.tutor ?? false;
       return {
+        courseId: course.id,
         course: course.name,
         tutor: course.tutor?.fullName ?? "No Tutor Assigned",
         totalStudents,

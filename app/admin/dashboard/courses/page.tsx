@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  BookOpen,
-  MoreHorizontal,
-  Plus,
-  Search,
-  User2,
-  Users,
-} from "lucide-react";
+import { BookOpen, MoreHorizontal, Search, User2, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -23,11 +16,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getCourses } from "@/lib/actions/actions";
-import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
 import ErrorState from "@/components/dashboard/error/data-error";
 import CreateCourse from "./components/create-course";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import StatsTableLoader from "@/components/dashboard/loaders/stats-table-loader";
+import AssignTutor from "./components/assign-tutor";
 
 interface CourseType {
+  courseId: string;
   course: string;
   tutor: string;
   totalStudents: number;
@@ -37,7 +41,7 @@ interface CourseType {
 const Courses = () => {
   const { courses, isLoading, error, mutate } = getCourses();
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <StatsTableLoader />;
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
 
@@ -127,18 +131,34 @@ const Courses = () => {
 
         {/* FILTERS */}
         <div className="flex flex-wrap items-center gap-3">
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Tutors</option>
-            <option>Assigned</option>
-            <option>Unassigned</option>
-          </select>
+          <Select defaultValue="All Tutors">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
 
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Inactive</option>
-            <option>Pending</option>
-          </select>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All Tutors">All Tutors</SelectItem>
+                <SelectItem value="Assigned">Assigned</SelectItem>
+                <SelectItem value="Unassigned">Unassigned</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select defaultValue="All Status">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All Status">All Status</SelectItem>
+                <SelectItem value="Assigned">Active</SelectItem>
+                <SelectItem value="Unassigned">Inactive</SelectItem>
+                <SelectItem value="Unassigned">Pending</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -156,13 +176,13 @@ const Courses = () => {
 
                 <TableHead>Status</TableHead>
 
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
               {courses.map((course: CourseType) => (
-                <TableRow key={course.course}>
+                <TableRow className="hover:bg-muted/10" key={course.course}>
                   {/* COURSE */}
                   <TableCell>
                     <div>
@@ -178,24 +198,24 @@ const Courses = () => {
 
                   {/* STATUS */}
                   <TableCell>
-                    <div
-                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium ${
-                        course.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : course.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {course.status}
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant={
+                          course.status === "Active" ? "default" : "destructive"
+                        }
+                      >
+                        {course.status}
+                      </Badge>
                     </div>
                   </TableCell>
 
                   {/* ACTIONS */}
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="rounded-xl">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                  <TableCell>
+                    <AssignTutor
+                      tutor={course.tutor}
+                      course={course.course}
+                      courseId={course.courseId}
+                    />
                   </TableCell>
                 </TableRow>
               ))}
