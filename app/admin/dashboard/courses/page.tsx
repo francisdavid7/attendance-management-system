@@ -1,7 +1,9 @@
+"use client";
+
 import {
   BookOpen,
+  ListFilterPlus,
   MoreHorizontal,
-  Plus,
   Search,
   User2,
   Users,
@@ -20,68 +22,60 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getCourses } from "@/lib/actions/actions";
+import ErrorState from "@/components/dashboard/error/data-error";
+import CreateCourse from "./components/create-course";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import StatsTableLoader from "@/components/dashboard/loaders/stats-table-loader";
+import AssignTutor from "./components/assign-tutor";
 
-const stats = [
-  {
-    title: "Total Courses",
-    value: "24",
-    icon: BookOpen,
-  },
-
-  {
-    title: "Active Courses",
-    value: "18",
-    icon: BookOpen,
-  },
-
-  {
-    title: "Assigned Tutors",
-    value: "12",
-    icon: User2,
-  },
-
-  {
-    title: "Total Enrollments",
-    value: "1,248",
-    icon: Users,
-  },
-];
-
-const courses = [
-  {
-    title: "Web Development",
-    tutor: "John Doe",
-    students: 120,
-    attendance: "92%",
-    status: "Active",
-  },
-
-  {
-    title: "UI/UX Design",
-    tutor: "Sarah James",
-    students: 84,
-    attendance: "88%",
-    status: "Active",
-  },
-
-  {
-    title: "Data Science",
-    tutor: "Michael Smith",
-    students: 63,
-    attendance: "81%",
-    status: "Inactive",
-  },
-
-  {
-    title: "Cyber Security",
-    tutor: "No Tutor Assigned",
-    students: 40,
-    attendance: "75%",
-    status: "Pending",
-  },
-];
+interface CourseType {
+  courseId: string;
+  course: string;
+  tutor: string;
+  totalStudents: number;
+  status: "Assigned" | "Unassigned";
+}
 
 const Courses = () => {
+  const { courses, isLoading, error, mutate } = getCourses();
+
+  if (isLoading) return <StatsTableLoader />;
+
+  if (error) return <ErrorState onRetry={() => mutate()} />;
+
+  const assignedCourses = courses.filter(
+    (course: any) => course.tutor !== "No Tutor Assigned",
+  );
+
+  const stats = [
+    {
+      title: "Total Courses",
+      value: courses.length,
+      icon: BookOpen,
+    },
+
+    {
+      title: "Assigned Courses",
+      value: assignedCourses.length,
+      icon: User2,
+    },
+
+    {
+      title: "Total Enrollments",
+      value: "1,248",
+      icon: Users,
+    },
+  ];
+
   return (
     <section className="space-y-6 p-6">
       {/* PAGE HEADER */}
@@ -94,15 +88,11 @@ const Courses = () => {
           </p>
         </div>
 
-        <Button className="h-10 rounded-xl px-5">
-          <Plus className="h-4 w-4" />
-
-          <span>Create Course</span>
-        </Button>
+        <CreateCourse />
       </div>
 
       {/* STATS */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {stats.map((item) => {
           const Icon = item.icon;
 
@@ -138,18 +128,23 @@ const Courses = () => {
 
         {/* FILTERS */}
         <div className="flex flex-wrap items-center gap-3">
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Tutors</option>
-            <option>Assigned</option>
-            <option>Unassigned</option>
-          </select>
+          <Select defaultValue="All Courses">
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
 
-          <select className="h-10 rounded-xl border bg-background px-3 text-sm outline-none">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Inactive</option>
-            <option>Pending</option>
-          </select>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="All Courses">All Courses</SelectItem>
+                <SelectItem value="Assigned">Assigned</SelectItem>
+                <SelectItem value="Unassigned">Unassigned</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Button size="lg">
+            <ListFilterPlus /> Filter
+          </Button>
         </div>
       </div>
 
@@ -165,21 +160,19 @@ const Courses = () => {
 
                 <TableHead>Students</TableHead>
 
-                <TableHead>Attendance</TableHead>
-
                 <TableHead>Status</TableHead>
 
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {courses.map((course) => (
-                <TableRow key={course.title}>
+              {courses.map((course: CourseType) => (
+                <TableRow className="hover:bg-muted/10" key={course.course}>
                   {/* COURSE */}
                   <TableCell>
                     <div>
-                      <p className="font-medium">{course.title}</p>
+                      <p className="font-medium">{course.course}</p>
                     </div>
                   </TableCell>
 
@@ -187,31 +180,29 @@ const Courses = () => {
                   <TableCell>{course.tutor}</TableCell>
 
                   {/* STUDENTS */}
-                  <TableCell>{course.students}</TableCell>
-
-                  {/* ATTENDANCE */}
-                  <TableCell>{course.attendance}</TableCell>
+                  <TableCell>{course.totalStudents}</TableCell>
 
                   {/* STATUS */}
                   <TableCell>
-                    <div
-                      className={`inline-flex rounded-lg px-3 py-1 text-xs font-medium ${
-                        course.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : course.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {course.status}
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        variant={
+                          course.status === "Assigned" ? "default" : "secondary"
+                        }
+                        className={`${course.status === "Assigned" ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100" : "bg-muted text-muted-foreground"}`}
+                      >
+                        {course.status}
+                      </Badge>
                     </div>
                   </TableCell>
 
                   {/* ACTIONS */}
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="rounded-xl">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
+                  <TableCell>
+                    <AssignTutor
+                      tutor={course.tutor}
+                      course={course.course}
+                      courseId={course.courseId}
+                    />
                   </TableCell>
                 </TableRow>
               ))}

@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: true,
-        message: "Course created!",
+        message: `The course with the id: ${course.id.split("-").join("")} has been created!`,
         course,
       },
       { status: 201 },
