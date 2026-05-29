@@ -12,7 +12,8 @@ import {
 
 import { Card } from "@/components/ui/card"
 
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 
 const attendanceData = [
     {
@@ -37,7 +38,7 @@ const attendanceData = [
         courseCode: "AI",
         course: "Intro to AI",
         status: "Absent",
-        checkInTime: "--",
+        checkInTime: "-----",
     },
     {
         id: 4,
@@ -54,27 +55,27 @@ export default function RecentHistory() {
     const btn = (status: string) => {
         if (status === "Present") {
             return (
-                <button className="bg-[hsl(120,54%,71%)] backdrop-blur-2xl text-(--color-primary) p-1 w-16 rounded-[10px]">
+                <Badge className="bg-(--color-secondary)/20 text-[14px] font-semibold text-(--color-primary) rounded-[8px]">
                     {status}
-                </button>
+                </Badge>
             )
         } else if (status === "Absent") {
             return (
-                <button className="bg-[#dda0a078] backdrop-blur-2xl text-[#ae0d0d] p-1 w-16 rounded-[10px]">
+                <Badge className="bg-(--color-destructive)/20 text-[14px] font-semibold backdrop-blur-2xl text-(--color-destructive) rounded-[8px]">
                     {status}
-                </button>
+                </Badge>
             )
         } else if (status === "Late") {
             return (
 
-                <button className="bg-[#de9a4c62] backdrop-blur-2xl text-[#ae8b23] p-1 w-16 rounded-[10px]">
+                <Badge className="bg-[#de9a4c62] text-[14px] font-semibold backdrop-blur-2xl text-[#ae8b23] rounded-[8px]">
                     {status}
-                </button>
+                </Badge>
             )
         }
     }
     return (
-        <div className=" mt-13">
+        <div className=" p-3 md:p-3 ">
 
             <Card >
                 <div className="flex  ">
@@ -82,15 +83,15 @@ export default function RecentHistory() {
                         Recent Activities
                     </div>
 
-                    <Button variant={"ghost"} className="text-(--color-primary)">
+                    <Button variant={"link"} className="text-(--color-primary)">
                         View All
                     </Button>
                 </div>
                 <Table>
 
-                    <TableHeader className="bg-muted/20" >
-                        <TableRow  >
-                            <TableHead className="font-bold">DATE</TableHead>
+                    <TableHeader >
+                        <TableRow className="bg-muted/20 h-20 text-xl"  >
+                            <TableHead className="font-bold ">DATE</TableHead>
                             <TableHead className="font-bold">COURSE</TableHead>
                             <TableHead className="font-bold">STATUS</TableHead>
                             <TableHead className="font-bold">CHECK-IN TIME</TableHead>
