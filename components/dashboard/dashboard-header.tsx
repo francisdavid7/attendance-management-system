@@ -1,12 +1,12 @@
 "use client";
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
 import { getCurrentUser } from "@/lib/actions/actions";
 import { Skeleton } from "../ui/skeleton";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "../theme-toggle";
 
 export function DashboardHeader() {
   const { user, isLoading } = getCurrentUser();
@@ -43,6 +43,7 @@ export function DashboardHeader() {
           </>
         ) : (
           <>
+            <ThemeToggle />
             <Button variant="outline" size="icon-lg">
               <Bell className="h-5 w-5" />
             </Button>

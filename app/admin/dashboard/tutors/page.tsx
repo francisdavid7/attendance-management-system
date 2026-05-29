@@ -143,24 +143,9 @@ const Tutors = () => {
 
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="All Courses">All Courses</SelectItem>
+                <SelectItem value="All Courses">All Tutors</SelectItem>
                 <SelectItem value="Assigned">Assigned</SelectItem>
                 <SelectItem value="Unassigned">Unassigned</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <Select defaultValue="All Status">
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="All Status">All Status</SelectItem>
-                <SelectItem value="Assigned">Active</SelectItem>
-                <SelectItem value="Unassigned">Inactive</SelectItem>
-                <SelectItem value="Unassigned">Pending</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>

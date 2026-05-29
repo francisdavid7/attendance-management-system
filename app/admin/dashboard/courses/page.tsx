@@ -1,6 +1,13 @@
 "use client";
 
-import { BookOpen, MoreHorizontal, Search, User2, Users } from "lucide-react";
+import {
+  BookOpen,
+  ListFilterPlus,
+  MoreHorizontal,
+  Search,
+  User2,
+  Users,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +42,7 @@ interface CourseType {
   course: string;
   tutor: string;
   totalStudents: number;
-  status: string;
+  status: "Assigned" | "Unassigned";
 }
 
 const Courses = () => {
@@ -44,10 +51,6 @@ const Courses = () => {
   if (isLoading) return <StatsTableLoader />;
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
-
-  const activeCourses = courses.filter(
-    (course: any) => course.status === "Active",
-  );
 
   const assignedCourses = courses.filter(
     (course: any) => course.tutor !== "No Tutor Assigned",
@@ -61,13 +64,7 @@ const Courses = () => {
     },
 
     {
-      title: "Active Courses",
-      value: activeCourses.length,
-      icon: BookOpen,
-    },
-
-    {
-      title: "Assigned Tutors",
+      title: "Assigned Courses",
       value: assignedCourses.length,
       icon: User2,
     },
@@ -95,7 +92,7 @@ const Courses = () => {
       </div>
 
       {/* STATS */}
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {stats.map((item) => {
           const Icon = item.icon;
 
@@ -131,34 +128,23 @@ const Courses = () => {
 
         {/* FILTERS */}
         <div className="flex flex-wrap items-center gap-3">
-          <Select defaultValue="All Tutors">
+          <Select defaultValue="All Courses">
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
 
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="All Tutors">All Tutors</SelectItem>
+                <SelectItem value="All Courses">All Courses</SelectItem>
                 <SelectItem value="Assigned">Assigned</SelectItem>
                 <SelectItem value="Unassigned">Unassigned</SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
 
-          <Select defaultValue="All Status">
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="All Status">All Status</SelectItem>
-                <SelectItem value="Assigned">Active</SelectItem>
-                <SelectItem value="Unassigned">Inactive</SelectItem>
-                <SelectItem value="Unassigned">Pending</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
+          <Button size="lg">
+            <ListFilterPlus /> Filter
+          </Button>
         </div>
       </div>
 
@@ -201,8 +187,9 @@ const Courses = () => {
                     <div className="flex items-center gap-2">
                       <Badge
                         variant={
-                          course.status === "Active" ? "default" : "destructive"
+                          course.status === "Assigned" ? "default" : "secondary"
                         }
+                        className={`${course.status === "Assigned" ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100" : "bg-muted text-muted-foreground"}`}
                       >
                         {course.status}
                       </Badge>

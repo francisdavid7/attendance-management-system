@@ -32,12 +32,7 @@ export async function GET() {
         course: course.name,
         tutor: course.tutor?.fullName ?? "No Tutor Assigned",
         totalStudents,
-        status:
-          course.tutor !== null
-            ? "Active"
-            : hasTutor && totalStudents < 1
-              ? "Pending"
-              : "Inactive",
+        status: hasTutor ? "Assigned" : "Unassigned",
       };
     });
 
