@@ -42,3 +42,13 @@ export const getCourses = () => {
 export const useAssignTutor = () => {
   return useSWRMutation("/api/courses/assign-tutor", postData);
 };
+// Get available courses
+export const getAllCourses = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/courses/available-courses",
+    fetch,
+  );
+
+  const courses = data?.availableCourses;
+  return { courses, isLoading, error, mutate };
+};

@@ -26,11 +26,6 @@ const items: ItemsTypes[] = [
     icon: BookOpen as any,
   },
   {
-    title: "Tutors",
-    url: "/student/dashboard/tutors",
-    icon: GraduationCap as any,
-  },
-  {
     title: "Attendance",
     url: "/student/dashboard/attendance",
     icon: CalendarCheck as any,
