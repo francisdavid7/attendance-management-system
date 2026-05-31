@@ -1,13 +1,17 @@
 "use client";
 import { useState } from "react";
 import { Search, MoreHorizontal } from "lucide-react";
-import { getCourses } from "@/lib/actions/actions";
+import { getAllCourses } from "@/lib/actions/actions";
 import Loading from "@/components/dashboard/loaders/dashboard-table-data-loader";
 import ErrorState from "@/components/dashboard/error/data-error";
+
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Html5Qrcode } from "html5-qrcode";
+import { useEffect, useRef } from "react";
+
 import {
   Table,
   TableBody,
@@ -17,9 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const Courses = () => {
-  const { courses, isLoading, error } = getCourses();
-  const [searched, setSearched] = useState();
+function Courses() {
+  const { courses, isLoading, error } = getAllCourses();
 
   if (isLoading) return <Loading />;
 
@@ -29,6 +32,10 @@ const Courses = () => {
 
   return (
     <section className="space-y-6 p-6">
+      <div>
+
+      </div>
+
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
           <h1 className="text-4xl font-bold tracking-tight">Courses</h1>
@@ -84,6 +91,7 @@ const Courses = () => {
       </Card>
     </section>
   );
+
 };
 
 export default Courses;

@@ -121,7 +121,7 @@ const statusStyles: Record<string, string> = {
 export default function AttendanceTable() {
     return (
         <div className="space-y-6 p-6 bg-slate-50 min-h-screen">
-            {/* Top Cards */}
+
             <div className="grid gap-4 md:grid-cols-3">
                 {attendanceStats.map((item) => {
                     const Icon = item.icon
@@ -181,7 +181,7 @@ export default function AttendanceTable() {
                 })}
             </div>
 
-            {/* Filters */}
+
             <Card className="rounded-2xl shadow-sm">
                 <CardContent className="p-4">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center">
@@ -255,7 +255,6 @@ export default function AttendanceTable() {
                 </CardContent>
             </Card>
 
-            {/* Table */}
             <Card className="rounded-2xl shadow-sm overflow-hidden">
                 <Table>
                     <TableHeader className="bg-slate-100">
@@ -321,7 +320,7 @@ export default function AttendanceTable() {
                     </TableBody>
                 </Table>
 
-                {/* Footer */}
+
                 <div className="flex items-center justify-between px-6 py-4 text-sm text-muted-foreground border-t">
                     <p>Showing 1 - 5 of 42 entries</p>
 
@@ -335,7 +334,7 @@ export default function AttendanceTable() {
 
                         <Button
                             size="sm"
-                            className="bg-emerald-700 hover:bg-emerald-800"
+                            variant={"default"}
                         >
                             1
                         </Button>

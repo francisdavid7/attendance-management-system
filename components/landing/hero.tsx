@@ -12,8 +12,8 @@ import { BadgeCheck, Play } from "lucide-react";
 const heroSection = () => {
   return (
     <main className="" >
-      <div className=" w-full md:w-full">
-        <section className="p-3 md:p-2 mx-auto  flex items-center gap-10 flex-wrap ">
+      <div className="">
+        <section className="p-4 mx-auto  flex items-center gap-10 flex-wrap ">
           <div className="mx-auto grow w-full md:w-96">
             <Badge variant="outline" className="py-3 px-4 bg-muted/20 text-primary">
               <BadgeCheck />
