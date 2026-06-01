@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import StatsTableLoader from "@/components/dashboard/loaders/stats-table-loader";
 import AssignTutor from "./components/assign-tutor";
+import { ChangeEvent, useEffect, useState } from "react";
 
 interface CourseType {
   courseId: string;
@@ -47,14 +48,19 @@ interface CourseType {
 
 const Courses = () => {
   const { courses, isLoading, error, mutate } = getCourses();
+  const [courseData, setCourseData] = useState<CourseType[]>([]);
+
+  useEffect(() => {
+    if (isLoading || !courses) return;
+    setCourseData(courses);
+  }, [isLoading]);
 
   if (isLoading) return <StatsTableLoader />;
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
 
-  const assignedCourses = courses.filter(
-    (course: any) => course.tutor !== "No Tutor Assigned",
-  );
+  const assignedCourses =
+    courses.filter((course: any) => course.tutor !== "No Tutor Assigned") || [];
 
   const stats = [
     {
@@ -75,6 +81,24 @@ const Courses = () => {
       icon: Users,
     },
   ];
+
+  // Handle search course functionality
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const searchedText = e.target.value.toLowerCase();
+
+    if (!searchedText.trim()) {
+      setCourseData(courses);
+      return;
+    }
+
+    const filteredCourses = courses.filter(
+      (course: CourseType) =>
+        course.course.toLowerCase().includes(searchedText) ||
+        course.tutor.toLowerCase().includes(searchedText),
+    );
+
+    setCourseData(filteredCourses);
+  };
 
   return (
     <section className="space-y-6 p-6">
@@ -123,6 +147,7 @@ const Courses = () => {
           <Input
             placeholder="Search courses..."
             className="h-10 rounded-xl pl-9"
+            onChange={handleSearch}
           />
         </div>
 
@@ -167,7 +192,7 @@ const Courses = () => {
             </TableHeader>
 
             <TableBody>
-              {courses.map((course: CourseType) => (
+              {courseData.map((course: CourseType) => (
                 <TableRow className="hover:bg-muted/10" key={course.course}>
                   {/* COURSE */}
                   <TableCell>
@@ -189,7 +214,11 @@ const Courses = () => {
                         variant={
                           course.status === "Assigned" ? "default" : "secondary"
                         }
-                        className={`${course.status === "Assigned" ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100" : "bg-muted text-muted-foreground"}`}
+                        className={
+                          course.status === "Assigned"
+                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                            : "bg-muted text-muted-foreground"
+                        }
                       >
                         {course.status}
                       </Badge>
