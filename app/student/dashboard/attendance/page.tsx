@@ -1,5 +1,9 @@
+
+import AttendanceTable from "@/components/student/attendance/tableAndData";
 const Attendance = () => {
-  return <div>Attendance</div>;
+  return <div>
+    <AttendanceTable />
+  </div>;
 };
 
 export default Attendance;

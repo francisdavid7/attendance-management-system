@@ -103,7 +103,7 @@ function Chart() {
                                         <RadialBarChart
                                             width={250}
                                             height={250}
-                                            innerRadius="80%"
+                                            innerRadius="70%"
                                             outerRadius="100%"
                                             data={data}
                                             startAngle={90}
