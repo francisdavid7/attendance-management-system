@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import {
   BookOpen,
   MoreHorizontal,
@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Loading from "@/components/dashboard/loaders/dashboard-table-data-loader";
 
 interface StatItem {
   title: string;
@@ -54,6 +55,7 @@ export interface Tutor {
 }
 
 const Tutors = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const { tutors, coursesAssigned, isLoading, error, mutate } = getTutors();
 
   if (isLoading) return <StatsTableLoader />;
@@ -83,6 +85,21 @@ const Tutors = () => {
       icon: BookOpen,
     },
   ];
+
+  const filteredTutored = tutors.filter((tutor: Tutor) => {
+    if (!searchQuery.trim()) return true;
+
+    const term = searchQuery.toLowerCase();
+
+    return (
+      tutor.email.toLowerCase().includes(term) ||
+      tutor.fullName.toLowerCase().includes(term)
+    );
+  });
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
     <section className="space-y-6 p-6">
@@ -131,6 +148,7 @@ const Tutors = () => {
           <Input
             placeholder="Search tutors..."
             className="h-10 rounded-xl pl-9"
+            onChange={handleSearch}
           />
         </div>
 
@@ -171,59 +189,71 @@ const Tutors = () => {
             </TableHeader>
 
             <TableBody>
-              {tutors.map((tutor: Tutor) => (
-                <TableRow key={tutor.email}>
-                  {/* TUTOR */}
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="h-10 w-10">
-                        <AvatarImage src="" />
+              {!filteredTutored ? (
+                <Loading />
+              ) : (
+                <>
+                  {filteredTutored.map((tutor: Tutor) => (
+                    <TableRow key={tutor.email}>
+                      {/* TUTOR */}
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src="" />
 
-                        <AvatarFallback>
-                          {tutor.fullName
-                            .split(" ")
-                            .map((name) => name[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
+                            <AvatarFallback>
+                              {tutor.fullName
+                                .split(" ")
+                                .map((name) => name[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
 
-                      <div>
-                        <p className="font-medium">{tutor.fullName}</p>
+                          <div>
+                            <p className="font-medium">{tutor.fullName}</p>
 
-                        <p className="text-sm text-muted-foreground">
-                          {tutor.email}
-                        </p>
-                      </div>
-                    </div>
-                  </TableCell>
+                            <p className="text-sm text-muted-foreground">
+                              {tutor.email}
+                            </p>
+                          </div>
+                        </div>
+                      </TableCell>
 
-                  {/* COURSE */}
-                  <TableCell>
-                    {tutor.assignedCourses[0] ?? "No course assigned yet"}
-                  </TableCell>
+                      {/* COURSE */}
+                      <TableCell>
+                        {tutor.assignedCourses[0] ?? "No course assigned yet"}
+                      </TableCell>
 
-                  {/* STUDENTS */}
-                  <TableCell>{tutor.totalStudents}</TableCell>
+                      {/* STUDENTS */}
+                      <TableCell>{tutor.totalStudents}</TableCell>
 
-                  {/* STATUS */}
-                  <TableCell>
-                    <Badge
-                      variant={
-                        tutor.status === "Active" ? "default" : "destructive"
-                      }
-                    >
-                      {tutor.status}
-                    </Badge>
-                  </TableCell>
+                      {/* STATUS */}
+                      <TableCell>
+                        <Badge
+                          variant={
+                            tutor.status === "Active"
+                              ? "default"
+                              : "destructive"
+                          }
+                        >
+                          {tutor.status}
+                        </Badge>
+                      </TableCell>
 
-                  {/* ACTIONS */}
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" className="rounded-xl">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      {/* ACTIONS */}
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="rounded-xl"
+                        >
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </CardContent>
