@@ -1,5 +1,8 @@
+import LecturerDashboard from "@/components/tutor/dashbaord/dashboard";
 const Dashboard = () => {
-  return <div>Dashboard</div>;
+  return <div>
+    <LecturerDashboard />
+  </div>;
 };
 
 export default Dashboard;

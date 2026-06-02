@@ -2,37 +2,23 @@
 import { Html5Qrcode } from "html5-qrcode";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogOverlay,
-    DialogPortal,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import { Card, } from "@/components/ui/card";
+import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScanLine } from "lucide-react";
-
-
 export default function QRScanner() {
     const [isScanning, setIsScanning] = useState(false);
     const scannerRef = useRef<Html5Qrcode | null>(null);
-
+    const [qRCode, setQRCode] = useState()
     const startScanning = async () => {
         try {
             if (!scannerRef.current) {
                 scannerRef.current = new Html5Qrcode("reader");
             }
-
             await scannerRef.current.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (qrCode) => {
-                console.log("QR-Code", qrCode);
+                const data = JSON.parse(qrCode)
+                console.log("QR-Code", data);
                 stopScanning();
             }, () => { })
-
             setIsScanning(true)
         }
         catch (error) {
@@ -51,7 +37,9 @@ export default function QRScanner() {
         }
     }
 
+
     const toggleScanner = () => {
+
         if (!isScanning) {
             startScanning()
         } else {

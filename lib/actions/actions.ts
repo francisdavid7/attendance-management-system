@@ -2,6 +2,7 @@ import useSWR from "swr";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
 
+
 // fether function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -42,6 +43,7 @@ export const getCourses = () => {
 export const useAssignTutor = () => {
   return useSWRMutation("/api/courses/assign-tutor", postData);
 };
+
 // Get available courses
 export const getAllCourses = () => {
   const { data, isLoading, error, mutate } = useSWR(
@@ -52,3 +54,14 @@ export const getAllCourses = () => {
   const courses = data?.availableCourses;
   return { courses, isLoading, error, mutate };
 };
+
+// ============================ session ============================= >
+
+const createSession = async (url: string, { arg }: { arg: { courseId: string } }) => {
+  const resp = await axios.post(url, { courseId: arg.courseId });
+  return resp.data;
+}
+
+export const startSession = () => {
+  return useSWRMutation("/api/session", createSession);
+}
