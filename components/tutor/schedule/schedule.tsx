@@ -4,11 +4,11 @@ import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getAllCourses } from "@/lib/actions/actions";
-import { QrCode, RefreshCw, Users, CircleCheck, CircleX, PlusIcon, CalendarDays, GraduationCap, RotateCcwIcon, Loader2Icon, CircleAlertIcon, } from "lucide-react";
+import { QrCode, RefreshCw, Users, CircleCheck, CircleX, PlusIcon, CalendarDays, GraduationCap, RotateCcwIcon, Loader2Icon, CircleAlertIcon, Loader2, } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardAction, } from "@/components/ui/card";
 import { useAttendance } from "./session";
-
+import { toast } from "sonner";
 export default function GenerateAttendanceQR() {
     const { courses, isLoading } = getAllCourses();
     const [show, setShow] = useState(false)
@@ -18,13 +18,25 @@ export default function GenerateAttendanceQR() {
     const { attendance, isMutating } = useAttendance();
 
     const attendances = async () => {
-        const session = await attendance(id);
-        setData(session);
+        try {
+            const promise = attendance(id);
+
+            toast.promise(promise, {
+                loading: "Creating session....",
+                success: (data) => data.Message,
+                error: "Failed to create a session",
+            });
+
+            const session = await promise;
+            setData(session);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
 
     return (
-        <div className="flex gap-4  p-4">
+        <div className="flex flex-col md:flex-row gap-4  p-4">
             <div className="space-y-4 w-full">
                 <Card>
                     <CardHeader>
@@ -69,7 +81,7 @@ export default function GenerateAttendanceQR() {
                         <CardFooter className="justify-center " >
                             <CardAction >
                                 <Button variant={"default"} onClick={attendances} disabled={isMutating} className="w-full ">
-                                    {!isMutating ? <><PlusIcon /> Start session</> : <><Loader2Icon />Creating session...</>}
+                                    {!isMutating ? <><PlusIcon /> Start session</> : <><Loader2 className="animate-spin" />Creating session...</>}
                                 </Button>
                             </CardAction>
                         </CardFooter>

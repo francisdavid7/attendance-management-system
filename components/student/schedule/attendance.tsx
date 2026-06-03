@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent, } from "@/components/ui/card"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { QrCode, ScanLine } from "lucide-react"
 import { useState } from "react"
 import QRScanner from "./scanner"
@@ -57,7 +58,6 @@ function Attend() {
                                     Manual Code
                                 </Button>
 
-
                             </CardAction>
                         </CardFooter>
                     </div>
@@ -67,7 +67,6 @@ function Attend() {
                 <QRScanner />
 
             </Dialog>
-
 
 
         </div>

@@ -30,21 +30,20 @@ model User {
   email    String @unique
   password String
 
-  role     Role   @default(STUDENT)
+  role Role @default(STUDENT)
 
   isVerified Boolean @default(false)
-  
-  verificationToken String?
+
+  verificationToken          String?
   verificationTokenExpiresAt DateTime?
 
-  resetPasswordToken String?
+  resetPasswordToken          String?
   resetPasswordTokenExpiresAt DateTime?
-  
 
   // Relations
-  studentCourses StudentCourse[]
-  courses   Course[]
-  verifiedAttendances    Attendance[] @relation("VerifiedByTutor")
+  studentCourses      StudentCourse[]
+  courses             Course[]
+  verifiedAttendances Attendance[]    @relation("VerifiedByTutor")
 
   attendances Attendance[] @relation("StudentAttendance")
 
@@ -63,7 +62,7 @@ model Course {
   students StudentCourse[]
   sessions Session[]
 
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 }
 
 model StudentCourse {
@@ -82,7 +81,7 @@ model Session {
   courseId String
   date     DateTime
 
-  qrCode      String
+  qrCode      String   @unique
   qrExpiresAt DateTime
 
   isActive Boolean @default(true)

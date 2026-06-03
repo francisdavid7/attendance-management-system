@@ -1,6 +1,8 @@
 import useSWR from "swr";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
+import { url } from "inspector";
+import Students from "@/app/tutor/dashboard/students/page";
 
 
 // fether function
@@ -64,4 +66,14 @@ const createSession = async (url: string, { arg }: { arg: { courseId: string } }
 
 export const startSession = () => {
   return useSWRMutation("/api/session", createSession);
+}
+// ======================= Mark Attendance ============================ >
+
+const validateAttendance = async (url: string, { arg }: { arg: { id: string, qrCode: string } }) => {
+  const resp = await axios.post(url, { id: arg.id, qrCode: arg.qrCode });
+  return resp.data;
+}
+
+export const markAttendance = () => {
+  return useSWRMutation("/api/mark", validateAttendance)
 }
