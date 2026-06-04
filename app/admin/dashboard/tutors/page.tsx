@@ -62,20 +62,19 @@ const Tutors = () => {
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
 
-  const activeTutors = tutors.filter(
-    (tutor: any) => tutor.assignedCourses.length > 0,
-  );
+  const activeTutors =
+    tutors?.filter((tutor: any) => tutor.assignedCourses.length > 0) || [];
 
-  const stats = [
+  const stats: StatItem[] = [
     {
       title: "Total Tutors",
-      value: tutors.length,
+      value: tutors?.length,
       icon: Users,
     },
 
     {
       title: "Active Tutors",
-      value: activeTutors.length,
+      value: activeTutors?.length,
       icon: UserCheck,
     },
 
@@ -86,7 +85,7 @@ const Tutors = () => {
     },
   ];
 
-  const filteredTutored = tutors.filter((tutor: Tutor) => {
+  const filteredTutored = tutors?.filter((tutor: Tutor) => {
     if (!searchQuery.trim()) return true;
 
     const term = searchQuery.toLowerCase();
@@ -189,69 +188,76 @@ const Tutors = () => {
             </TableHeader>
 
             <TableBody>
-              {!filteredTutored ? (
-                <Loading />
+              {error || !tutors ? (
+                <ErrorState onRetry={() => mutate()} />
               ) : (
                 <>
-                  {filteredTutored.map((tutor: Tutor) => (
-                    <TableRow key={tutor.email}>
-                      {/* TUTOR */}
-                      <TableCell>
-                        <div className="flex items-center gap-3">
-                          <Avatar className="h-10 w-10">
-                            <AvatarImage src="" />
+                  {!filteredTutored ? (
+                    <Loading />
+                  ) : (
+                    <>
+                      {filteredTutored.map((tutor: Tutor) => (
+                        <TableRow key={tutor.email}>
+                          {/* TUTOR */}
+                          <TableCell>
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage src="" />
 
-                            <AvatarFallback>
-                              {tutor.fullName
-                                .split(" ")
-                                .map((name) => name[0])
-                                .join("")}
-                            </AvatarFallback>
-                          </Avatar>
+                                <AvatarFallback>
+                                  {tutor.fullName
+                                    .split(" ")
+                                    .map((name) => name[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
 
-                          <div>
-                            <p className="font-medium">{tutor.fullName}</p>
+                              <div>
+                                <p className="font-medium">{tutor.fullName}</p>
 
-                            <p className="text-sm text-muted-foreground">
-                              {tutor.email}
-                            </p>
-                          </div>
-                        </div>
-                      </TableCell>
+                                <p className="text-sm text-muted-foreground">
+                                  {tutor.email}
+                                </p>
+                              </div>
+                            </div>
+                          </TableCell>
 
-                      {/* COURSE */}
-                      <TableCell>
-                        {tutor.assignedCourses[0] ?? "No course assigned yet"}
-                      </TableCell>
+                          {/* COURSE */}
+                          <TableCell>
+                            {tutor.assignedCourses[0] ??
+                              "No course assigned yet"}
+                          </TableCell>
 
-                      {/* STUDENTS */}
-                      <TableCell>{tutor.totalStudents}</TableCell>
+                          {/* STUDENTS */}
+                          <TableCell>{tutor.totalStudents}</TableCell>
 
-                      {/* STATUS */}
-                      <TableCell>
-                        <Badge
-                          variant={
-                            tutor.status === "Active"
-                              ? "default"
-                              : "destructive"
-                          }
-                        >
-                          {tutor.status}
-                        </Badge>
-                      </TableCell>
+                          {/* STATUS */}
+                          <TableCell>
+                            <Badge
+                              variant={
+                                tutor.status === "Active"
+                                  ? "default"
+                                  : "destructive"
+                              }
+                            >
+                              {tutor.status}
+                            </Badge>
+                          </TableCell>
 
-                      {/* ACTIONS */}
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="rounded-xl"
-                        >
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          {/* ACTIONS */}
+                          <TableCell className="text-right">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-xl"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </>
+                  )}
                 </>
               )}
             </TableBody>
