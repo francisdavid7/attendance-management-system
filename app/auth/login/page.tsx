@@ -67,8 +67,8 @@ const page = () => {
   };
 
   return (
-    <div className="w-1/2 p-12 flex items-center justify-center">
-      <Card className="w-[80%] mx-auto">
+    <div className="lg:w-1/2 w-full md:p-12 px-4 py-12 flex items-center justify-center">
+      <Card className="lg:w-[80%] lg:mt-0 mt-10 w-full mx-auto">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-bold">Welcome back</CardTitle>
           <CardDescription>
