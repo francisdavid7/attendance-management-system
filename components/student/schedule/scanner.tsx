@@ -3,21 +3,50 @@ import { Html5Qrcode } from "html5-qrcode";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, } from "@/components/ui/card";
-import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ScanLine } from "lucide-react";
+import { DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CircleAlert, CircleCheckBigIcon, LucideSquareCenterlineDashedVertical, MoveRight, QrCode, ScanLine, StopCircle } from "lucide-react";
+import { markAttendance } from "@/lib/actions/actions";
+import { toast } from "sonner";
+
+interface Session {
+    id: string;
+    courseId: string;
+    date: string;
+    createdAt: string;
+    qrCode: string;
+    qrExpiresAt: string;
+    isActive: boolean;
+    course: {
+        id: string;
+        name: string;
+        description: string;
+        tutorId: string;
+        createdAt: string;
+    };
+};
+
+type QrPlay = {
+    session: Session
+}
+
 export default function QRScanner() {
     const [isScanning, setIsScanning] = useState(false);
     const scannerRef = useRef<Html5Qrcode | null>(null);
-    const [qRCode, setQRCode] = useState()
+    const { trigger, isMutating } = markAttendance();
+    const [qRCode, setQRCode] = useState<QrPlay | null>(null)
+    const [disPlay, setDisPlay] = useState<Boolean | null>(null)
+
     const startScanning = async () => {
         try {
             if (!scannerRef.current) {
                 scannerRef.current = new Html5Qrcode("reader");
             }
             await scannerRef.current.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (qrCode) => {
-                const data = JSON.parse(qrCode)
-                console.log("QR-Code", data);
+                const data = JSON.parse(qrCode);
+                setQRCode(data);
+                console.log("fun wait", data.session)
                 stopScanning();
+
             }, () => { })
             setIsScanning(true)
         }
@@ -32,11 +61,15 @@ export default function QRScanner() {
                 await scannerRef.current.stop();
             }
             setIsScanning(false);
+            if (!qRCode) {
+                setDisPlay(true)
+            } else if (disPlay) {
+                setDisPlay(false)
+            }
         } catch (error) {
             console.log("failed to stop scanner ")
         }
     }
-
 
     const toggleScanner = () => {
 
@@ -47,7 +80,24 @@ export default function QRScanner() {
         }
     }
 
+    const submitAttendance = async () => {
+        if (!qRCode) return;
 
+        const mark = trigger({
+            id: qRCode?.session?.id,
+            qrCode: qRCode?.session?.qrCode,
+        });
+
+        toast.promise(mark, {
+            loading: "Submitting attendance...",
+            success: (data) => data.Message,
+            error: "Failed to submit attendance",
+        });
+
+        const submit = await mark;
+
+        console.log(submit);
+    };
     return (
         <div>
             <dialog>
@@ -57,19 +107,65 @@ export default function QRScanner() {
                             <DialogTitle className="font-bold text-xl">
                                 QR Code Scanner
                             </DialogTitle>
-                            <DialogDescription className="text-center mt-3 justify-center justify-self-center">
-                                <span >Scan the QR code to mark session attendance  </span>
-                                <div id="reader" className="mt-3">
-                                    <ScanLine size={100} className="text-center mt-3 justify-center justify-self-center" />
-                                </div>
 
-                            </DialogDescription>
+                            <div className="text-center mt-3 justify-center justify-self-center">
+                                {!isScanning ?
+                                    (<>
+                                        {!qRCode &&
+                                            (disPlay ? <span className="text-(--color-destructive) font-semibold">
+                                                <span> Scan the QR code to mark session attendance  </span>
+                                                <CircleAlert size={100} className="text-center mt-3 mb-2 justify-center justify-self-center" />
+                                                No QR code scanned</span> : "Scan the QR code to mark session attendance"
+                                            )} {
+                                            qRCode && (
+                                                <span className="text-(--color-primary) font-semibold">
+                                                    <CircleCheckBigIcon size={100} className="text-center mt-3 mb-2 justify-center justify-self-center" />
+                                                    <span className=""> QR Code Scanned Ready to Submit</span>
+                                                </span>
+                                            )}</>
+                                    ) :
+                                    <span> Scan the QR code to mark session attendance  </span>
+                                }
+                                <div id="reader" className="mt-3">
+                                    <span>
+                                        {!disPlay ? <ScanLine size={100} className="text-center mt-3 justify-center justify-self-center" /> : ""}
+                                    </span>
+                                </div>
+                            </div>
                         </DialogHeader>
+
                         <div className="space-y-4 pt-4">
                             <div className="text-center">
-                                <Button variant="default" className=" rounded-xl px-5 asChild" onClick={toggleScanner}>
-                                    {isScanning ? "Stop Scanning QRcode" : "Start Scanning QRcode"}
-                                </Button>
+                                {!isScanning ? (<div className="flex gap-1">
+                                    <div>
+                                        <Button variant="default" className=" rounded-xl px-5 asChild" onClick={toggleScanner}>
+                                            {isScanning ? (<><StopCircle /> Stop Scanning QRcode </>) :
+                                                (<> <LucideSquareCenterlineDashedVertical /> Start Scanning QRcode </>)}
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <DialogClose asChild>
+                                            <Button variant="default" className=" rounded-xl px-5 asChild" disabled={!qRCode} onClick={submitAttendance}>
+                                                <MoveRight /> Submit Attendance
+                                            </Button>
+                                        </DialogClose>
+                                    </div>
+                                </div>) : (
+                                    <div className="flex gap-1">
+                                        <div>
+                                            <Button variant="default" className=" rounded-xl px-5 asChild" onClick={toggleScanner}>
+                                                {isScanning ? (<><StopCircle /> Stop Scanning QRcode </>) : (<> <LucideSquareCenterlineDashedVertical /> Start Scanning QRcode </>)}
+                                            </Button>
+                                        </div>
+                                        <div>
+                                            <DialogClose asChild>
+                                                <Button variant="default" className=" rounded-xl px-5 asChild" disabled={!qRCode} onClick={submitAttendance}>
+                                                    <MoveRight /> Submit Attendance
+                                                </Button>
+                                            </DialogClose>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Card>
