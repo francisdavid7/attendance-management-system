@@ -1,4 +1,4 @@
-import { BadgeCheck, BookOpen, CheckCircle2, CircleX, History } from "lucide-react";
+import { BookOpen, CheckCircle2, CircleX, History } from "lucide-react";
 const btn = (status: string) => {
     if (status === "PRESENT") {
         return (

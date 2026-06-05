@@ -1,44 +1,52 @@
 "use client"
 import btn from "./icons";
 import { BadgeCheck } from "lucide-react";
-import { getCurrentUser } from "@/lib/actions/actions";
+import { studentsData } from "@/lib/actions/actions";
+import { useHistoryStore } from "@/components/tutor/dashbaord/zstand";
 import { Progress } from "@/components/ui/progress";
 import { RadialBarChart, RadialBar, PolarAngleAxis, Legend } from "recharts"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-
-const data = [{
-    name: "Attendance",
-    value: 83,
-    fill: "var(--color-primary)",
-}];
+import { useEffect, useState } from "react";
 
 
-const board = [
-    {
-        title: "TOTAL CLASSES",
-        number: 42,
-    },
-    {
-        title: "PRESENT",
-        number: 35,
-    },
-    {
-        title: "LATE",
-        number: 4,
-    },
-    {
-        title: "ABSENT",
-        number: 3,
-    }
-]
 
 
 function Chart() {
+    const { data, isLoading } = studentsData();
+    const { setHistoryData } = useHistoryStore();
+    const [table, setTable] = useState();
 
-    const { user, isLoading } = getCurrentUser();
+    useEffect(() => {
+        setTable(data)
+        setHistoryData(table)
+    }, [table, data])
 
+    const count = data?._count?.attendances
+    const railData = !count ? 0 : count;
+    const radialBar = [{
+        name: "Attendance",
+        value: railData,
+        fill: "var(--color-primary)",
+    }];
+
+    const board = [
+        {
+            title: "TOTAL CLASSES",
+            number: 42,
+        },
+        {
+            title: "PRESENT",
+            number: count,
+        },
+        {
+            title: "LATE",
+            number: 4,
+        },
+        {
+            title: "ABSENT",
+            number: 3,
+        }
+    ]
 
     const renderCenterLabel = () => {
         return (
@@ -46,9 +54,8 @@ function Chart() {
                 <span className="hidden md:inline text-4xl font-extrabold">
                     <BadgeCheck size={50} className="text-[color:var(--color-primary)]" />
                 </span>
-
                 <span className="inline md:hidden text-4xl font-extrabold text-[color:var(--color-primary)]">
-                    83%
+                    {count ? `${count}%` : "0%"}
                 </span>
             </div>
         );
@@ -56,17 +63,13 @@ function Chart() {
 
     return (
         <main className="p-3 md:p-5">
-
-
             <div className="">
-
-
                 <div className="">
                     <div className="text-4xl font-bold ">
-                        Welcome back, <span>{user?.fullName.split(" ")[0]}!</span>
+                        Welcome back, <span>{data?.fullName?.split(" ")[0]}!</span>
                     </div>
                     <p className=" text-xl opacity-70 font-light mt-2">
-                        You have attended 83% of your classes this semester. Keep it up!
+                        You have attended {count}% of your classes this semester. Keep it up!
                     </p>
                 </div>
 
@@ -85,13 +88,18 @@ function Chart() {
                                 <CardDescription>
                                     <CardContent>
                                         <h1 className="opacity-0 md:opacity-100 text-[1px] md:text-4xl text-(--color-primary) mt-0 md:mt-4 font-extrabold  ">
-                                            83%
+                                            {count ?
+                                                <div>
+                                                    {count == 0 ? "No classes attended yet" : `${count}%`}
+                                                </div> :
+                                                " "
+                                            }
                                         </h1>
                                         <p className="text-[17px] md:text-start text-center mt-4 md:mt-5">
                                             You are <span>+5%</span> above the required 75% Threshold
                                         </p>
                                         <div className="opacity-0 md:opacity-100 md:mt-6 mt-0">
-                                            <Progress value={70} />
+                                            <Progress value={count} />
                                         </div>
                                     </CardContent>
                                 </CardDescription>
@@ -105,7 +113,7 @@ function Chart() {
                                             height={250}
                                             innerRadius="70%"
                                             outerRadius="100%"
-                                            data={data}
+                                            data={radialBar}
                                             startAngle={90}
                                             endAngle={-270}
                                         >
@@ -136,9 +144,9 @@ function Chart() {
                     </Card>
 
                     <div className="w-full grid grid-cols-2 gap-3">
-                        {board.map((data) => {
+                        {board.map((data, index) => {
                             return (
-                                <div className="flex flex-col  text-justify" key={data.number}>
+                                <div className="flex flex-col  text-justify" key={index}>
 
                                     <Card>
                                         <CardHeader>
@@ -163,10 +171,7 @@ function Chart() {
                         })}
                     </div>
                 </section>
-
-
             </div>
-
         </main>
     )
 }

@@ -6,6 +6,8 @@ import { getCurrentUser } from "@/lib/actions/actions";
 const Dashboard = () => {
   const { user, isLoading } = getCurrentUser();
   return <div>
+
+
     {isLoading ? (
       <div className="p-2 md:p-3">
         <div className="flex flex-col gap-3">
