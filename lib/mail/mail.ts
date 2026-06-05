@@ -28,7 +28,7 @@ export async function sendLoginDetails(
   return transporter.sendMail({
     from: `"AttendX" <${process.env.GMAIL_USER}>`,
     to: email,
-    subject: "Verify your email",
+    subject: "Tutor Account Created Successfully",
     html: `
       <h2 style="margin-bottom: 20px">Hi, ${name}! Your tutor account has been successfully created.</h2>
 
