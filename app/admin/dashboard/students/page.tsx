@@ -2,6 +2,9 @@
 
 import { StudentsPageHeader } from "@/components/dashboard/admin/students-page-header";
 import { StudentsSearchFilters } from "@/components/dashboard/admin/students-search-filter";
+import ErrorState from "@/components/dashboard/error/data-error";
+import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   Table,
@@ -12,25 +15,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getStudents } from "@/lib/actions/students";
-import { useEffect, useState } from "react";
+import { getStudents } from "@/lib/actions/actions";
 
-const studentHeadRow = ["ID", "Student", "Email", "Course", "Tutor"];
+interface StudentType {
+  student: string;
+  email: string;
+  course: string[] | string;
+  tutor: string[] | string;
+}
+
+const studentHeadRow = ["Student", "Email", "Course", "Tutor"];
 
 const page = () => {
-  const [students, setStudents] = useState<
-    Awaited<ReturnType<typeof getStudents>>
-  >([]);
+  const { students, isLoading, error, mutate } = getStudents();
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      const st = await getStudents();
-      setStudents(st);
-    };
-    fetchStudents();
-  }, []);
+  if (isLoading) return <Loading />;
 
-  if (!students) console.log("loading...");
+  if (error) return <ErrorState onRetry={() => mutate()} />;
 
   return (
     <div className="p-6 space-y-4">
@@ -39,7 +40,6 @@ const page = () => {
 
       <div className="bg-card px-6 py-4 border rounded-2xl">
         <Table>
-          <TableCaption>Recent students</TableCaption>
           <TableHeader>
             <TableRow>
               {studentHeadRow.map((data) => (
@@ -49,12 +49,26 @@ const page = () => {
           </TableHeader>
 
           <TableBody>
-            {students.splice(0, 5).map((student) => (
-              <TableRow key={student.id}>
-                <TableCell className="py-4">
-                  {student.id?.split("-")[0]}
+            {students.map((student: StudentType) => (
+              <TableRow key={student.email}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src="" />
+
+                      <AvatarFallback>
+                        {student.student
+                          .split(" ")
+                          .map((name) => name[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+
+                    <div>
+                      <p className="font-medium">{student.student}</p>
+                    </div>
+                  </div>
                 </TableCell>
-                <TableCell className="py-4">{student.fullName}</TableCell>
                 <TableCell className="py-4">{student?.email}</TableCell>
                 <TableCell className="py-4">
                   {student?.course ?? "N/A"}

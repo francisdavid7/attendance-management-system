@@ -4,9 +4,7 @@ import React, { ChangeEvent, useState } from "react";
 import {
   BookOpen,
   MoreHorizontal,
-  Plus,
   Search,
-  ShieldCheck,
   UserCheck,
   Users,
 } from "lucide-react";

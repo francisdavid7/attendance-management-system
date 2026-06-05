@@ -4,7 +4,6 @@ import useSWRMutation from "swr/mutation";
 import { url } from "inspector";
 import Students from "@/app/tutor/dashboard/students/page";
 
-
 // fether function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);
 
@@ -18,6 +17,17 @@ export const getCurrentUser = () => {
 
   const user = data?.user;
   return { user, isLoading, error, mutate };
+};
+
+// Get students data
+export const getStudents = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/admin/students",
+    fetch,
+  );
+
+  const students = data?.studentsData;
+  return { students, isLoading, error, mutate };
 };
 
 // Get tutors data
@@ -41,7 +51,7 @@ export const getCourses = () => {
   return { courses, isLoading, error, mutate };
 };
 
-// ============================= POST REQUESTS ====================================== //
+// ============================= POST REQUESTS ======================== //
 export const useAssignTutor = () => {
   return useSWRMutation("/api/courses/assign-tutor", postData);
 };
@@ -59,21 +69,27 @@ export const getAllCourses = () => {
 
 // ============================ session ============================= >
 
-const createSession = async (url: string, { arg }: { arg: { courseId: string } }) => {
+const createSession = async (
+  url: string,
+  { arg }: { arg: { courseId: string } },
+) => {
   const resp = await axios.post(url, { courseId: arg.courseId });
   return resp.data;
-}
+};
 
 export const startSession = () => {
   return useSWRMutation("/api/session", createSession);
-}
+};
 // ======================= Mark Attendance ============================ >
 
-const validateAttendance = async (url: string, { arg }: { arg: { id: string, qrCode: string } }) => {
+const validateAttendance = async (
+  url: string,
+  { arg }: { arg: { id: string; qrCode: string } },
+) => {
   const resp = await axios.post(url, { id: arg.id, qrCode: arg.qrCode });
   return resp.data;
-}
+};
 
 export const markAttendance = () => {
-  return useSWRMutation("/api/mark", validateAttendance)
-}
+  return useSWRMutation("/api/mark", validateAttendance);
+};
