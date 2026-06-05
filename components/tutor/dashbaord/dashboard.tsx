@@ -1,52 +1,24 @@
 "use client"
-import {
-    GraduationCap,
-    Radio,
-    Users,
-    AlertTriangle,
-    QrCode,
-    UserPlus,
-    XCircle,
-} from "lucide-react";
-
-import { Progress } from "@/components/ui/progress";
-
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { useCourseStore } from "./zstand";
+import { useAttendanceStore } from "./zstand";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/actions/actions";
-const attendance = [
-    {
-        name: "Alice Schmidt",
-        id: "#STU-29384",
-        time: "09:12 AM",
-        status: "Present",
-    },
-    {
-        name: "Marcus Kane",
-        id: "#STU-29401",
-        time: "09:18 AM",
-        status: "Present",
-    },
-    {
-        name: "Lana Lopez",
-        id: "#STU-29311",
-        time: "09:42 AM",
-        status: "Late",
-    },
-    {
-        name: "James Roland",
-        id: "#STU-29522",
-        time: "09:44 AM",
-        status: "Present",
-    },
-];
+import DashboardLoading from "@/components/tutor/dashbaord/laoding"
+import { GraduationCap, Radio, Users, AlertTriangle } from "lucide-react";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+
 
 export default function LecturerDashboard() {
     const { user, isLoading } = getCurrentUser();
 
+    const attendanceData = useAttendanceStore((state) => state.attendanceData);
+
+    const sessionData = useCourseStore((state) => state.sessionData);
+
+    if (isLoading) return <DashboardLoading />
     return (
         <div className="space-y-6 p-6">
-            {/* Header */}
             <div>
                 <h1 className="text-4xl font-bold">
                     Good morning, Prof. {user?.fullName.split(" ")[0]}
@@ -57,7 +29,6 @@ export default function LecturerDashboard() {
                 </p>
             </div>
 
-            {/* Stats */}
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                 <Card>
                     <CardContent className="flex items-start justify-between pt-4">
@@ -67,11 +38,16 @@ export default function LecturerDashboard() {
                             </p>
 
                             <h3 className="mt-2 text-xl font-bold">
-                                CS101: Intro to CS
+                                {sessionData?.session?.course?.name}
                             </h3>
 
                             <p className="mt-1 text-sm text-muted-foreground">
-                                09:00 AM - 11:00 AM
+                                session started at <span className="font-bold"> {new Date(
+                                    sessionData?.session?.createdAt
+                                ).toLocaleString("en-US", {
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                })}</span>
                             </p>
                         </div>
 
@@ -112,10 +88,10 @@ export default function LecturerDashboard() {
                             </span>
                         </div>
 
-                        <h2 className="mt-3 text-3xl font-bold">32 / 45</h2>
+                        <h2 className="mt-3 text-3xl font-bold">{attendanceData?.totalAttendance}/45</h2>
 
                         <div className="mt-3 h-2 rounded-full bg-muted">
-                            <Progress value={70} />
+                            <Progress value={attendanceData?.totalAttendance} />
                         </div>
 
                         <p className="mt-2 text-sm text-muted-foreground">
@@ -145,7 +121,6 @@ export default function LecturerDashboard() {
                 </Card>
             </div>
 
-
             <div className="">
 
                 <Card>
@@ -169,22 +144,29 @@ export default function LecturerDashboard() {
                             </thead>
 
                             <tbody>
-                                {attendance.map((student) => (
-                                    <tr key={student.id} className="border-b">
+                                {attendanceData?.studentsAttended?.map((student: any) => (
+                                    <tr key={student?.id} className="border-b">
                                         <td className="p-4 font-medium">
-                                            {student.name}
+                                            {student?.student?.fullName}
                                         </td>
 
-                                        <td>{student.id}</td>
+                                        <td>{student?.student?.id}</td>
 
-                                        <td>{student.time}</td>
+                                        <td>{new Date(
+                                            student.checkInTime
+                                        ).toLocaleString("en-US", {
+                                            weekday: "short",
+                                            day: "numeric",
+                                            hour: "numeric",
+                                            minute: "2-digit",
+                                        })}</td>
 
                                         <td>
                                             <span
-                                                className={`rounded-full px-3 py-1 text-xs
-                        ${student.status === "Present"
-                                                        ? "bg-green-100 text-green-700"
-                                                        : "bg-red-100 text-red-700"
+                                                className={`rounded-[7px] px-3 py-1 text-xs
+                        ${student?.status === "PRESENT"
+                                                        ? "bg-(--color-primary)/20 text-(--color-primary)"
+                                                        : "bg-red-100 text-(--color-destructive)"
                                                     }`}
                                             >
                                                 {student.status}

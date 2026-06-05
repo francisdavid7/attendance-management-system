@@ -2,9 +2,9 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Field, FieldLabel } from "@/components/ui/field"
-import { getCurrentUser } from "@/lib/actions/actions";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getCurrentUser } from "@/lib/actions/actions";
+import { Field, FieldLabel } from "@/components/ui/field"
 import { CheckCircle2, Circle, EarthLockIcon, ShieldCheck } from "lucide-react";
 import { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent } from "@/components/ui/card";
 

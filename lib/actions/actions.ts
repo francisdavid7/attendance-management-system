@@ -65,7 +65,7 @@ const createSession = async (url: string, { arg }: { arg: { courseId: string } }
 }
 
 export const startSession = () => {
-  return useSWRMutation("/api/session", createSession);
+  return useSWRMutation("/api/attendance/session", createSession);
 }
 // ======================= Mark Attendance ============================ >
 
@@ -75,5 +75,32 @@ const validateAttendance = async (url: string, { arg }: { arg: { id: string, qrC
 }
 
 export const markAttendance = () => {
-  return useSWRMutation("/api/mark", validateAttendance)
+  return useSWRMutation("/api/attendance/mark", validateAttendance)
+}
+
+//============================ Attendance Data ========================= //
+
+const getSessionId = async (url: string, { arg }: { arg: { sessionId: any } }) => {
+  const resp = await axios.post(url, { sessionId: arg.sessionId });
+  return resp.data;
+}
+
+export const attendanceList = () => {
+  const { trigger, data, isMutating, error } = useSWRMutation(
+    "/api/attendance/attendanceList",
+    getSessionId
+  );
+
+  return { trigger, data, isMutating, error };
+};
+
+
+// ================================ Student Attendance Data ================= //
+
+export const studentsData = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/attendance/studentAttendance",
+    fetch,
+  )
+  return { data, isLoading }
 }

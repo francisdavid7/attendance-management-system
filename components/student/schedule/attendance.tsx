@@ -1,30 +1,15 @@
 "use client"
-import { Button } from "@/components/ui/button"
-import { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent, } from "@/components/ui/card"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { QrCode, ScanLine } from "lucide-react"
 import { useState } from "react"
 import QRScanner from "./scanner"
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogOverlay,
-    DialogPortal,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+import { QrCode } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent, } from "@/components/ui/card"
 
 function Attend() {
-
     const [isScanning, setIsScanning] = useState(false);
-
     return (
         <div>
-
             <Dialog >
                 <Card className="justify-self-center text-center w-[90%] md:w-[50%] mt-7">
                     <CardHeader>
@@ -34,7 +19,6 @@ function Attend() {
                             </div>
                         </CardTitle>
                     </CardHeader>
-
                     <CardDescription>
                         <CardContent>
                             <h1 className="font-bold text-2xl text-black">Check-in Now</h1>
@@ -43,7 +27,6 @@ function Attend() {
                             </div>
                         </CardContent>
                     </CardDescription>
-
                     <div>
                         <CardFooter className="justify-self-center">
                             <CardAction className="flex gap-4">
@@ -52,23 +35,15 @@ function Attend() {
                                         Open Scanner
                                     </Button>
                                 </DialogTrigger>
-
-
                                 <Button variant={"outline"}>
                                     Manual Code
                                 </Button>
-
                             </CardAction>
                         </CardFooter>
                     </div>
                 </Card>
-
-
                 <QRScanner />
-
             </Dialog>
-
-
         </div>
     )
 }

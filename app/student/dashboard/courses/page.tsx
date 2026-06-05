@@ -32,6 +32,7 @@ function Courses() {
 
   return (
     <section className="space-y-6 p-6">
+
       <div>
 
       </div>

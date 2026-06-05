@@ -1,39 +1,76 @@
 "use client";
+import { toast } from "sonner";
 import { useState } from "react";
 import QRCode from "react-qr-code";
+import { presentStud } from "./list";
+import SessionLoading from "./loading";
+import { useAttendance } from "./session";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getAllCourses } from "@/lib/actions/actions";
-import { QrCode, RefreshCw, Users, CircleCheck, CircleX, PlusIcon, CalendarDays, GraduationCap, RotateCcwIcon, Loader2Icon, CircleAlertIcon, Loader2, } from "lucide-react";
+import { useAttendanceStore, useCourseStore } from "../dashbaord/zstand";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardAction, } from "@/components/ui/card";
-import { useAttendance } from "./session";
-import { toast } from "sonner";
+import { QrCode, RefreshCw, Users, CircleCheck, CircleX, PlusIcon, GraduationCap, CircleAlertIcon, Loader2, } from "lucide-react";
+
+interface Session {
+    id: string;
+    courseId: string;
+    date: string;
+    createdAt: string;
+    qrCode: string;
+    qrExpiresAt: string;
+    isActive: boolean;
+    course: {
+        id: string;
+        name: string;
+        description: string;
+        tutorId: string;
+        createdAt: string;
+    };
+};
+
+type QrPlay = {
+    session: Session
+}
+
 export default function GenerateAttendanceQR() {
-    const { courses, isLoading } = getAllCourses();
-    const [show, setShow] = useState(false)
-    const [data, setData] = useState()
     const [id, setId] = useState("");
+    const { getList, } = presentStud();
+    const [count, setCount] = useState();
+    const [show, setShow] = useState(false)
     const [full, setFull] = useState(false);
+    const { setSessionData } = useCourseStore();
+    const { courses, isLoading } = getAllCourses();
+    const { setAttendanceData } = useAttendanceStore();
     const { attendance, isMutating } = useAttendance();
+    const [data, setData] = useState<QrPlay | null>(null)
+
+    if (isLoading) return <SessionLoading />
 
     const attendances = async () => {
         try {
             const promise = attendance(id);
-
             toast.promise(promise, {
                 loading: "Creating session....",
                 success: (data) => data.Message,
                 error: "Failed to create a session",
             });
-
             const session = await promise;
             setData(session);
+            setSessionData(session);
         } catch (error) {
             console.log(error);
         }
     };
 
+    const attendanceCount = async () => {
+        if (!data) return
+        const list = await getList(data?.session?.id);
+        console.log(list);
+        setAttendanceData(list)
+        setCount(list.totalAttendance);
+    };
 
     return (
         <div className="flex flex-col md:flex-row gap-4  p-4">
@@ -78,6 +115,7 @@ export default function GenerateAttendanceQR() {
                                 {!data ? "" : "Location: Lecture Hall B."}
                             </p>
                         </div>
+
                         <CardFooter className="justify-center " >
                             <CardAction >
                                 <Button variant={"default"} onClick={attendances} disabled={isMutating} className="w-full ">
@@ -86,12 +124,18 @@ export default function GenerateAttendanceQR() {
                             </CardAction>
                         </CardFooter>
                     </CardContent>
-
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle className="text-xl">
-                            Session Statistics
+                        <CardTitle className="flex text-xl">
+                            <div className="grow">
+                                Session Statistics
+                            </div>
+                            <div>
+                                <Button variant={"link"} className="-mt-15" onClick={attendanceCount}>
+                                    <RefreshCw />
+                                </Button>
+                            </div>
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -103,15 +147,15 @@ export default function GenerateAttendanceQR() {
                                 </span>
                             </div>
                             <span className="text-xl font-bold text-(--color-primary)">
-                                {data ? "24" : "NaN"}
+                                {count}
                             </span>
                         </div>
                         <div>
                             <div className="mb-2 flex justify-between text-xs text-muted-foreground">
                                 <span>Expected Attendance</span>
-                                <span> {!data ? "NaN/NaN" : "24/30"}</span>
+                                <span>  {count}/30</span>
                             </div>
-                            <Progress value={80} />
+                            <Progress value={count} />
                         </div>
                     </CardContent>
                 </Card>
@@ -130,14 +174,20 @@ export default function GenerateAttendanceQR() {
                     <div className="rounded-xl border-2 border-(--color-primary)/40 p-4 shadow-sm">
                         <div className="overflow-hidden w-[250px] h-[250px] ">
                             {show ?
-                                <div>{data && (
-                                    <QRCode
-                                        value={JSON.stringify(data)}
-                                        className={`${full ? "absolute w-[100%] h-[100%] left-0 right-0 to-0 bottom-0" : "w-full"}`}
-                                        onClick={() => setFull((prev) => !prev)}
-                                    />)} {!data && (<div className="text-center place-content-center py-23 text-(--color-destructive) text-[17px] font-bold">
-                                        Please Create a class session to Generate QR code for your student.
-                                    </div>)} </div>
+                                <div>
+                                    {data && (
+                                        <QRCode
+                                            value={JSON.stringify(data)}
+                                            className={`${full ? "absolute w-[100%] h-[100%] left-0 right-0 to-0 bottom-0" : "w-full"}`}
+                                            onClick={() => setFull((prev) => !prev)}
+                                        />)}
+
+                                    {!data && (
+                                        <div className="text-center place-content-center py-23 text-(--color-destructive) text-[17px] font-bold">
+                                            Please Create a class session to Generate QR code for your student.
+                                        </div>
+                                    )}
+                                </div>
                                 :
                                 <img
                                     src="/hero_image.png"
@@ -147,6 +197,7 @@ export default function GenerateAttendanceQR() {
                             }
                         </div>
                     </div>
+
                     <div className="mt-4 rounded-full bg-muted px-4 py-2 text-xs font-medium">
                         <RefreshCw className="mr-1 inline h-3 w-3" />
                         QR code expires in 01:45

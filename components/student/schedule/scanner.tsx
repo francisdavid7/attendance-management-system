@@ -1,12 +1,12 @@
 "use client";
-import { Html5Qrcode } from "html5-qrcode";
-import { useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, } from "@/components/ui/card";
-import { DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { CircleAlert, CircleCheckBigIcon, LucideSquareCenterlineDashedVertical, MoveRight, QrCode, ScanLine, StopCircle } from "lucide-react";
-import { markAttendance } from "@/lib/actions/actions";
 import { toast } from "sonner";
+import { useRef, useState } from "react";
+import { Html5Qrcode } from "html5-qrcode";
+import { Card, } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { markAttendance } from "@/lib/actions/actions";
+import { DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { CircleAlert, CircleCheckBigIcon, LucideSquareCenterlineDashedVertical, MoveRight, ScanLine, StopCircle } from "lucide-react";
 
 interface Session {
     id: string;
@@ -30,9 +30,9 @@ type QrPlay = {
 }
 
 export default function QRScanner() {
+    const { trigger, isMutating } = markAttendance();
     const [isScanning, setIsScanning] = useState(false);
     const scannerRef = useRef<Html5Qrcode | null>(null);
-    const { trigger, isMutating } = markAttendance();
     const [qRCode, setQRCode] = useState<QrPlay | null>(null)
     const [disPlay, setDisPlay] = useState<Boolean | null>(null)
 
@@ -44,9 +44,8 @@ export default function QRScanner() {
             await scannerRef.current.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (qrCode) => {
                 const data = JSON.parse(qrCode);
                 setQRCode(data);
-                console.log("fun wait", data.session)
+                console.log("QR-CODE", data.session)
                 stopScanning();
-
             }, () => { })
             setIsScanning(true)
         }
@@ -61,11 +60,13 @@ export default function QRScanner() {
                 await scannerRef.current.stop();
             }
             setIsScanning(false);
+
             if (!qRCode) {
                 setDisPlay(true)
             } else if (disPlay) {
                 setDisPlay(false)
             }
+
         } catch (error) {
             console.log("failed to stop scanner ")
         }
@@ -98,6 +99,7 @@ export default function QRScanner() {
 
         console.log(submit);
     };
+
     return (
         <div>
             <dialog>
@@ -136,28 +138,28 @@ export default function QRScanner() {
 
                         <div className="space-y-4 pt-4">
                             <div className="text-center">
-                                {!isScanning ? (<div className="flex gap-1">
-                                    <div>
-                                        <Button variant="default" className=" rounded-xl px-5 asChild" onClick={toggleScanner}>
+                                {!isScanning ? (<div className="grid md:flex gap-1 ">
+                                    <div >
+                                        <Button variant="default" className=" rounded-xl p-5 asChild " onClick={toggleScanner}>
                                             {isScanning ? (<><StopCircle /> Stop Scanning QRcode </>) :
                                                 (<> <LucideSquareCenterlineDashedVertical /> Start Scanning QRcode </>)}
                                         </Button>
                                     </div>
-                                    <div>
+                                    <div >
                                         <DialogClose asChild>
-                                            <Button variant="default" className=" rounded-xl px-5 asChild" disabled={!qRCode} onClick={submitAttendance}>
+                                            <Button variant="default" className=" rounded-xl  px-5 asChild  " disabled={!qRCode} onClick={submitAttendance}>
                                                 <MoveRight /> Submit Attendance
                                             </Button>
                                         </DialogClose>
                                     </div>
                                 </div>) : (
-                                    <div className="flex gap-1">
-                                        <div>
+                                    <div className="grid md:flex gap-1 ">
+                                        <div >
                                             <Button variant="default" className=" rounded-xl px-5 asChild" onClick={toggleScanner}>
                                                 {isScanning ? (<><StopCircle /> Stop Scanning QRcode </>) : (<> <LucideSquareCenterlineDashedVertical /> Start Scanning QRcode </>)}
                                             </Button>
                                         </div>
-                                        <div>
+                                        <div >
                                             <DialogClose asChild>
                                                 <Button variant="default" className=" rounded-xl px-5 asChild" disabled={!qRCode} onClick={submitAttendance}>
                                                     <MoveRight /> Submit Attendance
