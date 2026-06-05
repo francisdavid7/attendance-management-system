@@ -1,8 +1,6 @@
 import useSWR from "swr";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
-import { url } from "inspector";
-import Students from "@/app/tutor/dashboard/students/page";
 
 // fether function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);

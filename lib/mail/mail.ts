@@ -1,5 +1,6 @@
 import EmailVerificationTemplate from "@/components/emailVerificationTemplate";
 import { transporter } from "./nodemailer";
+import { tutorLoginDetailsTemplate } from "@/components/utorLoginDetailsTemplate";
 
 // Verification email
 export async function sendVerificationEmail(
@@ -25,21 +26,11 @@ export async function sendLoginDetails(
   email: string,
   password: string,
 ) {
+  const loginLink = "http://localhost:3000/auth/login";
   return transporter.sendMail({
     from: `"AttendX" <${process.env.GMAIL_USER}>`,
     to: email,
-    subject: "Verify your email",
-    html: `
-      <h2 style="margin-bottom: 20px">Hi, ${name}! Your tutor account has been successfully created.</h2>
-
-      <p>
-        Below are you login details:
-      </p>
-
-      <ul style="list-style: none">
-        <li>email: ${email}</li>
-        <li>password: ${password}</li>
-      </ul>
-    `,
+    subject: "Your AttendX Tutor Account Has Been Created",
+    html: tutorLoginDetailsTemplate({ name, email, password, loginLink }),
   });
 }
