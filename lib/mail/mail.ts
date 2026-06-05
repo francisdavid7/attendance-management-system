@@ -1,8 +1,7 @@
-import { Resend } from "resend";
 import EmailVerificationTemplate from "@/components/emailVerificationTemplate";
+import { transporter } from "./nodemailer";
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
-
+// Verification email
 export async function sendVerificationEmail(
   email: string,
   token: string,
@@ -12,27 +11,24 @@ export async function sendVerificationEmail(
 
   const emailTemplate = EmailVerificationTemplate(name, verificationLink);
 
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
-
+  return transporter.sendMail({
+    from: `"AttendX" <${process.env.GMAIL_USER}>`,
     to: email,
-
     subject: "Verify your email",
-
     html: emailTemplate,
   });
 }
 
+// Tutor login details
 export async function sendLoginDetails(
   name: string,
   email: string,
   password: string,
 ) {
-  await resend.emails.send({
-    from: "onboarding@resend.dev",
+  return transporter.sendMail({
+    from: `"AttendX" <${process.env.GMAIL_USER}>`,
     to: email,
-    subject: "Tutor Account Login Details!",
-
+    subject: "Verify your email",
     html: `
       <h2 style="margin-bottom: 20px">Hi, ${name}! Your tutor account has been successfully created.</h2>
 

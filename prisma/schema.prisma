@@ -1,14 +1,78 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id                          String          @id @default(uuid())
+  fullName                    String
+  email                       String          @unique
+  password                    String
+  createdAt                   DateTime        @default(now())
+  updatedAt                   DateTime        @updatedAt
+  role                        Role            @default(STUDENT)
+  isVerified                  Boolean         @default(false)
+  resetPasswordToken          String?
+  resetPasswordTokenExpiresAt DateTime?
+  verificationTokenExpiresAt  DateTime?
+  verificationToken           String?
+  attendances                 Attendance[]    @relation("StudentAttendance")
+  verifiedAttendances         Attendance[]    @relation("VerifiedByTutor")
+  courses                     Course[]
+  studentCourses              StudentCourse[]
+}
+
+model Course {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  tutorId     String?
+  createdAt   DateTime        @default(now())
+  tutor       User?           @relation(fields: [tutorId], references: [id])
+  sessions    Session[]
+  students    StudentCourse[]
+}
+
+model StudentCourse {
+  id        String @id @default(uuid())
+  studentId String
+  courseId  String
+  course    Course @relation(fields: [courseId], references: [id])
+  student   User   @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, courseId])
+}
+
+model Session {
+  id           String       @id @default(uuid())
+  courseId     String
+  date         DateTime
+  qrCode       String       @unique
+  qrExpiresAt  DateTime
+  isActive     Boolean      @default(true)
+  createdAt    DateTime     @default(now())
+  sessionEndAt DateTime?
+  attendances  Attendance[]
+  course       Course       @relation(fields: [courseId], references: [id])
+}
+
+model Attendance {
+  id           String           @id @default(uuid())
+  studentId    String
+  sessionId    String
+  checkInTime  DateTime?
+  checkOutTime DateTime?
+  status       AttendanceStatus
+  verifiedById String?
+  createdAt    DateTime         @default(now())
+  session      Session          @relation(fields: [sessionId], references: [id])
+  student      User             @relation("StudentAttendance", fields: [studentId], references: [id])
+  verifiedBy   User?            @relation("VerifiedByTutor", fields: [verifiedById], references: [id])
+
+  @@unique([studentId, sessionId])
 }
 
 enum Role {
@@ -22,94 +86,4 @@ enum AttendanceStatus {
   LATE
   PARTIAL
   ABSENT
-}
-
-model User {
-  id       String @id @default(uuid())
-  fullName String
-  email    String @unique
-  password String
-
-  role Role @default(STUDENT)
-
-  isVerified Boolean @default(false)
-
-  verificationToken          String?
-  verificationTokenExpiresAt DateTime?
-
-  resetPasswordToken          String?
-  resetPasswordTokenExpiresAt DateTime?
-
-  // Relations
-  studentCourses      StudentCourse[]
-  courses             Course[]
-  verifiedAttendances Attendance[]    @relation("VerifiedByTutor")
-
-  attendances Attendance[] @relation("StudentAttendance")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Course {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-
-  tutorId String?
-  tutor   User?   @relation(fields: [tutorId], references: [id])
-
-  students StudentCourse[]
-  sessions Session[]
-
-  createdAt DateTime @default(now())
-}
-
-model StudentCourse {
-  id        String @id @default(uuid())
-  studentId String
-  courseId  String
-
-  student User   @relation(fields: [studentId], references: [id])
-  course  Course @relation(fields: [courseId], references: [id])
-
-  @@unique([studentId, courseId])
-}
-
-model Session {
-  id       String   @id @default(uuid())
-  courseId String
-  date     DateTime
-
-  qrCode      String   @unique
-  qrExpiresAt DateTime
-
-  isActive Boolean @default(true)
-
-  course Course @relation(fields: [courseId], references: [id])
-
-  attendances Attendance[]
-
-  createdAt DateTime @default(now())
-}
-
-model Attendance {
-  id        String @id @default(uuid())
-  studentId String
-  sessionId String
-
-  checkInTime  DateTime?
-  checkOutTime DateTime?
-
-  status AttendanceStatus
-
-  verifiedById String?
-  verifiedBy   User?   @relation("VerifiedByTutor", fields: [verifiedById], references: [id])
-
-  student User    @relation("StudentAttendance", fields: [studentId], references: [id])
-  session Session @relation(fields: [sessionId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@unique([studentId, sessionId])
 }
