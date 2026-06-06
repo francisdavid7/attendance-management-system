@@ -1,151 +1,197 @@
-// "use client"
-// import btn from "./icons";
-// import { BadgeCheck } from "lucide-react";
-// import { studentsData } from "@/lib/actions/actions";
-// import { useHistoryStore } from "@/components/tutor/dashbaord/zstand";
-// import { Progress } from "@/components/ui/progress";
-// import { RadialBarChart, RadialBar, PolarAngleAxis, Legend } from "recharts"
-// import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
-// import { useEffect, useState } from "react";
+"use client"
+import btn from "./icons";
+import { BadgeCheck, BookOpen, CheckCircle2, Clock, Download, Plus, XCircle } from "lucide-react";
+import { studentsData } from "@/lib/actions/actions";
+import { useHistoryStore } from "@/components/tutor/dashbaord/zstand";
+import { Progress } from "@/components/ui/progress";
+import { RadialBarChart, RadialBar, PolarAngleAxis, Legend } from "recharts"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
-// function Chart() {
-//     const { data, isLoading } = studentsData();
-//     const { setHistoryData } = useHistoryStore();
-//     const [table, setTable] = useState();
+function Chart() {
+    const { data, isLoading } = studentsData();
+    const { setHistoryData } = useHistoryStore();
+    const [table, setTable] = useState();
 
-//     const renderCenterLabel = () => {
-//         return (
-//             <div className="flex items-center justify-center w-full h-full text-center">
-//                 <span className="hidden md:inline text-4xl font-extrabold">
-//                     <BadgeCheck size={50} className="text-[color:var(--color-primary)]" />
-//                 </span>
-//                 <span className="inline md:hidden text-4xl font-extrabold text-[color:var(--color-primary)]">
-//                     {count ? `${count}%` : "0%"}
-//                 </span>
-//             </div>
-//         );
-//     };
+    useEffect(() => {
+        setTable(data)
+        setHistoryData(table)
+    }, [table, data])
 
-//     return (
-//         <main className="p-3 md:p-5">
-//             <div className="">
-//                 <div className="">
-//                     <div className="text-4xl font-bold ">
-//                         Welcome back, <span>{data?.fullName?.split(" ")[0]}!</span>
-//                     </div>
-//                     <p className=" text-xl opacity-70 font-light mt-2">
-//                         You have attended {count}% of your classes this semester. Keep it up!
-//                     </p>
-//                 </div>
+    const count = data?._count?.attendances
+    const railData = !count ? 0 : count;
+    const radialBar = [{
+        name: "Attendance",
+        value: railData,
+        fill: "var(--color-primary)",
+    }];
 
-//                 <section className="grid md:flex gap-4 w-full mt-5">
-//                     <Card className="w-full">
-//                         <section className="flex  md:flex-row flex-col ">
-//                             <div className="grow " >
-//                                 <CardHeader>
-//                                     <CardTitle>
-//                                         <div className="text-2xl md:text-justify text-center text-[color:var(--color-muted-foreground)]">
-//                                             OVERALL ATTENDANCE
-//                                         </div>
-//                                     </CardTitle>
-//                                 </CardHeader>
+    const board = [
+        {
+            title: "TOTAL CLASSES",
+            number: 42,
+        },
+        {
+            title: "PRESENT",
+            number: count,
+        },
+        {
+            title: "LATE",
+            number: 4,
+        },
+        {
+            title: "ABSENT",
+            number: 3,
+        }
+    ]
 
-//                                 <CardDescription>
-//                                     <CardContent>
-//                                         <h1 className="opacity-0 md:opacity-100 text-[1px] md:text-4xl text-(--color-primary) mt-0 md:mt-4 font-extrabold  ">
-//                                             {count ?
-//                                                 <div>
-//                                                     {count == 0 ? "No classes attended yet" : `${count}%`}
-//                                                 </div> :
-//                                                 " "
-//                                             }
-//                                         </h1>
-//                                         <p className="text-[17px] md:text-start text-center mt-4 md:mt-5">
-//                                             You are <span>+5%</span> above the required 75% Threshold
-//                                         </p>
-//                                         <div className="opacity-0 md:opacity-100 md:mt-6 mt-0">
-//                                             <Progress value={count} />
-//                                         </div>
-//                                     </CardContent>
-//                                 </CardDescription>
-//                             </div>
+    const renderCenterLabel = () => {
+        return (
+            <div className="flex items-center justify-center w-full h-full text-center">
+                <span className="hidden md:inline text-4xl font-extrabold">
+                    <BadgeCheck size={50} className="text-[color:var(--color-primary)]" />
+                </span>
+                <span className="inline md:hidden text-4xl font-extrabold text-[color:var(--color-primary)]">
+                    {count ? `${count}%` : "0%"}
+                </span>
+            </div>
+        );
+    };
 
-//                             <div>
-//                                 <CardContent>
-//                                     <div className="justify-self-center">
-//                                         <RadialBarChart
-//                                             width={250}
-//                                             height={250}
-//                                             innerRadius="70%"
-//                                             outerRadius="100%"
-//                                             data={radialBar}
-//                                             startAngle={90}
-//                                             endAngle={-270}
-//                                         >
-//                                             <PolarAngleAxis
-//                                                 type="number"
-//                                                 domain={[0, 100]}
-//                                                 angleAxisId={0}
-//                                                 tick={false}
-//                                             />
 
-//                                             <RadialBar
-//                                                 dataKey="value"
-//                                                 background
-//                                                 cornerRadius={10}
-//                                             />
+    const getCardMeta = (title: string) => {
+        switch (title?.toLowerCase()) {
+            case 'total classes':
+                return { icon: <BookOpen className="h-5 w-5 text-slate-600" />, bg: 'bg-slate-50' };
+            case 'present':
+                return { icon: <CheckCircle2 className="h-5 w-5 text-(--color-primary)" />, bg: 'bg-primary/10' };
+            case 'late':
+                return { icon: <Clock className="h-5 w-5 text-amber-500" />, bg: 'bg-amber-50' };
+            case 'absent':
+                return { icon: <XCircle className="h-5 w-5 text-(--color-destructive)" />, bg: 'bg-destructive/10' };
+            default:
+                return { icon: <BookOpen className="h-5 w-5 text-slate-600" />, bg: 'bg-slate-50' };
+        }
+    };
+    return (
 
-//     <CardDescription>
-//         <CardContent>
-//             <h1 className="opacity-0 md:opacity-100 text-[1px] md:text-4xl text-(--color-primary) mt-0 md:mt-4 font-extrabold  ">
-//                 {count ?
-//                     <div>
-//                         {count == 0 ? "No classes attended yet" : `${count}%`}
-//                     </div> :
-//                     "0"
-//                 }
-//             </h1>
-//             <p className="text-[17px] md:text-start text-center mt-4 md:mt-5">
-//                 You are <span>+5%</span> above the required 75% Threshold
-//             </p>
-//             <div className="opacity-0 md:opacity-100 md:mt-6 mt-0">
-//                 <Progress value={count} />
-//             </div>
-//         </CardContent>
-//     </CardDescription>
-// </div>
 
-//                     <div className="w-full grid grid-cols-2 gap-3">
-//                         {board.map((data, index) => {
-//                             return (
-//                                 <div className="flex flex-col  text-justify" key={index}>
+        <main className="p-3 md:p-0 max-w-7xl mx-auto">
 
-//                                     <Card>
-//                                         <CardHeader>
-//                                             <CardTitle>
-//                                                 {btn(data.title)}
-//                                             </CardTitle>
-//                                         </CardHeader>
-//                                         <CardDescription>
 
-//                                             <CardContent>
-//                                                 <h1>
-//                                                     {data.title}
-//                                                 </h1>
-//                                                 <div className="font-bold mt-3 text-[20px]">
-//                                                     {data.number}
-//                                                 </div>
-//                                             </CardContent>
-//                                         </CardDescription>
-//                                     </Card>
-//                                 </div>
-//                             )
-//                         })}
-//                     </div>
-//                 </section>
-//             </div>
-//         </main>
-//     )
-// }
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+                <div>
+                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mt-5">
+                        Welcome back, <span className="font-bold">{data?.fullName?.split(" ")[0]}!</span>
+                    </h1>
+                    <p className="text-sm md:text-base text-slate-500 mt-1.5 font-normal">
+                        You have attended {count}% of your classes this semester. Keep it up!
+                    </p>
+                </div>
+            </div>
+            <section className="flex flex-col lg:flex-row gap-6 w-full items-stretch">
+                <Card className="w-full lg:w-[68%] overflow-hidden p-6 md:p-8 flex flex-col justify-between">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 h-full">
+                        <div className="flex flex-col justify-between flex-1 h-full py-2">
+                            <CardHeader>
+                                <CardTitle>
 
-// export default Chart;
+                                    <span className="text-xl md:text-2xl opacity-60 font-bold tracking-wider">
+                                        OVERALL ATTENDANCE
+                                    </span>
+                                </CardTitle>
+                                <h2 className="hidden md:inline text-5xl md:text-6xl font-extrabold text-(--color-primary) tracking-tight mt-3 mb-4">
+                                    {count ? (count === 0 ? "0%" : `${count}%`) : "0%"}
+                                </h2>
+                                <p className="text-[15px] md:text-base opacity-90 font-normal">
+                                    You are <span className="font-semibold text-(--color-primary)">+5%</span> above the required 75% threshold.
+                                </p>
+
+                                <div className="mt-12 w-full ">
+                                    <Progress
+                                        value={count}
+                                        className="h-3 rounded-full"
+                                    />
+                                </div>
+                            </CardHeader>
+                        </div>
+
+
+                        <div className="flex items-center justify-center min-w-[240px] relative">
+                            <RadialBarChart
+                                width={240}
+                                height={240}
+                                innerRadius="75%"
+                                outerRadius="100%"
+                                data={radialBar}
+                                startAngle={90}
+                                endAngle={-270}
+                            >
+                                <PolarAngleAxis
+                                    type="number"
+                                    domain={[0, 100]}
+                                    angleAxisId={0}
+                                    tick={false}
+                                />
+                                <RadialBar
+                                    dataKey="value"
+                                    background={{ fill: '#f1f5f9' }}
+                                    cornerRadius={12}
+                                    fill="#10b981"
+                                />
+                                <Legend
+                                    content={renderCenterLabel}
+                                    layout="vertical"
+                                    verticalAlign="middle"
+                                    align="center"
+                                />
+                            </RadialBarChart>
+                        </div>
+
+                    </div>
+                </Card>
+
+                <div className="w-full lg:w-[32%] grid grid-cols-2 gap-4">
+                    {board?.map((item, index) => {
+                        const meta = getCardMeta(item.title);
+                        return (
+                            <Card key={index} className=" p-5 flex flex-col justify-between transition-all ">
+                                <CardContent className="p-0 flex flex-col justify-between h-full gap-5">
+
+                                    <div className={`p-2.5 rounded-xl w-fit ${meta.bg}`}>
+                                        {meta.icon}
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <span className="text-xs md:text-sm font-bold tracking-wider opacity-68 uppercase block">
+                                            {item.title}
+                                        </span>
+                                        <span className="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight block">
+                                            {item.number}
+                                        </span>
+                                    </div>
+
+                                </CardContent>
+                            </Card>
+                        );
+                    })}
+                </div>
+
+            </section>
+        </main>
+    )
+}
+
+export default Chart;
+
+
+
+
+
+
+
+
+
+
+
