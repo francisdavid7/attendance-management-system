@@ -4,7 +4,7 @@ import * as z from "zod";
 import { loginSchema } from "@/lib/validation/auth";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -27,6 +27,7 @@ import useSWRMutation from "swr/mutation";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useState } from "react";
 
 const sendRequest = async (
   url: string,
@@ -34,6 +35,7 @@ const sendRequest = async (
 ) => axios.post(url, arg).then((res) => res.data);
 
 const page = () => {
+  const [isVisible, setIsVisible] = useState(false);
   const { trigger, isMutating } = useSWRMutation<
     { message: string },
     string,
@@ -106,16 +108,31 @@ const page = () => {
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field className="gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <div className="flex justify-between">
+                      <FieldLabel htmlFor={field.name}>Password</FieldLabel>
 
-                    <Input
-                      {...field}
-                      type="password"
-                      id={field.name}
-                      placeholder="••••••••••••••"
-                      aria-invalid={fieldState.invalid}
-                      className="placeholder:text-muted-foreground/20"
-                    />
+                      <p className="cursor-pointer font-medium text-primary">
+                        Forgot password?
+                      </p>
+                    </div>
+
+                    <div className="relative">
+                      <Input
+                        {...field}
+                        type={isVisible ? "text" : "password"}
+                        id={field.name}
+                        placeholder="••••••••••••••"
+                        aria-invalid={fieldState.invalid}
+                        className="placeholder:text-muted-foreground/20"
+                      />
+
+                      <div
+                        onClick={() => setIsVisible((prev) => !prev)}
+                        className="absolute right-4 bottom-2.5 cursor-pointer text-muted-foreground/80"
+                      >
+                        {isVisible ? <EyeOff /> : <Eye />}
+                      </div>
+                    </div>
 
                     {fieldState.error && (
                       <FieldError errors={[fieldState.error]} />
