@@ -25,9 +25,10 @@ import { Input } from "@/components/ui/input";
 import { Mail } from "lucide-react";
 
 import { Controller, useForm } from "react-hook-form";
+import { Field, FieldLabel } from "@/components/ui/field";
 
 export default function ForgotPasswordPage() {
-  const {control} = useForm({
+  const form = useForm({
     defaultValues: {
       email: "",
     },
@@ -38,56 +39,42 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
+    <div className="w-1/2 flex min-h-screen items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-2 text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
             <Mail className="h-6 w-6 text-primary" />
           </div>
 
-          <CardTitle className="text-2xl">
-            Forgot Password
-          </CardTitle>
+          <CardTitle className="text-2xl">Forgot Password</CardTitle>
 
           <CardDescription>
-            Enter your email address and we'll send you a
-            password reset link.
+            Enter your email address and we'll send you a password reset link.
           </CardDescription>
         </CardHeader>
 
         <CardContent>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-5"
-            >
-              <Controller
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            <Controller
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <Field>
+                  <FieldLabel>Email Address</FieldLabel>
 
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="john@example.com"
-                        {...field}
-                      />
-                    </FormControl>
+                  <Input
+                    type="email"
+                    placeholder="john@example.com"
+                    {...field}
+                  />
+                </Field>
+              )}
+            />
 
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                className="w-full"
-              >
-                Send Reset Link
-              </Button>
-            </form>
-          </Form>
+            <Button type="submit" className="w-full">
+              Send Reset Link
+            </Button>
+          </form>
 
           <div className="mt-6 text-center text-sm">
             Remember your password?{" "}

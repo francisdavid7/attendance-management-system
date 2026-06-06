@@ -111,9 +111,12 @@ const page = () => {
                     <div className="flex justify-between">
                       <FieldLabel htmlFor={field.name}>Password</FieldLabel>
 
-                      <p className="cursor-pointer font-medium text-primary">
+                      <Link
+                        href="/auth/forgot-password"
+                        className="cursor-pointer font-medium text-primary"
+                      >
                         Forgot password?
-                      </p>
+                      </Link>
                     </div>
 
                     <div className="relative">
