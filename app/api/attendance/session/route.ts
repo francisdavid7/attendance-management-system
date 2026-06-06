@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
                 date: new Date(),
                 qrCode: crypto.randomUUID(),
                 qrExpiresAt: new Date(Date.now() + 15 * 60 * 1000),
+                sessionEndAt: new Date(Date.now() + 120 * 60 * 1000),
             },
             include: {
                 course: true,

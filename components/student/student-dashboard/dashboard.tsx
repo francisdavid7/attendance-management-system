@@ -13,38 +13,6 @@
 //     const { setHistoryData } = useHistoryStore();
 //     const [table, setTable] = useState();
 
-//     useEffect(() => {
-//         setTable(data)
-//         setHistoryData(table)
-//     }, [table, data])
-
-//     const count = data?._count?.attendances
-//     const railData = !count ? 0 : count;
-//     const radialBar = [{
-//         name: "Attendance",
-//         value: railData,
-//         fill: "var(--color-primary)",
-//     }];
-
-//     const board = [
-//         {
-//             title: "TOTAL CLASSES",
-//             number: 42,
-//         },
-//         {
-//             title: "PRESENT",
-//             number: count,
-//         },
-//         {
-//             title: "LATE",
-//             number: 4,
-//         },
-//         {
-//             title: "ABSENT",
-//             number: 3,
-//         }
-//     ]
-
 //     const renderCenterLabel = () => {
 //         return (
 //             <div className="flex items-center justify-center w-full h-full text-center">
@@ -127,18 +95,25 @@
 //                                                 cornerRadius={10}
 //                                             />
 
-//                                             <Legend
-//                                                 content={renderCenterLabel}
-//                                                 layout="vertical"
-//                                                 verticalAlign="middle"
-//                                                 align="center"
-//                                             />
-//                                         </RadialBarChart>
-//                                     </div>
-//                                 </CardContent>
-//                             </div>
-//                         </section>
-//                     </Card>
+//     <CardDescription>
+//         <CardContent>
+//             <h1 className="opacity-0 md:opacity-100 text-[1px] md:text-4xl text-(--color-primary) mt-0 md:mt-4 font-extrabold  ">
+//                 {count ?
+//                     <div>
+//                         {count == 0 ? "No classes attended yet" : `${count}%`}
+//                     </div> :
+//                     "0"
+//                 }
+//             </h1>
+//             <p className="text-[17px] md:text-start text-center mt-4 md:mt-5">
+//                 You are <span>+5%</span> above the required 75% Threshold
+//             </p>
+//             <div className="opacity-0 md:opacity-100 md:mt-6 mt-0">
+//                 <Progress value={count} />
+//             </div>
+//         </CardContent>
+//     </CardDescription>
+// </div>
 
 //                     <div className="w-full grid grid-cols-2 gap-3">
 //                         {board.map((data, index) => {

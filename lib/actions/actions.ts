@@ -76,7 +76,7 @@ const createSession = async (
 };
 
 export const startSession = () => {
-  return useSWRMutation("/api/session", createSession);
+  return useSWRMutation("/api/attendance/session", createSession);
 };
 // ======================= Mark Attendance ============================ >
 
@@ -89,5 +89,36 @@ const validateAttendance = async (
 };
 
 export const markAttendance = () => {
-  return useSWRMutation("/api/mark", validateAttendance);
+  return useSWRMutation("/api/attendance/mark", validateAttendance);
 };
+
+// ==================================== 
+export const studentsData = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/attendance/studentAttendance",
+    fetch,
+  )
+  return { data, isLoading }
+}
+
+//  ========================== ATTENDANCE LIST =======================
+
+const attendance = async (url: string, { arg }: { arg: { sessionId: string } }) => {
+  const resp = await axios.post(url, { sessionId: arg.sessionId });
+  return resp.data;
+}
+
+export const attendanceList = () => {
+  return useSWRMutation("/api/attendance/attendanceList", attendance);
+}
+
+// ================================= TUTOR'S COURSE ============================ //
+
+
+export const tutorCourse = () => {
+  const { data, isLoading, error, mutate } = useSWR("/api/courses/tutor-courses",
+    fetch,
+  )
+
+  return { data, isLoading }
+}
