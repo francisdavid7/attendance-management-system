@@ -1,6 +1,7 @@
 import useSWR from "swr";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
+import { ur } from "@faker-js/faker";
 
 // fether function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);
@@ -92,7 +93,8 @@ export const markAttendance = () => {
   return useSWRMutation("/api/attendance/mark", validateAttendance);
 };
 
-// ==================================== 
+// ============================= STUDENT ATTENDANCE =========================== >
+
 export const studentsData = () => {
   const { data, isLoading, error, mutate } = useSWR(
     "/api/attendance/studentAttendance",
@@ -100,18 +102,18 @@ export const studentsData = () => {
   )
   return { data, isLoading }
 }
-
-//  ========================== ATTENDANCE LIST =======================
+// ==================================== ATTENDANCE LIST ====================== //
 
 const attendance = async (url: string, { arg }: { arg: { sessionId: string } }) => {
   const resp = await axios.post(url, { sessionId: arg.sessionId });
   return resp.data;
 }
 
+
 export const attendanceList = () => {
   return useSWRMutation("/api/attendance/attendanceList", attendance);
-}
 
+}
 // ================================= TUTOR'S COURSE ============================ //
 
 
