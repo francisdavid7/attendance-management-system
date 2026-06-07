@@ -1,5 +1,6 @@
 import { attendanceList } from "@/lib/actions/actions";
 
+
 export const presentStud = () => {
     const { trigger } = attendanceList();
     const getList = async (sessionId: any) => {
@@ -9,3 +10,6 @@ export const presentStud = () => {
 
     return { getList };
 };
+
+
+

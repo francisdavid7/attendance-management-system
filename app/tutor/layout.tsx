@@ -1,29 +1,15 @@
 "use client";
-
-import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-
+import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import type { ItemsTypes } from "@/components/dashboard/dashboard-sidebar";
-import {
-  BookOpen,
-  CalendarCheck,
-  CalendarDays,
-  LayoutDashboard,
-  Settings,
-  Users,
-} from "lucide-react";
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { CalendarCheck, CalendarDays, LayoutDashboard, Settings, Users } from "lucide-react";
 
 const items: ItemsTypes[] = [
   {
     title: "Dashboard",
     url: "/tutor/dashboard",
     icon: LayoutDashboard as any,
-  },
-  {
-    title: "My Courses",
-    url: "/tutor/dashboard/courses",
-    icon: BookOpen as any,
   },
   {
     title: "Students",

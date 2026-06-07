@@ -62,7 +62,7 @@ export default function AttendanceTable() {
             value: 42,
             subtitle: "Completion rate: 100%",
             icon: BookOpen,
-            badge: "Fall 2023",
+            badge: "Fall 2026",
             progress: "100%",
             color: "bg-(--color-primary)",
         },
@@ -78,11 +78,11 @@ export default function AttendanceTable() {
         },
         {
             title: "TOTAL ABSENCES",
-            value: 2,
+            value: 0,
             subtitle: "Approaching policy limit (3)",
             icon: CircleAlert,
             badge: "Warning",
-            progress: "35%",
+            progress: "0",
             color: "bg-(--color-destructive)",
         },
     ]

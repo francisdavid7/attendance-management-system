@@ -38,11 +38,11 @@ function Chart() {
         },
         {
             title: "LATE",
-            number: 4,
+            number: 0,
         },
         {
             title: "ABSENT",
-            number: 3,
+            number: 0,
         }
     ]
 

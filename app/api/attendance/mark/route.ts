@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
 
         if (!session) return NextResponse.json({ Message: "Invalid QrCode" });
 
-        if (!session.isActive) return NextResponse.json({ Message: "Session closed" })
+        // if (session.qrExpiresAt < session.createdAt) return NextResponse.json({ Message: "Session closed" })
 
-        if (session.qrExpiresAt < new Date()) return NextResponse.json({ Message: "Session closed" });
+        // if (session.sessionEndAt! > new Date()) return NextResponse.json({ Message: "Session closed" });
 
         const existing = await prisma.attendance.findUnique({
             where: {

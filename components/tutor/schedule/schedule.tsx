@@ -1,12 +1,12 @@
 "use client";
 import { toast } from "sonner";
-import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
 import { presentStud } from "./list";
 import SessionLoading from "./loading";
 import { useAttendance } from "./session";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { tutorCourse } from "@/lib/actions/actions";
+import { tutorCourse, endASession } from "@/lib/actions/actions";
 import { Progress } from "@/components/ui/progress";
 import { useAttendanceStore, useCourseStore } from "../dashbaord/zstand";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardAction, } from "@/components/ui/card";
@@ -35,20 +35,24 @@ type QrPlay = {
 }
 
 export default function GenerateAttendanceQR() {
-    const [id, setId] = useState("");
+    const { trigger } = endASession()
     const { getList, } = presentStud();
     const [count, setCount] = useState();
     const [show, setShow] = useState(false);
     const [full, setFull] = useState(false);
     const { data, isLoading } = tutorCourse();
     const { setSessionData } = useCourseStore();
+    const [timeLeft, setTimeLeft] = useState("");
     const [isEnded, setIsEnded] = useState(false);
     const [progress, setProgress] = useState(100);
+    const [endSession, setEndSession] = useState("");
     const { setAttendanceData } = useAttendanceStore();
     const { attendance, isMutating } = useAttendance();
-    const [endSession, setEndSession] = useState("");
     const [session, setSession] = useState<QrPlay | null>(null)
-    const attendances = async () => {
+    const startTime = new Date(session?.session?.createdAt!).getTime();
+    const endTime = new Date(session?.session?.sessionEndAt!).getTime();
+
+    const createSession = async () => {
         try {
             const id = data[0].id;
             const promise = attendance(id);
@@ -57,10 +61,10 @@ export default function GenerateAttendanceQR() {
                 success: (data) => data.Message,
                 error: "Failed to create a session",
             });
-            setIsEnded(true)
             const session = await promise;
             setSession(session);
             setSessionData(session);
+            setIsEnded(true);
         } catch (error) {
             console.log(error);
         }
@@ -73,27 +77,41 @@ export default function GenerateAttendanceQR() {
         setCount(list.totalAttendance);
     };
 
+    const endClass = async () => {
+        if (!session) return;
+        try {
+            const sessionId = session.session.id;
+            const sessionEndPromise = trigger({ sessionId });
+            toast.promise(sessionEndPromise, {
+                loading: "Ending session...",
+                success: (data) => data.Message,
+                error: "Failed to end session",
+            });
+            const result = await sessionEndPromise;
+            setIsEnded(false)
+            console.log(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    const startTime = new Date(session?.session?.createdAt!).getTime();
-    const endTime = new Date(session?.session?.sessionEndAt!).getTime();
-    const [timeLeft, setTimeLeft] = useState("");
+
 
     useEffect(() => {
         const interval = setInterval(() => {
             const now = Date.now();
             const remaining = endTime - now;
-            const diff = endTime - Date.now();
+            const diff = endTime - now;
             const totalDuration = endTime - startTime;
 
             if (now >= endTime) {
                 setProgress(0);
-                setIsEnded(false)
-                toast.error("Session Closed");
+                endClass()
                 clearInterval(interval);
                 return;
             }
-            setProgress((remaining / totalDuration) * 100);
 
+            setProgress((remaining / totalDuration) * 100);
 
             if (diff <= 0) {
                 setTimeLeft("00:00:00");
@@ -161,7 +179,7 @@ export default function GenerateAttendanceQR() {
 
                             <CardFooter className="justify-center " >
                                 <CardAction >
-                                    <Button variant={"default"} onClick={attendances} disabled={isEnded} className="w-full ">
+                                    <Button variant={"default"} onClick={createSession} disabled={isEnded} className="w-full ">
                                         <PlusIcon /> Start session
                                     </Button>
                                 </CardAction>
@@ -209,15 +227,16 @@ export default function GenerateAttendanceQR() {
                                 className="w-full"
                                 disabled={isMutating}
                                 onClick={() => {
-                                    setIsEnded(false)
+
                                     setEndSession("Session end by tutor")
+                                    endClass();
                                 }}
                             >
                                 <CircleX className="mr-2 h-4 w-4" />
                                 End Session
                             </Button>
 
-                            <div className="p-5">
+                            <div className="mt-4 w-full">
                                 <Card className="w-[100%] border-0 bg-(--color-secondary)/15">
                                     <CardContent className="space-y-1 ">
                                         <div>
