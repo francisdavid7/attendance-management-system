@@ -50,7 +50,6 @@ const page = () => {
     try {
       const res = await trigger(user);
       toast.success(res.message);
-      console.log(res);
     } catch (error: any) {
       console.log(error.message);
     }
@@ -73,7 +72,7 @@ const page = () => {
           </CardTitle>
           <CardDescription>
             We've sent a verification link to
-            <span className="font-medium">{email}</span>. Please click the link
+            <span className="font-medium"> {email}</span>. Please click the link
             in the email to activate your account.
           </CardDescription>
         </CardHeader>

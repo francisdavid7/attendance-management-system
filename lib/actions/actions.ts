@@ -2,12 +2,16 @@ import useSWR from "swr";
 import axios from "axios";
 import useSWRMutation from "swr/mutation";
 
-// fether function
+// fetcher function
 const fetch = (url: string) => axios.get(url).then((res) => res.data);
 
-// request poster function
+// REQUEST POSTER function
 const postData = (url: string, { arg }: { arg: any }) =>
   axios.post(url, arg).then((res) => res.data);
+
+// PUT REQUEST function
+const putData = (url: string, { arg }: { arg: any }) =>
+  axios.put(url, arg).then((res) => res.data);
 
 // Get current user
 export const getCurrentUser = () => {
@@ -45,13 +49,7 @@ export const getCourses = () => {
   );
 
   const courses = data?.coursesData;
-  const coursesAssigned = data?.coursesAssigned;
   return { courses, isLoading, error, mutate };
-};
-
-// ============================= POST REQUESTS ======================== //
-export const useAssignTutor = () => {
-  return useSWRMutation("/api/courses/assign-tutor", postData);
 };
 
 // Get available courses
@@ -63,6 +61,23 @@ export const getAllCourses = () => {
 
   const courses = data?.availableCourses;
   return { courses, isLoading, error, mutate };
+};
+
+// ============================= POST REQUESTS ======================== //
+export const useAssignTutor = () => {
+  return useSWRMutation("/api/courses/assign-tutor", postData);
+};
+
+// send forgot password request
+export const useForgotPassword = () => {
+  return useSWRMutation("/api/auth/forgot-password", postData);
+};
+
+// =========================== PUT REQUEST ================================ //
+
+// Reset password request
+export const useResetPassword = () => {
+  return useSWRMutation("/api/auth/reset-password", putData);
 };
 
 // ============================ session ============================= >

@@ -19,6 +19,7 @@ model User {
   resetPasswordTokenExpiresAt DateTime?
   verificationTokenExpiresAt  DateTime?
   verificationToken           String?
+  isEnrolled                  Boolean         @default(false)
   attendances                 Attendance[]    @relation("StudentAttendance")
   verifiedAttendances         Attendance[]    @relation("VerifiedByTutor")
   courses                     Course[]
