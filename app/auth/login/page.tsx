@@ -58,7 +58,7 @@ const page = () => {
       const res = await trigger(data);
 
       toast.success(res.message);
-      router.push("/dashboard");
+      router.push("/courseEnrollment");
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);
