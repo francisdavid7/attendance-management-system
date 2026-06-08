@@ -24,6 +24,7 @@ model User {
   verifiedAttendances         Attendance[]    @relation("VerifiedByTutor")
   courses                     Course[]
   studentCourses              StudentCourse[]
+  sessions                    Session[]
 }
 
 model Course {
@@ -50,13 +51,15 @@ model StudentCourse {
 model Session {
   id           String       @id @default(uuid())
   courseId     String
+  userId       String?
   date         DateTime
   qrCode       String       @unique
   qrExpiresAt  DateTime
-  isActive     Boolean      @default(true)
+  isActive     Boolean      @default(false)
   createdAt    DateTime     @default(now())
   sessionEndAt DateTime?
   attendances  Attendance[]
+  tutor        User?        @relation(fields: [userId], references: [id])
   course       Course       @relation(fields: [courseId], references: [id])
 }
 

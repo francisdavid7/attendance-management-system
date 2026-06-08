@@ -84,7 +84,7 @@ export default function LecturerDashboard() {
                         <div className="flex justify-between">
                             <Users className="h-5 w-5 text-(--color-primary)" />
                             <span className="text-sm font-medium text-(--color-primary)">
-                                71%
+                                {attendanceData?.totalAttendance}%
                             </span>
                         </div>
 
