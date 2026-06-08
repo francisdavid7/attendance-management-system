@@ -161,3 +161,23 @@ const endSession = async (url: string, { arg }: { arg: { sessionId: string } }) 
 export const endASession = () => {
   return useSWRMutation("/api/attendance/endSession", endSession);
 }
+
+
+// ============================ COURSE ENROLLMENT ======================= //
+
+const enroll = async (url: string, { arg }: { arg: { courseId: string } }) => {
+  const resp = await axios.post(url, { courseId: arg.courseId });
+  return resp.data
+}
+
+export const enrollCourse = () => {
+  return useSWRMutation("/api/courses/enroll", enroll);
+}
+
+export const checkCourse = () => {
+  const { data, isLoading, error, mutate } = useSWR("/api/course/checkCourse", fetch);
+
+  return {
+    data, isLoading
+  }
+}
