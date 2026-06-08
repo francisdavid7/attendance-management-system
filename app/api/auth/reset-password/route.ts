@@ -31,7 +31,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const hashedPassword = await hashPassword(String(password));
+    const hashedPassword = await hashPassword(password);
 
     await prisma.user.update({
       where: {

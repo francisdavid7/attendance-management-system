@@ -170,96 +170,104 @@ const Tutors = () => {
       {/* TUTORS TABLE */}
       <Card className="rounded-2xl border-0">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Tutor</TableHead>
+          {filteredTutored.length === 0 ? (
+            <>
+              <p className="text-center m-7">No data to display</p>
+            </>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Tutor</TableHead>
 
-                <TableHead>Assigned Course</TableHead>
+                  <TableHead>Assigned Course</TableHead>
 
-                <TableHead>Students</TableHead>
+                  <TableHead>Students</TableHead>
 
-                <TableHead>Status</TableHead>
+                  <TableHead>Status</TableHead>
 
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
 
-            <TableBody>
-              {error || !tutors ? (
-                <ErrorState onRetry={() => mutate()} />
-              ) : (
-                <>
-                  {!filteredTutored ? (
-                    <Loading />
-                  ) : (
-                    <>
-                      {filteredTutored.map((tutor: Tutor) => (
-                        <TableRow key={tutor.email}>
-                          {/* TUTOR */}
-                          <TableCell>
-                            <div className="flex items-center gap-3">
-                              <Avatar className="h-10 w-10">
-                                <AvatarImage src="" />
+              <TableBody>
+                {error || !tutors ? (
+                  <ErrorState onRetry={() => mutate()} />
+                ) : (
+                  <>
+                    {!filteredTutored ? (
+                      <Loading />
+                    ) : (
+                      <>
+                        {filteredTutored.map((tutor: Tutor) => (
+                          <TableRow key={tutor.email}>
+                            {/* TUTOR */}
+                            <TableCell>
+                              <div className="flex items-center gap-3">
+                                <Avatar className="h-10 w-10">
+                                  <AvatarImage src="" />
 
-                                <AvatarFallback>
-                                  {tutor.fullName
-                                    .split(" ")
-                                    .map((name) => name[0])
-                                    .join("")}
-                                </AvatarFallback>
-                              </Avatar>
+                                  <AvatarFallback>
+                                    {tutor.fullName
+                                      .split(" ")
+                                      .map((name) => name[0])
+                                      .join("")}
+                                  </AvatarFallback>
+                                </Avatar>
 
-                              <div>
-                                <p className="font-medium">{tutor.fullName}</p>
+                                <div>
+                                  <p className="font-medium">
+                                    {tutor.fullName}
+                                  </p>
 
-                                <p className="text-sm text-muted-foreground">
-                                  {tutor.email}
-                                </p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {tutor.email}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
+                            </TableCell>
 
-                          {/* COURSE */}
-                          <TableCell>
-                            {tutor.assignedCourses[0] ??
-                              "No course assigned yet"}
-                          </TableCell>
+                            {/* COURSE */}
+                            <TableCell>
+                              {tutor.assignedCourses[0] ??
+                                "No course assigned yet"}
+                            </TableCell>
 
-                          {/* STUDENTS */}
-                          <TableCell>{tutor.totalStudents}</TableCell>
+                            {/* STUDENTS */}
+                            <TableCell>{tutor.totalStudents}</TableCell>
 
-                          {/* STATUS */}
-                          <TableCell>
-                            <Badge
-                              variant={
-                                tutor.status === "Active"
-                                  ? "default"
-                                  : "destructive"
-                              }
-                            >
-                              {tutor.status}
-                            </Badge>
-                          </TableCell>
+                            {/* STATUS */}
+                            <TableCell>
+                              <Badge
+                                variant={
+                                  tutor.status === "Active"
+                                    ? "default"
+                                    : "destructive"
+                                }
+                              >
+                                {tutor.status}
+                              </Badge>
+                            </TableCell>
 
-                          {/* ACTIONS */}
-                          <TableCell className="text-right">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="rounded-xl"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </>
-                  )}
-                </>
-              )}
-            </TableBody>
-          </Table>
+                            {/* ACTIONS */}
+                            <TableCell className="text-right">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="rounded-xl"
+                              >
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    )}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </section>

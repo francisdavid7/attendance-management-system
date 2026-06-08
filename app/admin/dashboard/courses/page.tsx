@@ -176,67 +176,73 @@ const Courses = () => {
       {/* COURSES TABLE */}
       <Card className="rounded-2xl border-0">
         <CardContent className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Course</TableHead>
+          {courseData.length === 0 ? (
+            <p className="text-center m-7">No data to display</p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Course</TableHead>
 
-                <TableHead>Tutor</TableHead>
+                  <TableHead>Tutor</TableHead>
 
-                <TableHead>Students</TableHead>
+                  <TableHead>Students</TableHead>
 
-                <TableHead>Status</TableHead>
+                  <TableHead>Status</TableHead>
 
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-
-            <TableBody>
-              {courseData.map((course: CourseType) => (
-                <TableRow className="hover:bg-muted/10" key={course.course}>
-                  {/* COURSE */}
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{course.course}</p>
-                    </div>
-                  </TableCell>
-
-                  {/* TUTOR */}
-                  <TableCell>{course.tutor}</TableCell>
-
-                  {/* STUDENTS */}
-                  <TableCell>{course.totalStudents}</TableCell>
-
-                  {/* STATUS */}
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant={
-                          course.status === "Assigned" ? "default" : "secondary"
-                        }
-                        className={
-                          course.status === "Assigned"
-                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-                            : "bg-muted text-muted-foreground"
-                        }
-                      >
-                        {course.status}
-                      </Badge>
-                    </div>
-                  </TableCell>
-
-                  {/* ACTIONS */}
-                  <TableCell>
-                    <AssignTutor
-                      tutor={course.tutor}
-                      course={course.course}
-                      courseId={course.courseId}
-                    />
-                  </TableCell>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+
+              <TableBody>
+                {courseData.map((course: CourseType) => (
+                  <TableRow className="hover:bg-muted/10" key={course.course}>
+                    {/* COURSE */}
+                    <TableCell>
+                      <div>
+                        <p className="font-medium">{course.course}</p>
+                      </div>
+                    </TableCell>
+
+                    {/* TUTOR */}
+                    <TableCell>{course.tutor}</TableCell>
+
+                    {/* STUDENTS */}
+                    <TableCell>{course.totalStudents}</TableCell>
+
+                    {/* STATUS */}
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant={
+                            course.status === "Assigned"
+                              ? "default"
+                              : "secondary"
+                          }
+                          className={
+                            course.status === "Assigned"
+                              ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                              : "bg-muted text-muted-foreground"
+                          }
+                        >
+                          {course.status}
+                        </Badge>
+                      </div>
+                    </TableCell>
+
+                    {/* ACTIONS */}
+                    <TableCell>
+                      <AssignTutor
+                        tutor={course.tutor}
+                        course={course.course}
+                        courseId={course.courseId}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </section>
