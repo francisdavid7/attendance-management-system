@@ -114,70 +114,66 @@ export const studentsData = () => {
   const { data, isLoading, error, mutate } = useSWR(
     "/api/attendance/studentAttendance",
     fetch,
-  )
-  return { data, isLoading }
-}
+  );
+  return { data, isLoading };
+};
 // ==================================== ATTENDANCE LIST ====================== //
 
-const attendance = async (url: string, { arg }: { arg: { sessionId: string } }) => {
+const attendance = async (
+  url: string,
+  { arg }: { arg: { sessionId: string } },
+) => {
   const resp = await axios.post(url, { sessionId: arg.sessionId });
   return resp.data;
-}
-
+};
 
 export const attendanceList = () => {
   return useSWRMutation("/api/attendance/attendanceList", attendance);
-
-}
+};
 
 // ================================= TUTOR HISTORY ============================== //
 
 export const tutorAttendanceHistory = () => {
   const { data, isLoading, error, mutate } = useSWR(
     "/api/attendance/tutorsAttendance",
-    fetch,)
+    fetch,
+  );
 
-  return { data, isLoading }
-}
+  return { data, isLoading };
+};
 
 // ================================= TUTOR'S COURSE ============================ //
 
 export const tutorCourse = () => {
-  const { data, isLoading, error, mutate } = useSWR("/api/courses/tutor-courses",
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/courses/tutor-courses",
     fetch,
-  )
+  );
 
-  return { data, isLoading }
-}
-
+  return { data, isLoading };
+};
 
 // =================================== END SESSION ========================= //
 
-const endSession = async (url: string, { arg }: { arg: { sessionId: string } }) => {
-  const resp = await axios.post(url, { sessionId: arg.sessionId })
-  return resp.data
-}
+const endSession = async (
+  url: string,
+  { arg }: { arg: { sessionId: string } },
+) => {
+  const resp = await axios.post(url, { sessionId: arg.sessionId });
+  return resp.data;
+};
 
 export const endASession = () => {
   return useSWRMutation("/api/attendance/endSession", endSession);
-}
-
+};
 
 // ============================ COURSE ENROLLMENT ======================= //
 
 const enroll = async (url: string, { arg }: { arg: { courseId: string } }) => {
   const resp = await axios.post(url, { courseId: arg.courseId });
-  return resp.data
-}
+  return resp.data;
+};
 
 export const enrollCourse = () => {
   return useSWRMutation("/api/courses/enroll", enroll);
-}
-
-export const checkCourse = () => {
-  const { data, isLoading, error, mutate } = useSWR("/api/course/checkCourse", fetch);
-
-  return {
-    data, isLoading
-  }
-}
+};

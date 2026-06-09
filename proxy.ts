@@ -25,7 +25,8 @@ export async function proxy(request: NextRequest) {
       pathname.startsWith("/admin") ||
       pathname.startsWith("/student") ||
       pathname.startsWith("/tutor") ||
-      pathname.startsWith("/dashboard")
+      pathname.startsWith("/dashboard") ||
+      pathname.startsWith("/course-enrollment")
     ) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
@@ -83,8 +84,12 @@ export async function proxy(request: NextRequest) {
         );
       }
 
-      return NextResponse.redirect(new URL("/courseEnrollment", request.url));
+      return NextResponse.redirect(new URL("/course-enrollment", request.url));
     }
+
+    // if (pathname.startsWith("/courseEnrollment") && !user) {
+    //   return NextResponse.redirect(new URL("/auth/login", request.url));
+    // }
 
     return NextResponse.next();
   } catch (error) {
@@ -103,5 +108,6 @@ export const config = {
     "/student/:path*",
     "/tutor/:path*",
     "/dashboard/:path*",
+    "/course-enrollment/",
   ],
 };

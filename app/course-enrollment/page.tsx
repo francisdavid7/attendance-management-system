@@ -20,18 +20,15 @@ import {
   getCurrentUser,
   getAllCourses,
   enrollCourse,
-  checkCourse,
 } from "@/lib/actions/actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CourseEnrollment() {
   const { user } = getCurrentUser();
   const { courses } = getAllCourses();
   const [selectedCourse, setSelectedCourse] = useState("");
   const { trigger, isMutating } = enrollCourse();
-  const { data, isLoading } = checkCourse();
 
   const router = useRouter();
   const submitCourse = async () => {
@@ -45,24 +42,12 @@ export default function CourseEnrollment() {
         error: "Failed",
       });
       const courseChoice = await studentCourse;
+      router.push("/dashboard");
       console.log(courseChoice);
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    console.log("Roll", data);
-  }, []);
-
-  if (isLoading)
-    return (
-      <div className=" w-1/2 h-125 flex items-center justify-center">
-        <div className="relative w-[80%]">
-          <Skeleton className="absolute w-full h-full" />
-        </div>
-      </div>
-    );
 
   return (
     <div className="w-1/2 flex items-center justify-center">
