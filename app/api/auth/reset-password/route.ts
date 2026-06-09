@@ -35,7 +35,7 @@ export async function PUT(request: NextRequest) {
 
     await prisma.user.update({
       where: {
-        id: user.id,
+        email: user.email,
       },
       data: {
         password: hashedPassword,
@@ -48,6 +48,7 @@ export async function PUT(request: NextRequest) {
       {
         success: true,
         message: "Password reset successful",
+        user,
       },
       { status: 200 },
     );

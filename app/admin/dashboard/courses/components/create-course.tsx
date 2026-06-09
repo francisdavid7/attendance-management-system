@@ -30,6 +30,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { mutate } from "swr";
 
 const sendRequest = async (
   url: string,
@@ -73,6 +74,7 @@ const CreateCourse = () => {
     try {
       const res: any = await trigger(data);
       setIsOpen(false);
+      mutate("/api/admin/courses");
       toast.success(res.message);
     } catch (error: any) {
       if (error.response) {

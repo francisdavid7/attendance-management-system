@@ -42,6 +42,7 @@ const ResetPassword = () => {
     try {
       const token = searchParams.get("token");
       const res = await trigger({ password: value, token });
+      console.log(res);
       toast.success(res.message);
       router.push("/dashboard");
     } catch (error: any) {
