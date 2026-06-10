@@ -34,6 +34,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  if (pathname === "/course-enrollment" && !token) {
+    return NextResponse.redirect(new URL("/auth/login", request.url));
+  }
+
   try {
     const user = verifyToken(token) as UserType;
 
@@ -77,19 +81,23 @@ export async function proxy(request: NextRequest) {
       );
     }
 
-    if (token && user.role === "STUDENT") {
+    if (user.role === "STUDENT") {
       if (userData?.isEnrolled) {
-        return NextResponse.redirect(
-          new URL(`/${user.role.toLowerCase()}/dashboard`, request.url),
-        );
+        if (!pathname.startsWith("/student")) {
+          return NextResponse.redirect(
+            new URL(`/${user.role.toLowerCase()}/dashboard`, request.url),
+          );
+        }
+      } else {
+        if (!pathname.startsWith("/course-enrollment")) {
+          return NextResponse.redirect(
+            new URL("/course-enrollment", request.url),
+          );
+        }
       }
 
-      return NextResponse.redirect(new URL("/course-enrollment", request.url));
+      return NextResponse.next();
     }
-
-    // if (pathname.startsWith("/courseEnrollment") && !user) {
-    //   return NextResponse.redirect(new URL("/auth/login", request.url));
-    // }
 
     return NextResponse.next();
   } catch (error) {
@@ -108,6 +116,6 @@ export const config = {
     "/student/:path*",
     "/tutor/:path*",
     "/dashboard/:path*",
-    "/course-enrollment/",
+    "/course-enrollment/:path*",
   ],
 };

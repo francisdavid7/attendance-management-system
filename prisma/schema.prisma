@@ -43,7 +43,7 @@ model StudentCourse {
   studentId String
   courseId  String
   course    Course @relation(fields: [courseId], references: [id])
-  student   User   @relation(fields: [studentId], references: [id])
+  student   User   @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, courseId])
 }

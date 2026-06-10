@@ -77,7 +77,7 @@ const page = () => {
             <CardTitle className="text-2xl md:text-3xl font-bold">
               {status === "loading"
                 ? "Verifying your email"
-                : message
+                : message === "Your email is already verified"
                   ? "Email already verified"
                   : "Email verified"}
             </CardTitle>
