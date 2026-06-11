@@ -41,10 +41,10 @@ const ResetPassword = () => {
   const onSubmit = async (value: { password: string }) => {
     try {
       const token = searchParams.get("token");
-      const res = await trigger({ password: value, token });
-      console.log(res);
-      toast.success(res.message);
-      router.push("/dashboard");
+      // const res = await trigger({ password: value, token });
+      console.log({ password: value, token });
+      // toast.success(res.message);
+      // router.push("/dashboard");
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);

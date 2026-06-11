@@ -7,11 +7,11 @@ import { Role } from "@prisma/client";
 export async function POST() {
   try {
     const users = await Promise.all(
-      Array.from({ length: 20 }).map(async () => ({
+      Array.from({ length: 40 }).map(async () => ({
         fullName: faker.person.fullName(),
         email: faker.internet.email(),
         password: await bcrypt.hash("password123", 10),
-        role: Role.TUTOR,
+        role: Role.STUDENT,
       })),
     );
 

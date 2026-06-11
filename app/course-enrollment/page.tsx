@@ -15,7 +15,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { GraduationCapIcon } from "lucide-react";
+import { GraduationCapIcon, Loader2 } from "lucide-react";
 import {
   getCurrentUser,
   getAllCourses,
@@ -29,21 +29,16 @@ export default function CourseEnrollment() {
   const { courses } = getAllCourses();
   const [selectedCourse, setSelectedCourse] = useState("");
   const { trigger, isMutating } = enrollCourse();
-
   const router = useRouter();
+
   const submitCourse = async () => {
     if (!selectedCourse) return;
     try {
       const courseId = selectedCourse;
-      const studentCourse = trigger({ courseId });
-      toast.promise(studentCourse, {
-        loading: "Enrolling...",
-        success: "Success 🎉",
-        error: "Failed",
-      });
-      const courseChoice = await studentCourse;
+      const res = await trigger({ courseId });
+      toast.success("Success 🎉");
       router.push("/dashboard");
-      console.log(courseChoice);
+      console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -56,9 +51,7 @@ export default function CourseEnrollment() {
           <CardTitle className="text-2xl font-bold">
             Course Enrollment
           </CardTitle>
-          <CardDescription>
-            Select a course to enroll in for the current semester.
-          </CardDescription>
+          <CardDescription>Select a course to enroll.</CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
@@ -103,7 +96,14 @@ export default function CourseEnrollment() {
             disabled={isMutating}
             onClick={submitCourse}
           >
-            Enroll Course
+            {isMutating ? (
+              <>
+                <Loader2 className="animate-spin" />
+                Loading ...
+              </>
+            ) : (
+              "Enroll Course"
+            )}
           </Button>
         </CardContent>
       </Card>

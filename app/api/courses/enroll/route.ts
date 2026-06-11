@@ -31,6 +31,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        isEnrolled: true,
+      },
+    });
+
     return NextResponse.json({ enrolledCourse });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
