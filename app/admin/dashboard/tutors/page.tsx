@@ -170,7 +170,7 @@ const Tutors = () => {
       {/* TUTORS TABLE */}
       <Card className="rounded-2xl border-0">
         <CardContent className="p-0">
-          {filteredTutored.length === 0 ? (
+          {filteredTutored?.length === 0 ? (
             <>
               <p className="text-center m-7">No data to display</p>
             </>

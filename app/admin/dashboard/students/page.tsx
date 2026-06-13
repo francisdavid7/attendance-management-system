@@ -39,7 +39,7 @@ const page = () => {
       <StudentsSearchFilters />
 
       <div className="bg-card px-6 py-4 border rounded-2xl">
-        {students.length === 0 ? (
+        {students?.length === 0 ? (
           <>
             <p className="text-center m-7">No data to display</p>
           </>
