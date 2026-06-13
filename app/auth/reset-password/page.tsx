@@ -39,7 +39,7 @@ const ResetPassword = () => {
   const router = useRouter();
   const { trigger, isMutating } = useResetPassword();
 
-  const onSubmit = async (values: { password: string; token: string }) => {
+  const onSubmit = async (values: z.infer<typeof EmailSchema>) => {
     try {
       const token = searchParams.get("token");
 
