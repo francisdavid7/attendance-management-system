@@ -86,7 +86,7 @@ const Tutors = () => {
   const filteredTutored = tutors?.filter((tutor: Tutor) => {
     if (!searchQuery.trim()) return true;
 
-    const term = searchQuery.toLowerCase();
+    const term = searchQuery.toLowerCase().trim();
 
     return (
       tutor.email.toLowerCase().includes(term) ||

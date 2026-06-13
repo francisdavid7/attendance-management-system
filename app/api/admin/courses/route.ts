@@ -5,7 +5,7 @@ export async function GET() {
   try {
     const courses = await prisma.course.findMany({
       orderBy: {
-        createdAt: "asc",
+        createdAt: "desc",
       },
 
       select: {

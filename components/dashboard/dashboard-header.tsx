@@ -44,9 +44,9 @@ export function DashboardHeader() {
         ) : (
           <>
             <ThemeToggle />
-            <Button variant="outline" size="icon-lg">
+            {/* <Button variant="outline" size="icon-lg">
               <Bell className="h-5 w-5" />
-            </Button>
+            </Button> */}
           </>
         )}
 
