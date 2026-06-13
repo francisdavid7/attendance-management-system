@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -52,8 +54,14 @@ const page = () => {
   };
 
   useEffect(() => {
+    if (!token) {
+      setStatus("error");
+      setMessage("Missing verification token");
+      return;
+    }
+
     confirmEmail();
-  }, []);
+  }, [token]);
 
   return (
     <div className="w-1/2 p-12 flex items-center justify-center">
