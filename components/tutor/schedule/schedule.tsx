@@ -36,7 +36,7 @@ type QrPlay = {
 }
 
 export default function GenerateAttendanceQR() {
-    const { trigger } = endASession()
+    const { trigger } = endASession();
     const { getList, } = presentStud();
     const [count, setCount] = useState();
     const [show, setShow] = useState(false);
@@ -62,10 +62,12 @@ export default function GenerateAttendanceQR() {
                 success: (data) => data.Message,
                 error: "Failed to create a session",
             });
+
             const session = await promise;
             setSession(session);
             setSessionData(session);
             setIsEnded(true);
+
         } catch (error) {
             console.log(error);
         }
@@ -127,8 +129,8 @@ export default function GenerateAttendanceQR() {
             setTimeLeft(`${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`);
         }, 1000);
 
+        attendanceCount();
 
-        attendanceCount()
         return () => clearInterval(interval);
     }, [startTime, endTime]);
 
@@ -138,8 +140,6 @@ export default function GenerateAttendanceQR() {
 
     return (
         <div>
-
-
             <div className="flex flex-col md:flex-row gap-4  p-4">
                 <div className="space-y-4 w-full">
                     <Card>
@@ -175,7 +175,6 @@ export default function GenerateAttendanceQR() {
                                         minute: "2-digit"
                                     })}`}
                                 </p>
-
                             </div>
 
                             <CardFooter className="justify-center " >
