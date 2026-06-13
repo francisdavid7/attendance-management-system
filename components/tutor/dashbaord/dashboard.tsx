@@ -18,7 +18,7 @@ export default function LecturerDashboard() {
 
     const sessionData = useCourseStore((state) => state.sessionData);
 
-    const student = data ? data[0]?._count?.students : data[0]?._count?.students;
+    const student = data ? data[0]?._count?.students : data?._count?.students;
 
     if (isLoading) return <DashboardLoading />
 
