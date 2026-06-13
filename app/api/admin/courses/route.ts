@@ -24,7 +24,7 @@ export async function GET() {
       },
     });
 
-    const coursesData = courses.map((course) => {
+    const coursesData = courses.map((course: any) => {
       const totalStudents = course._count.students;
       const hasTutor = course.tutor ?? false;
       return {
