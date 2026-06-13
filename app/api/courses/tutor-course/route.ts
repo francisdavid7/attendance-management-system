@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
     });
 
     // Flatten the array of objects into an array of pure strings
-    const courseNames = coursesRaw.map((course) => course.name);
+    const courseNames = coursesRaw.map((course: any) => course.name);
 
     return NextResponse.json({ courses: courseNames });
   } catch (error: any) {
