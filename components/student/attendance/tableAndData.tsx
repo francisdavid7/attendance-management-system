@@ -1,43 +1,13 @@
 "use client"
 
-import {
-    Card,
-    CardContent,
-} from "@/components/ui/card"
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-
+import { Card, CardContent } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-
-import {
-    CalendarDays,
-    CircleAlert,
-    CircleCheck,
-    Clock3,
-    BookOpen,
-    MoreVertical,
-} from "lucide-react"
-
+import { CalendarDays, CircleAlert, CircleCheck, Clock3, BookOpen } from "lucide-react"
 import { Progress } from "@/components/ui/progress"
 import { useHistoryStore } from "@/components/tutor/dashbaord/zstand"
-
-
-
+import { studentCourse } from "@/lib/actions/actions"
 
 const statusStyles: Record<string, string> = {
     PRESENT:
@@ -51,15 +21,16 @@ const statusStyles: Record<string, string> = {
 }
 
 export default function AttendanceTable() {
-
+    const { data, isLoading } = studentCourse();
     const histories = useHistoryStore((state) => state.historyData);
     const count = `${histories?._count?.attendances}%`;
     const progressBAr = histories?._count?.attendances;
 
+    console.log(data)
     const attendanceStats = [
         {
             title: "TOTAL CLASSES",
-            value: 42,
+            value: count,
             subtitle: "Completion rate: 100%",
             icon: BookOpen,
             badge: "Fall 2026",
@@ -87,15 +58,17 @@ export default function AttendanceTable() {
         },
     ]
 
-
     return (
 
         <div className="space-y-6 p-6 bg-slate-50 min-h-screen">
 
+            <p className="text-4xl font-bold">
+                <small>Course</small> Cyber security
+            </p>
+
             <div className="grid gap-4 md:grid-cols-3">
                 {attendanceStats.map((item) => {
                     const Icon = item.icon
-
                     return (
                         <Card
                             key={item.title}
@@ -127,7 +100,7 @@ export default function AttendanceTable() {
                                     </h2>
                                 </div>
 
-                                <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                                <div className="w-full h-2  rounded-full overflow-hidden">
                                     <Progress value={item.progress} />
                                 </div>
 
@@ -167,24 +140,6 @@ export default function AttendanceTable() {
                                     </SelectItem>
                                     <SelectItem value="7days">
                                         Last 7 Days
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-
-                            <Select>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="All Courses" />
-                                </SelectTrigger>
-
-                                <SelectContent>
-                                    <SelectItem value="all">
-                                        All Courses
-                                    </SelectItem>
-                                    <SelectItem value="java">
-                                        Intro to Java
-                                    </SelectItem>
-                                    <SelectItem value="ds">
-                                        Data Structures
                                     </SelectItem>
                                 </SelectContent>
                             </Select>

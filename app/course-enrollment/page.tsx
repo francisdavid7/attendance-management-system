@@ -38,7 +38,10 @@ export default function CourseEnrollment() {
       const res = await trigger({ courseId });
       toast.success("Course enrolled successfully!");
       router.push("/dashboard");
+<<<<<<< HEAD
       router.refresh();
+=======
+>>>>>>> def3624 (protectStudent-schedule-page-and-update-the-dashboard)
     } catch (err) {
       console.log(err);
     }

@@ -7,16 +7,21 @@ import { getCurrentUser } from "@/lib/actions/actions";
 import DashboardLoading from "@/components/tutor/dashbaord/laoding"
 import { GraduationCap, Radio, Users, CircleAlertIcon } from "lucide-react";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-
+import { tutorStudent } from "@/lib/actions/actions";
 
 export default function LecturerDashboard() {
     const { user, isLoading } = getCurrentUser();
+
+    const { data } = tutorStudent();
 
     const attendanceData = useAttendanceStore((state) => state.attendanceData);
 
     const sessionData = useCourseStore((state) => state.sessionData);
 
+    const student = data ? data[0]?._count?.students : data[0]?._count?.students;
+
     if (isLoading) return <DashboardLoading />
+
     return (
         <div className="space-y-6 p-6">
             <div>
@@ -106,7 +111,7 @@ export default function LecturerDashboard() {
 
                         <h2 className="mt-3 text-3xl font-bold">
                             {sessionData ? <>
-                                {attendanceData?.totalAttendance}/45
+                                {attendanceData?.totalAttendance}/{student}
                             </> : ""}
                         </h2>
 

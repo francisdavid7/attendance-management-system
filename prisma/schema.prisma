@@ -31,7 +31,7 @@ model Course {
   id          String          @id @default(uuid())
   name        String
   description String?
-  tutorId     String?
+  tutorId     String?         @unique
   createdAt   DateTime        @default(now())
   tutor       User?           @relation(fields: [tutorId], references: [id])
   sessions    Session[]

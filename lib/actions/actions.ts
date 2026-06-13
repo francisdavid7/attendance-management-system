@@ -177,3 +177,38 @@ const enroll = async (url: string, { arg }: { arg: { courseId: string } }) => {
 export const enrollCourse = () => {
   return useSWRMutation("/api/courses/enroll", enroll);
 };
+
+
+// ====================== STUDENT COURSE ========================= > 
+
+
+export const studentCourse = () => {
+  const { data, isLoading, error } = useSWR("/api/courses/student-course", fetch)
+
+  return {
+    data, isLoading
+  }
+}
+
+
+// ================================ PROTECT STUDENT SCHEDULE PAGE ==============>
+
+export const activeSession = () => {
+  const { data, isLoading, error } = useSWR("/api/attendance/protectScanPage", fetch)
+
+  return {
+    data,
+    isLoading
+  }
+}
+
+// ================================ TUTORS STUDENTS ============================ >
+
+export const tutorStudent = () => {
+  const { data, isLoading, error } = useSWR("/api/tutors-student", fetch);
+
+  return {
+    data,
+    isLoading
+  }
+}

@@ -21,11 +21,6 @@ const items: ItemsTypes[] = [
     icon: LayoutDashboard as any,
   },
   {
-    title: "My Courses",
-    url: "/student/dashboard/courses",
-    icon: BookOpen as any,
-  },
-  {
     title: "Attendance",
     url: "/student/dashboard/attendance",
     icon: CalendarCheck as any,
