@@ -10,7 +10,6 @@ interface UserType {
   exp: number;
 }
 
-
 export async function proxy(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
   const pathname = request.nextUrl.pathname;
@@ -101,12 +100,9 @@ export async function proxy(request: NextRequest) {
     }
 
     return NextResponse.next();
-  } catch (error) {
-    const response = NextResponse.redirect(new URL("/auth/login", request.url));
-
-    response.cookies.delete("token");
-
-    return response;
+  } catch (error: any) {
+    console.log(error.message);
+    return NextResponse.next();
   }
 }
 
