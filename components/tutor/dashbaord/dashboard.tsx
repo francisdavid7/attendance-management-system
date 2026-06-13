@@ -5,18 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/actions/actions";
 import DashboardLoading from "@/components/tutor/dashbaord/laoding"
-import { GraduationCap, Radio, Users, AlertTriangle } from "lucide-react";
+import { GraduationCap, Radio, Users, CircleAlertIcon } from "lucide-react";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
-
+import { tutorStudent } from "@/lib/actions/actions";
 
 export default function LecturerDashboard() {
     const { user, isLoading } = getCurrentUser();
+
+    const { data } = tutorStudent();
 
     const attendanceData = useAttendanceStore((state) => state.attendanceData);
 
     const sessionData = useCourseStore((state) => state.sessionData);
 
+    const student = data ? data[0]?._count?.students : data[0]?._count?.students;
+
     if (isLoading) return <DashboardLoading />
+
     return (
         <div className="space-y-6 p-6">
             <div>
@@ -33,21 +38,27 @@ export default function LecturerDashboard() {
                 <Card>
                     <CardContent className="flex items-start justify-between pt-4">
                         <div>
+
+
                             <p className="text-xs uppercase text-muted-foreground">
                                 Active Class
                             </p>
 
                             <h3 className="mt-2 text-xl font-bold">
-                                {sessionData?.session?.course?.name}
+                                {sessionData ? <>{sessionData?.session?.course?.name}</> : "No session at the moment"}
                             </h3>
 
                             <p className="mt-1 text-sm text-muted-foreground">
-                                session started at <span className="font-bold"> {new Date(
-                                    sessionData?.session?.createdAt
-                                ).toLocaleString("en-US", {
-                                    hour: "numeric",
-                                    minute: "2-digit",
-                                })}</span>
+                                {sessionData ? <>
+
+                                    session started at <span className="font-bold"> {new Date(
+                                        sessionData?.session?.createdAt
+                                    ).toLocaleString("en-US", {
+                                        hour: "numeric",
+                                        minute: "2-digit",
+                                    })}</span>
+
+                                </> : " "}
                             </p>
                         </div>
 
@@ -64,13 +75,22 @@ export default function LecturerDashboard() {
                                 </p>
 
                                 <div className="mt-2 flex items-center gap-2">
-                                    <div className="h-2 w-2 rounded-full bg-(--color-primary)" />
 
-                                    <span className="font-semibold">Active</span>
+                                    {sessionData ?
+                                        <>
+                                            <div className="h-2 w-2 rounded-full bg-(--color-primary)" />
+                                            <span className="font-semibold">Active</span>
+                                        </> :
+                                        <>
+                                            <CircleAlertIcon className="text-(--color-destructive)" />
+                                            <span className="font-semibold">No Active session</span>
+                                        </>
+                                    }
+
                                 </div>
 
                                 <p className="mt-2 text-sm ">
-                                    QR Scanner engaged
+                                    {sessionData ? "QR Scanner engaged" : <></>}
                                 </p>
                             </div>
 
@@ -82,13 +102,18 @@ export default function LecturerDashboard() {
                 <Card>
                     <CardContent className="">
                         <div className="flex justify-between">
+
                             <Users className="h-5 w-5 text-(--color-primary)" />
                             <span className="text-sm font-medium text-(--color-primary)">
                                 {attendanceData?.totalAttendance}%
                             </span>
                         </div>
 
-                        <h2 className="mt-3 text-3xl font-bold">{attendanceData?.totalAttendance}/45</h2>
+                        <h2 className="mt-3 text-3xl font-bold">
+                            {sessionData ? <>
+                                {attendanceData?.totalAttendance}/{student}
+                            </> : ""}
+                        </h2>
 
                         <div className="mt-3 h-2 rounded-full bg-muted">
                             <Progress value={attendanceData?.totalAttendance} />
@@ -100,7 +125,7 @@ export default function LecturerDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card>
+                {/* <Card>
                     <CardContent className="flex items-start justify-between pt-4">
                         <div>
                             <span className="rounded-full bg-orange-100 px-3 py-1 text-xs text-orange-600">
@@ -108,7 +133,7 @@ export default function LecturerDashboard() {
                             </span>
 
                             <h3 className="mt-5 text-2xl font-bold">
-                                3 Students
+                               session 3 Students
                             </h3>
 
                             <p className="text-sm text-muted-foreground">
@@ -118,7 +143,7 @@ export default function LecturerDashboard() {
 
                         <AlertTriangle className="h-5 w-5 text-orange-500" />
                     </CardContent>
-                </Card>
+                </Card> */}
             </div>
 
             <div className="">

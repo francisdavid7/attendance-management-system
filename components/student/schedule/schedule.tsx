@@ -1,30 +1,34 @@
 import { CalendarDays, Clock3, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-const schedules = [
-    {
-        id: 1,
-        courseCode: "CSC 301",
-        lecturer: "Dr. James",
-        time: "08:00 AM - 10:00 AM",
-        venue: "LT 2",
-        status: "Upcoming",
-        attendance: "Present",
-    },
-    {
-        id: 2,
-        courseCode: "GST 302",
-        lecturer: "Mr. John",
-        time: "02:00 PM - 04:00 PM",
-        venue: "Hall A",
-        status: "Completed",
-        attendance: "Present",
-    },
-];
+import { activeSession } from "@/lib/actions/actions";
+// const schedules = [
+//     {
+//         id: 1,
+//         courseCode: "CSC 301",
+//         lecturer: "Dr. James",
+//         time: "08:00 AM - 10:00 AM",
+//         venue: "LT 2",
+//         status: "Upcoming",
+//         attendance: "Present",
+//     },
+//     {
+//         id: 2,
+//         courseCode: "GST 302",
+//         lecturer: "Mr. John",
+//         time: "02:00 PM - 04:00 PM",
+//         venue: "Hall A",
+//         status: "Completed",
+//         attendance: "Present",
+//     },
+// ];
 
 export default function SchedulePage() {
+    const { data, isLoading } = activeSession();
+
     return (
         <div className="space-y-6 p-6">
+
             <div>
                 <h1 className="text-3xl font-bold">Schedule</h1>
                 <p className="text-muted-foreground">
@@ -35,22 +39,28 @@ export default function SchedulePage() {
             <div className="grid gap-4 md:grid-cols-2">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Next Class</CardTitle>
+                        <CardTitle className="text-(--color-primary) text-xl font-bold  ">Ongoing session</CardTitle>
                     </CardHeader>
 
                     <CardContent className="space-y-3">
                         <h3 className="font-semibold text-lg">
-                            CSC 302
+                            {data?.session?.course.name}
                         </h3>
 
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <Clock3 className="h-4 w-4" />
-                            02:00 AM - 4:00 AM
+                            {new Date(data?.session?.createdAt).toLocaleString("en-US", {
+                                hour: "numeric",
+                                minute: "2-digit"
+                            })} - {new Date(data?.session?.sessionEndAt).toLocaleString("en-US", {
+                                hour: "numeric",
+                                minute: "2-digit"
+                            })}
                         </div>
 
                         <div className="flex items-center gap-2 text-muted-foreground">
                             <MapPin className="h-4 w-4" />
-                            LT 2
+                            Lecture Hall 3
                         </div>
                     </CardContent>
                 </Card>
@@ -63,7 +73,7 @@ export default function SchedulePage() {
                     <CardContent>
                         <div className="flex items-center gap-2">
                             <CalendarDays className="h-4 w-4" />
-                            <span>2 Classes Scheduled</span>
+                            <span>1 Class Scheduled</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -71,7 +81,7 @@ export default function SchedulePage() {
 
             <Card>
                 <CardHeader className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <CardTitle className="text-2xl">Today</CardTitle>
+                    <CardTitle className="text-2xl">Active class</CardTitle>
 
                     <div className="flex gap-2">
 
@@ -90,23 +100,30 @@ export default function SchedulePage() {
                         </TableHeader>
 
                         <TableBody>
-                            {schedules.map((schedule) => (
-                                <TableRow key={schedule.id}>
-                                    <TableCell>
-                                        {schedule.courseCode}
-                                    </TableCell>
 
-                                    <TableCell>
-                                        {schedule.lecturer}
-                                    </TableCell>
+                            <TableRow key={data?.session.id}>
+                                <TableCell>
+                                    {data?.session?.course?.name}
+                                </TableCell>
 
-                                    <TableCell>
-                                        {schedule.time}
-                                    </TableCell>
+                                <TableCell>
+                                    {data?.session?.tutor?.fullName
+                                    }
+                                </TableCell>
+
+                                <TableCell>
+                                    {new Date(data?.session?.createdAt).toLocaleString("en-US", {
+                                        hour: "numeric",
+                                        minute: "2-digit"
+                                    })} - {new Date(data?.session?.sessionEndAt).toLocaleString("en-US", {
+                                        hour: "numeric",
+                                        minute: "2-digit"
+                                    })}
+                                </TableCell>
 
 
-                                </TableRow>
-                            ))}
+                            </TableRow>
+
                         </TableBody>
                     </Table>
                 </CardContent>

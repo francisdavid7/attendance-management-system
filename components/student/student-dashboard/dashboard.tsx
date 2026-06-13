@@ -19,7 +19,11 @@ function Chart() {
         setHistoryData(table)
     }, [table, data])
 
+    const late = data?.attendances?.filter((s: any) => s.status === "LATE")
+    const present = data?.attendances?.filter((s: any) => s.status === "PRESENT")
+
     const count = data?._count?.attendances
+
     const railData = !count ? 0 : count;
     const radialBar = [{
         name: "Attendance",
@@ -30,15 +34,15 @@ function Chart() {
     const board = [
         {
             title: "TOTAL CLASSES",
-            number: 42,
-        },
-        {
-            title: "PRESENT",
             number: count,
         },
         {
+            title: "PRESENT",
+            number: present?.length,
+        },
+        {
             title: "LATE",
-            number: 0,
+            number: late?.length,
         },
         {
             title: "ABSENT",
@@ -74,11 +78,11 @@ function Chart() {
                 return { icon: <BookOpen className="h-5 w-5 text-slate-600" />, bg: 'bg-slate-50' };
         }
     };
+
     return (
 
 
         <main className="p-3 md:p-0 max-w-7xl mx-auto">
-
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
                 <div>
@@ -90,20 +94,22 @@ function Chart() {
                     </p>
                 </div>
             </div>
+
             <section className="flex flex-col lg:flex-row gap-6 w-full items-stretch">
                 <Card className="w-full lg:w-[68%] overflow-hidden p-6 md:p-8 flex flex-col justify-between">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 h-full">
                         <div className="flex flex-col justify-between flex-1 h-full py-2">
                             <CardHeader>
                                 <CardTitle>
-
                                     <span className="text-xl md:text-2xl opacity-60 font-bold tracking-wider">
                                         OVERALL ATTENDANCE
                                     </span>
                                 </CardTitle>
+
                                 <h2 className="hidden md:inline text-5xl md:text-6xl font-extrabold text-(--color-primary) tracking-tight mt-3 mb-4">
                                     {count ? (count === 0 ? "0%" : `${count}%`) : "0%"}
                                 </h2>
+
                                 <p className="text-[15px] md:text-base opacity-90 font-normal">
                                     You are <span className="font-semibold text-(--color-primary)">+5%</span> above the required 75% threshold.
                                 </p>
@@ -148,7 +154,6 @@ function Chart() {
                                 />
                             </RadialBarChart>
                         </div>
-
                     </div>
                 </Card>
 
@@ -158,11 +163,9 @@ function Chart() {
                         return (
                             <Card key={index} className=" p-5 flex flex-col justify-between transition-all ">
                                 <CardContent className="p-0 flex flex-col justify-between h-full gap-5">
-
                                     <div className={`p-2.5 rounded-xl w-fit ${meta.bg}`}>
                                         {meta.icon}
                                     </div>
-
                                     <div className="space-y-1">
                                         <span className="text-xs md:text-sm font-bold tracking-wider opacity-68 uppercase block">
                                             {item.title}
@@ -171,13 +174,11 @@ function Chart() {
                                             {item.number}
                                         </span>
                                     </div>
-
                                 </CardContent>
                             </Card>
                         );
                     })}
                 </div>
-
             </section>
         </main>
     )

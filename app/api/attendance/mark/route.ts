@@ -26,9 +26,16 @@ export async function POST(req: NextRequest) {
 
         if (!session) return NextResponse.json({ Message: "Invalid QrCode" });
 
-        // if (session.qrExpiresAt < session.createdAt) return NextResponse.json({ Message: "Session closed" })
+        if (session.qrExpiresAt < session.createdAt) return NextResponse.json({ Message: "Attendance closed for Ongoing class" })
 
-        // if (session.sessionEndAt! > new Date()) return NextResponse.json({ Message: "Session closed" });
+
+        const now = new Date();
+
+        const isLate = new Date(session.createdAt);
+
+        isLate.setMinutes(isLate.getMinutes() + 10);
+
+        const status = now <= isLate ? "PRESENT" : "LATE";
 
         const existing = await prisma.attendance.findUnique({
             where: {
@@ -45,12 +52,12 @@ export async function POST(req: NextRequest) {
             data: {
                 studentId,
                 sessionId: session.id,
-                status: "PRESENT",
+                status: status,
                 checkInTime: new Date(),
             },
         });
 
-        return NextResponse.json({ Message: "marked as PRESENT!", attendance })
+        return NextResponse.json({ Message: `Marked as ${status}!`, attendance })
 
     } catch (error) {
         console.log(error)

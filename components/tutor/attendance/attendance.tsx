@@ -56,12 +56,12 @@ export function AttendanceTableHistory() {
                 </div>
             </div>
 
-            <div className="w-full bg-slate-50/50 mb-6 flex items-center justify-center">
+            <div className="w-full mb-6 flex items-center justify-center">
                 <div className="grid gap-4 md:grid-cols-3 w-full m">
                     {stats.map((item, index) => {
                         const Icon = item.icon;
                         return (
-                            <Card key={index} className="border-none shadow-sm rounded-xl bg-white">
+                            <Card key={index} className="border-none shadow-sm rounded-xl ">
                                 <CardContent className="p-6 flex items-center justify-between">
                                     <div className="space-y-1.5">
                                         <p className="text-xs font-semibold tracking-wider text-slate-400 uppercase">

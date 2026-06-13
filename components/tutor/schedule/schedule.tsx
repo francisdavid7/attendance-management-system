@@ -1,13 +1,14 @@
 "use client";
 import { toast } from "sonner";
 import QRCode from "react-qr-code";
+import { ScanCount } from "./counts";
 import { presentStud } from "./list";
 import SessionLoading from "./loading";
 import { useAttendance } from "./session";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { tutorCourse, endASession } from "@/lib/actions/actions";
 import { Progress } from "@/components/ui/progress";
+import { tutorCourse, endASession } from "@/lib/actions/actions";
 import { useAttendanceStore, useCourseStore } from "../dashbaord/zstand";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardAction, } from "@/components/ui/card";
 import { QrCode, RefreshCw, Users, CircleCheck, CircleX, PlusIcon, GraduationCap, CircleAlertIcon, Loader2, } from "lucide-react";
@@ -212,10 +213,7 @@ export default function GenerateAttendanceQR() {
                                 </span>
                             </div>
                             <div>
-                                <div className="mb-2 flex justify-between text-xs text-muted-foreground">
-                                    <span>Expected Attendance</span>
-                                    <span>  {count}/30</span>
-                                </div>
+                                <ScanCount count={count} />
                                 <Progress value={count} />
                             </div>
                         </CardContent>
