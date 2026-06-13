@@ -59,6 +59,7 @@ const page = () => {
 
       toast.success(res.message);
       router.push("/dashboard");
+      router.refresh();
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);

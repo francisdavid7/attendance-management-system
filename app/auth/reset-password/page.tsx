@@ -25,6 +25,7 @@ import { useResetPassword } from "@/lib/actions/actions";
 
 const EmailSchema = z.object({
   password: z.string().min(6, "Password must be atleast 6 characters long"),
+  token: z.string().optional(),
 });
 
 const ResetPassword = () => {
@@ -38,13 +39,16 @@ const ResetPassword = () => {
   const router = useRouter();
   const { trigger, isMutating } = useResetPassword();
 
-  const onSubmit = async (value: { password: string }) => {
+  const onSubmit = async (values: { password: string; token: string }) => {
     try {
       const token = searchParams.get("token");
-      // const res = await trigger({ password: value, token });
-      console.log({ password: value, token });
-      // toast.success(res.message);
-      // router.push("/dashboard");
+
+      if (!token) return toast.error("Invalid reset token");
+
+      values.token = token;
+      const res = await trigger(values);
+      toast.success(res.message);
+      router.push("/dashboard");
     } catch (error: any) {
       if (error.response) {
         toast.error(error.response.data.error);
