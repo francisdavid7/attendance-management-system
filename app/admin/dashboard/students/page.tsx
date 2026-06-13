@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { getStudents } from "@/lib/actions/actions";
 
-interface StudentType {
+export interface StudentType {
   student: string;
   email: string;
   course: string[] | string;
