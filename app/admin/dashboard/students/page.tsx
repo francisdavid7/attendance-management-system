@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getStudents } from "@/lib/actions/actions";
+import { ChangeEvent, useState } from "react";
 
 export interface StudentType {
   student: string;
@@ -27,16 +28,32 @@ export interface StudentType {
 const studentHeadRow = ["Student", "Email", "Course", "Tutor"];
 
 const page = () => {
+  const [searchQuery, setSearchQuery] = useState("");
   const { students, isLoading, error, mutate } = getStudents();
 
   if (isLoading) return <Loading />;
 
   if (error) return <ErrorState onRetry={() => mutate()} />;
 
+  const filterStudents = students.filter((student: StudentType) => {
+    if (!searchQuery) return true;
+
+    const searchTerm = searchQuery.toLocaleLowerCase().trim();
+
+    return (
+      student.student.toLowerCase().includes(searchTerm) ||
+      student.email.toLowerCase().includes(searchTerm)
+    );
+  });
+
+  const handleChage = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
   return (
     <div className="p-6 space-y-4">
       <StudentsPageHeader />
-      <StudentsSearchFilters />
+      <StudentsSearchFilters onChange={handleChage as () => any} />
 
       <div className="bg-card px-6 py-4 border rounded-2xl">
         {students?.length === 0 ? (
@@ -54,7 +71,7 @@ const page = () => {
             </TableHeader>
 
             <TableBody>
-              {students.map((student: StudentType) => (
+              {filterStudents.map((student: StudentType) => (
                 <TableRow key={student.email}>
                   <TableCell>
                     <div className="flex items-center gap-3">
