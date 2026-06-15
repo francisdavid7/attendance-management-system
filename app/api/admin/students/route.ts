@@ -28,10 +28,10 @@ export async function GET() {
       },
     });
 
-    const studentsData = students.map((student) => {
-      const course = student.studentCourses.map((cs) => cs.course.name);
+    const studentsData = students.map((student: any) => {
+      const course = student.studentCourses.map((cs: any) => cs.course.name);
       const tutor = student.studentCourses.map(
-        (cs) => cs.course.tutor?.fullName,
+        (cs: any) => cs.course.tutor?.fullName,
       );
 
       return {

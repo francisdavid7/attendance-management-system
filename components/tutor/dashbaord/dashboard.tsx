@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getCurrentUser } from "@/lib/actions/actions";
 import DashboardLoading from "@/components/tutor/dashbaord/laoding"
-import { GraduationCap, Radio, Users, CircleAlertIcon } from "lucide-react";
+import { GraduationCap, Radio, Users, CircleAlertIcon, WifiOff, ShieldClose } from "lucide-react";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { tutorStudent } from "@/lib/actions/actions";
+import useSWR from "swr";
 
 export default function LecturerDashboard() {
     const { user, isLoading } = getCurrentUser();
@@ -19,6 +20,19 @@ export default function LecturerDashboard() {
     const sessionData = useCourseStore((state) => state.sessionData);
 
     const student = data ? data[0]?._count?.students : data?._count?.students;
+
+
+    const fetcher = async (url: string) => {
+        const res = await fetch(url);
+        if (!res.ok) {
+            throw new Error("Failed to fetch");
+        }
+        return res.json();
+    };
+
+    const { data: sessions, mutate } = useSWR("/api/attendance/getTutorSession", fetcher);
+
+    const session = sessions?.tutorActiveSession;
 
     if (isLoading) return <DashboardLoading />
 
@@ -45,14 +59,23 @@ export default function LecturerDashboard() {
                             </p>
 
                             <h3 className="mt-2 text-xl font-bold">
-                                {sessionData ? <>{sessionData?.session?.course?.name}</> : "No session at the moment"}
+                                {session ? <>{session?.course?.name}</> :
+
+                                    <div className="flex items-center justify-center gap-2 text-(--color-destructive)">
+
+                                        <CircleAlertIcon className="h-4 w-4" />
+                                        <span className="text-sm font-medium">
+                                            <div className=" text-sm"> No Active Session</div>
+
+                                        </span>
+                                    </div>}
                             </h3>
 
                             <p className="mt-1 text-sm text-muted-foreground">
-                                {sessionData ? <>
+                                {session ? <>
 
                                     session started at <span className="font-bold"> {new Date(
-                                        sessionData?.session?.createdAt
+                                        session?.createdAt
                                     ).toLocaleString("en-US", {
                                         hour: "numeric",
                                         minute: "2-digit",
@@ -76,21 +99,27 @@ export default function LecturerDashboard() {
 
                                 <div className="mt-2 flex items-center gap-2">
 
-                                    {sessionData ?
+                                    {session ?
                                         <>
                                             <div className="h-2 w-2 rounded-full bg-(--color-primary)" />
                                             <span className="font-semibold">Active</span>
                                         </> :
                                         <>
-                                            <CircleAlertIcon className="text-(--color-destructive)" />
-                                            <span className="font-semibold">No Active session</span>
+                                            <div className="flex items-center justify-center gap-2 text-(--color-destructive)">
+
+                                                <ShieldClose className="h-5 w-5" />
+                                                <span className="text-sm font-medium">
+                                                    <div className=" text-sm"> Not engaged</div>
+
+                                                </span>
+                                            </div>
                                         </>
                                     }
 
                                 </div>
 
                                 <p className="mt-2 text-sm ">
-                                    {sessionData ? "QR Scanner engaged" : <></>}
+                                    {session ? "QR Scanner engaged" : <></>}
                                 </p>
                             </div>
 
@@ -110,7 +139,7 @@ export default function LecturerDashboard() {
                         </div>
 
                         <h2 className="mt-3 text-3xl font-bold">
-                            {sessionData ? <>
+                            {session ? <>
                                 {attendanceData?.totalAttendance}/{student}
                             </> : ""}
                         </h2>

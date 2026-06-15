@@ -1,4 +1,3 @@
-import Courses from "@/app/admin/dashboard/courses/page";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
@@ -40,16 +39,16 @@ export async function GET() {
       },
     });
 
-    const tutorData = tutors.map((tutor) => {
+    const tutorData = tutors.map((tutor: any) => {
       // Get students' ID
-      const studentIds = tutor.courses.flatMap((course) =>
-        course.students.map((student) => student.studentId),
+      const studentIds = tutor.courses.flatMap((course: any) =>
+        course.students.map((student: any) => student.studentId),
       );
 
       // Remove duplicates
       const uniqueStudents = [...new Set(studentIds)];
 
-      const assignedCourses = tutor.courses.map((course) => course.name);
+      const assignedCourses = tutor.courses.map((course: any) => course.name);
 
       return {
         id: tutor.id,

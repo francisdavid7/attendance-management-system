@@ -25,19 +25,14 @@ export default function RecentHistory() {
             )
         } else if (status === "ABSENT") {
             return (
-                <Badge className="bg-(--color-destructive)/20 text-[14px] font-semibold backdrop-blur-2xl text-(--color-destructive) rounded-[8px]">
-                    {status}
-                </Badge>
-            )
-        } else if (status === "LATE") {
-            return (
-
-                <Badge className="bg-[#de9a4c62] text-[14px] font-semibold backdrop-blur-2xl text-[#ae8b23] rounded-[8px]">
+                <Badge className="bg-destructive/20 text-[14px] font-semibold backdrop-blur-2xl text-(--color-destructive) rounded-[8px]">
                     {status}
                 </Badge>
             )
         }
+
     }
+
     return (
         <div className=" p-3 md:p-3 ">
 
