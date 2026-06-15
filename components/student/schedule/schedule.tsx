@@ -2,26 +2,7 @@ import { CalendarDays, Clock3, MapPin } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { activeSession } from "@/lib/actions/actions";
-// const schedules = [
-//     {
-//         id: 1,
-//         courseCode: "CSC 301",
-//         lecturer: "Dr. James",
-//         time: "08:00 AM - 10:00 AM",
-//         venue: "LT 2",
-//         status: "Upcoming",
-//         attendance: "Present",
-//     },
-//     {
-//         id: 2,
-//         courseCode: "GST 302",
-//         lecturer: "Mr. John",
-//         time: "02:00 PM - 04:00 PM",
-//         venue: "Hall A",
-//         status: "Completed",
-//         attendance: "Present",
-//     },
-// ];
+
 
 export default function SchedulePage() {
     const { data, isLoading } = activeSession();

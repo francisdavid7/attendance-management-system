@@ -16,9 +16,9 @@ const Schedule = () => {
 
         <Attend />
         <SchedulePage />
-      </> : <div className="px-50 py-50 text-(--color-destructive)">
-        <Card className="px-50  flex flex-col text-center">
-          <div >
+      </> : <div className="w-[70%] mt-40 justify-self-center text-(--color-destructive)">
+        <Card className=" flex flex-col text-center">
+          <div>
             <ShieldAlertIcon size={120} className="text-(--color-destructive) justify-self-center" />
           </div>
           <div className="text-(--color-destructive) mb-10 text-xl font-bold">

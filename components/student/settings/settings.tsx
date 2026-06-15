@@ -81,7 +81,7 @@ function Setting() {
                                         <Input
                                             type="email"
                                             id="email"
-                                            placeholder={`edit email "${user?.email}"`}
+                                            placeholder={`provide email to edit name "${user?.email}"`}
                                         />
                                     </Field>
                                 )}

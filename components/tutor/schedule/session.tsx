@@ -1,13 +1,13 @@
 
-import { startSession } from "@/lib/actions/actions";
+import { endASession } from "@/lib/actions/actions";
 
-export const useAttendance = () => {
-    const { trigger, isMutating, error } = startSession();
+export const endSessions = () => {
+    const { trigger, isMutating, error } = endASession();
 
-    const attendance = async (id: string) => {
+    const endSEssion = async (sessionId: string) => {
         try {
             return await trigger({
-                courseId: id,
+                sessionId: sessionId,
             });
         } catch (err) {
             console.log(err);
@@ -15,7 +15,7 @@ export const useAttendance = () => {
     };
 
     return {
-        attendance,
+        endSEssion,
         isMutating,
         error,
     };

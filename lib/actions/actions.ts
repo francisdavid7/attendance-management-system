@@ -212,3 +212,14 @@ export const tutorStudent = () => {
     isLoading
   }
 }
+
+
+// ============================ TUTORS ACTIVE SESSION ============================ >
+
+// export const tutorActiveSession = () => {
+//   const { data: activeSession, isLoading, error } = useSWR("/api/attendance/getTutorSession", fetch);
+//   return {
+//     activeSession,
+//     isLoading
+//   }
+// }

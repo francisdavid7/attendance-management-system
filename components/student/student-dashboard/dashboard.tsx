@@ -19,8 +19,7 @@ function Chart() {
         setHistoryData(table)
     }, [table, data])
 
-    const late = data?.attendances?.filter((s: any) => s.status === "LATE")
-    const present = data?.attendances?.filter((s: any) => s.status === "PRESENT")
+
 
     const count = data?._count?.attendances
 
@@ -38,11 +37,8 @@ function Chart() {
         },
         {
             title: "PRESENT",
-            number: present?.length,
-        },
-        {
-            title: "LATE",
-            number: late?.length,
+            number: count,
+
         },
         {
             title: "ABSENT",
@@ -70,8 +66,6 @@ function Chart() {
                 return { icon: <BookOpen className="h-5 w-5 text-slate-600" />, bg: 'bg-slate-50' };
             case 'present':
                 return { icon: <CheckCircle2 className="h-5 w-5 text-(--color-primary)" />, bg: 'bg-primary/10' };
-            case 'late':
-                return { icon: <Clock className="h-5 w-5 text-amber-500" />, bg: 'bg-amber-50' };
             case 'absent':
                 return { icon: <XCircle className="h-5 w-5 text-(--color-destructive)" />, bg: 'bg-destructive/10' };
             default:

@@ -27,13 +27,13 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ Massage: "Course Not found" }, { status: 404 })
         }
 
-        const session = await prisma.session.create({
+        const sessions = await prisma.session.create({
             data: {
                 courseId,
                 userId: userId,
                 date: new Date(),
                 qrCode: crypto.randomUUID(),
-                qrExpiresAt: new Date(Date.now() + 15 * 60 * 1000),
+                qrExpiresAt: new Date(Date.now() + 120 * 60 * 1000),
                 sessionEndAt: new Date(Date.now() + 120 * 60 * 1000),
                 isActive: true,
             },
@@ -43,6 +43,16 @@ export async function POST(req: NextRequest) {
 
         })
 
+        const session = await prisma.session.findFirst({
+            where: { courseId: sessions?.courseId, isActive: true },
+            include: {
+                course: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        })
         return NextResponse.json({ Message: "Session Created", session: session }, { status: 201 })
 
     } catch (error) {

@@ -12,8 +12,6 @@ import { studentCourse } from "@/lib/actions/actions"
 const statusStyles: Record<string, string> = {
     PRESENT:
         "bg-emerald-100 text-emerald-700 border border-emerald-200",
-    LATE:
-        "bg-yellow-100 text-yellow-700 border border-yellow-200",
     ABSENT:
         "bg-red-100 text-red-700 border border-red-200",
     PARTIAL:
@@ -26,7 +24,6 @@ export default function AttendanceTable() {
     const count = `${histories?._count?.attendances}%`;
     const progressBAr = histories?._count?.attendances;
 
-    console.log(data)
     const attendanceStats = [
         {
             title: "TOTAL CLASSES",
@@ -47,26 +44,17 @@ export default function AttendanceTable() {
             progress: progressBAr,
             color: "bg-(--color-primary)",
         },
-        {
-            title: "TOTAL ABSENCES",
-            value: 0,
-            subtitle: "Approaching policy limit (3)",
-            icon: CircleAlert,
-            badge: "Warning",
-            progress: "0",
-            color: "bg-(--color-destructive)",
-        },
     ]
 
     return (
 
-        <div className="space-y-6 p-6 bg-slate-50 min-h-screen">
+        <div className="space-y-6 p-6 min-h-screen">
 
             <p className="text-4xl font-bold">
                 <small>Course</small> Cyber security
             </p>
 
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2">
                 {attendanceStats.map((item) => {
                     const Icon = item.icon
                     return (
@@ -96,13 +84,10 @@ export default function AttendanceTable() {
                                     </p>
 
                                     <h2 className="text-4xl font-bold mt-1">
-                                        {item.value}
+                                        {item.value ? 0 : item.value}
                                     </h2>
                                 </div>
 
-                                <div className="w-full h-2  rounded-full overflow-hidden">
-                                    <Progress value={item.progress} />
-                                </div>
 
                                 <div className="flex items-center justify-between text-xs">
                                     <p className="text-muted-foreground">
@@ -122,7 +107,7 @@ export default function AttendanceTable() {
             </div>
 
 
-            <Card className="rounded-2xl shadow-sm">
+            {/* <Card className="rounded-2xl shadow-sm">
                 <CardContent className="p-4">
                     <div className="flex flex-col gap-4 md:flex-row md:items-center">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-1">
@@ -175,23 +160,23 @@ export default function AttendanceTable() {
                         </div>
                     </div>
                 </CardContent>
-            </Card>
+            </Card> */}
 
-            <Card className="rounded-2xl shadow-sm overflow-hidden">
+            <Card className="mt-20 rounded-2xl shadow-sm overflow-hidden">
                 <Table>
-                    <TableHeader className="bg-slate-100">
+                    <TableHeader className="">
                         <TableRow>
                             <TableHead>Date</TableHead>
                             <TableHead>Course</TableHead>
                             <TableHead>Check-in</TableHead>
-                            <TableHead>Check-out</TableHead>
+
                             <TableHead>Status</TableHead>
 
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        {histories?.attendances.map((item: any) => (
+                        {histories?.attendances?.map((item: any) => (
                             <TableRow key={item.id}>
                                 <TableCell>{new Date(
                                     item.checkInTime
@@ -215,7 +200,7 @@ export default function AttendanceTable() {
                                     minute: "2-digit"
                                 })}</TableCell>
 
-                                <TableCell>{item.checkOut}</TableCell>
+
 
                                 <TableCell>
                                     <span
@@ -224,17 +209,8 @@ export default function AttendanceTable() {
                                         {item.status === "PRESENT" && (
                                             <CircleCheck className="w-3 h-3" />
                                         )}
-
-                                        {item.status === "LATE" && (
-                                            <Clock3 className="w-3 h-3" />
-                                        )}
-
                                         {item.status === "ABSENT" && (
                                             <CircleAlert className="w-3 h-3" />
-                                        )}
-
-                                        {item.status === "PARTIAL" && (
-                                            <Clock3 className="w-3 h-3" />
                                         )}
                                         {item.status}
                                     </span>
