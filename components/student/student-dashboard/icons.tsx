@@ -12,13 +12,6 @@ const btn = (status: string) => {
                 <CircleX size={30} />
             </button>
         )
-    } else if (status === "LATE") {
-        return (
-
-            <button className="bg-[#de9a4c62] backdrop-blur-2xl text-[#ae8b23] p-3 w-fit rounded-[10px]">
-                <History size={30} />
-            </button>
-        )
     } else if (status === "TOTAL CLASSES") {
         return (
 
