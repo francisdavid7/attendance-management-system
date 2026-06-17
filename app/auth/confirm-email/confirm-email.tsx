@@ -62,7 +62,7 @@ const ConfirmEmail = () => {
   }, [token]);
 
   return (
-    <div className="w-1/2 p-12 flex items-center justify-center">
+    <div className="lg:w-1/2 w-full p-12 flex items-center justify-center">
       <Card className="md:w-[80%] mx-auto p-8 text-center flex flex-col items-center justify-center gap-2">
         <Button
           variant={status === "error" ? "destructive" : "outline"}

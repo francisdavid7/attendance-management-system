@@ -43,11 +43,6 @@ const items: ItemsTypes[] = [
     url: "/admin/dashboard/attendance",
     icon: Calendar as any,
   },
-  {
-    title: "Settings",
-    url: "/admin/dashboard/settings",
-    icon: Settings as any,
-  },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
