@@ -10,7 +10,7 @@ export async function sendVerificationEmail(
   token: string,
   name: string,
 ) {
-  const verificationLink = `http://localhost:3000/auth/confirm-email?token=${token}`;
+  const verificationLink = `https://attendx-flame.vercel.app/auth/confirm-email?token=${token}`;
 
   const emailTemplate = verifyEmailTemplate(name, verificationLink);
 
@@ -28,7 +28,7 @@ export async function sendResetPasswordEmail(
   token: string,
   email: string,
 ) {
-  const resetPasswordLink = `http://localhost:3000/auth/reset-password?token=${token}`;
+  const resetPasswordLink = `https://attendx-flame.vercel.app/auth/reset-password?token=${token}`;
 
   return transporter.sendMail({
     from: `"AttendX" <${process.env.GMAIL_USER}>`,
