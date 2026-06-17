@@ -25,8 +25,6 @@ import Loading from "../loading";
 
 const page = () => {
   const filteredTutored: any[] = [];
-  const tutos = false;
-  const error = false;
 
   return (
     <section className="space-y-6 p-6">
@@ -84,80 +82,63 @@ const page = () => {
               </TableHeader>
 
               <TableBody>
-                {error || !tutors ? (
-                  <ErrorState onRetry={() => mutate()} />
-                ) : (
-                  <>
-                    {!filteredTutored ? (
-                      <Loading />
-                    ) : (
-                      <>
-                        {filteredTutored.map((tutor: Tutor) => (
-                          <TableRow key={tutor.email}>
-                            {/* TUTOR */}
-                            <TableCell>
-                              <div className="flex items-center gap-3">
-                                <Avatar className="h-10 w-10">
-                                  <AvatarImage src="" />
+                {filteredTutored.map((tutor: any) => (
+                  <TableRow key={tutor.email}>
+                    {/* TUTOR */}
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src="" />
 
-                                  <AvatarFallback>
-                                    {tutor.fullName
-                                      .split(" ")
-                                      .map((name: any) => name[0])
-                                      .join("")}
-                                  </AvatarFallback>
-                                </Avatar>
+                          <AvatarFallback>
+                            {tutor.fullName
+                              .split(" ")
+                              .map((name: any) => name[0])
+                              .join("")}
+                          </AvatarFallback>
+                        </Avatar>
 
-                                <div>
-                                  <p className="font-medium">
-                                    {tutor.fullName}
-                                  </p>
+                        <div>
+                          <p className="font-medium">{tutor.fullName}</p>
 
-                                  <p className="text-sm text-muted-foreground">
-                                    {tutor.email}
-                                  </p>
-                                </div>
-                              </div>
-                            </TableCell>
+                          <p className="text-sm text-muted-foreground">
+                            {tutor.email}
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
 
-                            {/* COURSE */}
-                            <TableCell>
-                              {tutor.assignedCourses[0] ??
-                                "No course assigned yet"}
-                            </TableCell>
+                    {/* COURSE */}
+                    <TableCell>
+                      {tutor.assignedCourses[0] ?? "No course assigned yet"}
+                    </TableCell>
 
-                            {/* STUDENTS */}
-                            <TableCell>{tutor.totalStudents}</TableCell>
+                    {/* STUDENTS */}
+                    <TableCell>{tutor.totalStudents}</TableCell>
 
-                            {/* STATUS */}
-                            <TableCell>
-                              <Badge
-                                variant={
-                                  tutor.status === "Active"
-                                    ? "default"
-                                    : "destructive"
-                                }
-                              >
-                                {tutor.status}
-                              </Badge>
-                            </TableCell>
+                    {/* STATUS */}
+                    <TableCell>
+                      <Badge
+                        variant={
+                          tutor.status === "Active" ? "default" : "destructive"
+                        }
+                      >
+                        {tutor.status}
+                      </Badge>
+                    </TableCell>
 
-                            {/* ACTIONS */}
-                            <TableCell className="text-right">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="rounded-xl"
-                              >
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </>
-                    )}
-                  </>
-                )}
+                    {/* ACTIONS */}
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="rounded-xl"
+                      >
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           )}
