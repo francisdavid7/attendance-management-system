@@ -31,7 +31,7 @@ const navLinks = [
 export default function Navbar() {
   return (
     <header className="border-b bg-background">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto max-w-[80%] flex h-16 items-center justify-between px-4">
         <div className="flex justify-between items-center w-full">
           {/* LOGO */}
           <Logo />
