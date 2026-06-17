@@ -7,12 +7,6 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { token, password } = body;
 
-    console.log("--- DEBUG PASSWORD RESET ---");
-    console.log("Raw Password Received:", password);
-    console.log("Type of Password:", typeof password);
-    console.log("Length:", password?.length);
-    console.log("----------------------------");
-
     if (!token) {
       return NextResponse.json({ error: "Missing token" }, { status: 404 });
     }
