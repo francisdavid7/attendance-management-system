@@ -24,7 +24,7 @@ import { MoreHorizontal, Search } from "lucide-react";
 import Loading from "../loading";
 
 const page = () => {
-  const filteredTutored = [];
+  const filteredTutored: any[] = [];
   const tutos = false;
   const error = false;
 
