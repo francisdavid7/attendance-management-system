@@ -64,6 +64,17 @@ export const getAllCourses = () => {
   return { courses, isLoading, error, mutate };
 };
 
+// Get Attendances
+export const getAttendance = () => {
+  const { data, isLoading, error, mutate } = useSWR(
+    "/api/admin/attendance",
+    fetch,
+  );
+
+  const attendance = data?.attendance;
+  return { attendance, isLoading, error, mutate };
+};
+
 // ============================= POST REQUESTS ======================== //
 export const useAssignTutor = () => {
   return useSWRMutation("/api/courses/assign-tutor", postData);
@@ -178,29 +189,33 @@ export const enrollCourse = () => {
   return useSWRMutation("/api/courses/enroll", enroll);
 };
 
-
-// ====================== STUDENT COURSE ========================= > 
-
+// ====================== STUDENT COURSE ========================= >
 
 export const studentCourse = () => {
-  const { data, isLoading, error } = useSWR("/api/courses/student-course", fetch)
+  const { data, isLoading, error } = useSWR(
+    "/api/courses/student-course",
+    fetch,
+  );
 
   return {
-    data, isLoading
-  }
-}
-
+    data,
+    isLoading,
+  };
+};
 
 // ================================ PROTECT STUDENT SCHEDULE PAGE ==============>
 
 export const activeSession = () => {
-  const { data, isLoading, error } = useSWR("/api/attendance/protectScanPage", fetch)
+  const { data, isLoading, error } = useSWR(
+    "/api/attendance/protectScanPage",
+    fetch,
+  );
 
   return {
     data,
-    isLoading
-  }
-}
+    isLoading,
+  };
+};
 
 // ================================ TUTORS STUDENTS ============================ >
 
@@ -209,10 +224,9 @@ export const tutorStudent = () => {
 
   return {
     data,
-    isLoading
-  }
-}
-
+    isLoading,
+  };
+};
 
 // ============================ TUTORS ACTIVE SESSION ============================ >
 

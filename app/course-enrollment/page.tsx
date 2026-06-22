@@ -37,7 +37,7 @@ export default function CourseEnrollment() {
       const courseId = selectedCourse;
       const res = await trigger({ courseId });
       toast.success("Course enrolled successfully!");
-      router.push("/dashboard");
+      router.refresh();
     } catch (err) {
       console.log(err);
     }

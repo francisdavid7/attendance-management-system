@@ -3,6 +3,11 @@ import { transporter } from "./nodemailer";
 import { tutorLoginDetailsTemplate } from "@/components/emails/tutor-invitation";
 import { verifyEmailTemplate } from "@/components/emails/verify-email";
 import { passwordResetTemplate } from "@/components/emails/password-reset";
+import {
+  LOGIN_LINK,
+  RESET_PASSWORD_LINK,
+  VERIFICATION_LINK,
+} from "../services";
 
 // Verification email
 export async function sendVerificationEmail(
@@ -10,7 +15,7 @@ export async function sendVerificationEmail(
   token: string,
   name: string,
 ) {
-  const verificationLink = `https://attendx-flame.vercel.app/auth/confirm-email?token=${token}`;
+  const verificationLink = VERIFICATION_LINK(token);
 
   const emailTemplate = verifyEmailTemplate(name, verificationLink);
 
@@ -28,7 +33,7 @@ export async function sendResetPasswordEmail(
   token: string,
   email: string,
 ) {
-  const resetPasswordLink = `https://attendx-flame.vercel.app/auth/reset-password?token=${token}`;
+  const resetPasswordLink = RESET_PASSWORD_LINK(token);
 
   return transporter.sendMail({
     from: `"AttendX" <${process.env.GMAIL_USER}>`,
@@ -44,7 +49,7 @@ export async function sendLoginDetails(
   email: string,
   password: string,
 ) {
-  const loginLink = "http://localhost:3000/auth/login";
+  const loginLink = LOGIN_LINK;
   return transporter.sendMail({
     from: `"AttendX" <${process.env.GMAIL_USER}>`,
     to: email,

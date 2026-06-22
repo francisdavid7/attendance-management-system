@@ -1,3 +1,5 @@
+"use client";
+
 import ErrorState from "@/components/dashboard/error/data-error";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -21,10 +23,25 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { MoreHorizontal, Search } from "lucide-react";
-import Loading from "../loading";
+import { getAttendance } from "@/lib/actions/actions";
+import Loading from "@/components/dashboard/loaders/dashboard-content-loader";
+
+interface AttendanceType {
+  student: string;
+  course: string;
+  date: string;
+  time: string;
+  status: string;
+}
 
 const page = () => {
   const filteredTutored: any[] = [];
+
+  const { attendance, isLoading, error, mutate } = getAttendance();
+
+  if (isLoading) return <Loading />;
+
+  console.log(attendance);
 
   return (
     <section className="space-y-6 p-6">
@@ -61,7 +78,7 @@ const page = () => {
       {/* TUTORS TABLE */}
       <Card className="rounded-2xl border-0">
         <CardContent className="p-0">
-          {filteredTutored?.length === 0 ? (
+          {attendance.length === 0 ? (
             <>
               <p className="text-center m-7">No data to display</p>
             </>
@@ -69,21 +86,21 @@ const page = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Tutor</TableHead>
+                  <TableHead>Student</TableHead>
 
-                  <TableHead>Assigned Course</TableHead>
+                  <TableHead>Course</TableHead>
 
-                  <TableHead>Students</TableHead>
+                  <TableHead>Date</TableHead>
+
+                  <TableHead>Time</TableHead>
 
                   <TableHead>Status</TableHead>
-
-                  <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
 
               <TableBody>
-                {filteredTutored.map((tutor: any) => (
-                  <TableRow key={tutor.email}>
+                {attendance?.map((data: AttendanceType) => (
+                  <TableRow key={data.student}>
                     {/* TUTOR */}
                     <TableCell>
                       <div className="flex items-center gap-3">
@@ -91,7 +108,7 @@ const page = () => {
                           <AvatarImage src="" />
 
                           <AvatarFallback>
-                            {tutor.fullName
+                            {data.student
                               .split(" ")
                               .map((name: any) => name[0])
                               .join("")}
@@ -99,43 +116,29 @@ const page = () => {
                         </Avatar>
 
                         <div>
-                          <p className="font-medium">{tutor.fullName}</p>
-
-                          <p className="text-sm text-muted-foreground">
-                            {tutor.email}
-                          </p>
+                          <p className="font-medium">{data.student}</p>
                         </div>
                       </div>
                     </TableCell>
 
                     {/* COURSE */}
-                    <TableCell>
-                      {tutor.assignedCourses[0] ?? "No course assigned yet"}
-                    </TableCell>
+                    <TableCell>{data.course}</TableCell>
 
-                    {/* STUDENTS */}
-                    <TableCell>{tutor.totalStudents}</TableCell>
+                    {/* DATE */}
+                    <TableCell>{data.date}</TableCell>
+
+                    {/* TIME */}
+                    <TableCell>{data.time}</TableCell>
 
                     {/* STATUS */}
                     <TableCell>
                       <Badge
                         variant={
-                          tutor.status === "Active" ? "default" : "destructive"
+                          data.status === "PRESENT" ? "default" : "destructive"
                         }
                       >
-                        {tutor.status}
+                        {data.status}
                       </Badge>
-                    </TableCell>
-
-                    {/* ACTIONS */}
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-xl"
-                      >
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
